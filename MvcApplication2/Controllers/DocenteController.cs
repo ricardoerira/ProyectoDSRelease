@@ -221,6 +221,17 @@ namespace MvcApplication2.Controllers
         }
 
 
+
+        public ActionResult BuscarEnDepartamento()
+        {
+
+            return View();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public ActionResult BuscarEnDepartamento(Docente docente)
         {
             var docentes = from b in db.Docentes
@@ -236,7 +247,8 @@ namespace MvcApplication2.Controllers
             }
             if (docente.docenteId == 0)
             {
-                return View(docente);
+                ViewBag.AlertMessage = "Cedula incorrecta.";
+                return View();
             }
             else
             {
@@ -567,7 +579,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen1 = "/Uploads/" + documentos[0] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen1 = path1;
 
                   }
                   else
@@ -576,12 +590,17 @@ namespace MvcApplication2.Controllers
 
                   }
 
+
+
+
                   path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + docente.num_documento, ".jpg");
 
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen2 = "/Uploads/" + documentos[1] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen2 = path1;
 
                   }
                   else
@@ -596,7 +615,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen3 = "/Uploads/" + documentos[2] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen3 = path1;
 
                   }
                   else
@@ -612,7 +633,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen4 = "/Uploads/" + documentos[3] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen4 = path1;
 
                   }
                   else
@@ -629,7 +652,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen5 = "/Uploads/" + documentos[4] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen5 = path1;
 
                   }
                   else
@@ -645,7 +670,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen6 = "/Uploads/" + documentos[5] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen6 = path1;
 
                   }
                   else
@@ -661,7 +688,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen7 = "/Uploads/" + documentos[6] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen7 = path1;
 
                   }
                   else
@@ -677,7 +706,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen8 = "/Uploads/" + documentos[7] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen8 = path1;
 
                   }
                   else
@@ -691,7 +722,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen9 = "/Uploads/" + documentos[8] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen9 = path1;
 
                   }
                   else
@@ -705,7 +738,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen10 = "/Uploads/" + documentos[9] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen10 = path1; ;
 
                   }
                   else
@@ -719,7 +754,9 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      ViewBag.imagen11 = "/Uploads/" + documentos[10] + docente.num_documento + ".jpg";
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                      ViewBag.imagen11 = path1;
 
                   }
                   else

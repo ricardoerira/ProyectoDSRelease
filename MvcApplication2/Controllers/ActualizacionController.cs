@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -369,10 +370,10 @@ namespace MvcApplication2.Controllers
                                     docente.dedicacion = item3.CTUR_DESCRIPCION;
                                     HojaVida hojavida = hvs.ElementAt(0);
                                     hojavida.genero = item3.CHOV_SEXO;
-                             
+
                                     hojavida.municipio_procedencia = item3.CHOV_LUGARNACE;
                                     db.Entry(hojavida).State = EntityState.Modified;
-                                    if(hojavida.municipio_procedencia.Equals(String.Empty))
+                                    if (hojavida.municipio_procedencia.Equals(String.Empty))
                                     {
                                         hojavida.municipio_procedencia = ".";
 
@@ -442,7 +443,7 @@ namespace MvcApplication2.Controllers
                                     hojavida.primer_apellido = item3.P_APELLIDO;
                                     hojavida.segundo_apellido = item3.S_APELLIDO;
                                     hojavida.direccion_manizales = item3.DIRECCION;
-                                    hojavida.num_celular =3000000000;
+                                    hojavida.num_celular = 3000000000;
                                     hojavida.municipio_procedencia = ".";
 
                                     hojavida.num_telefono = item3.TELEFONO;
@@ -461,7 +462,7 @@ namespace MvcApplication2.Controllers
 
                                     hojavida.correo = item3.EMAIL;
 
-                                   
+
                                     try
                                     {
                                         db.HojaVidas.Add(hojavida);
@@ -521,7 +522,7 @@ namespace MvcApplication2.Controllers
 
             }
 
-            
+
 
         }
 
@@ -685,7 +686,7 @@ namespace MvcApplication2.Controllers
                                         Console.WriteLine(e.Data);
                                     }
 
-                                    
+
 
                                 }
                                 else
@@ -776,7 +777,7 @@ namespace MvcApplication2.Controllers
                                         Console.WriteLine(e.Data);
                                     }
 
-                                   
+
 
                                     iffam = db.HojaVidas.Max(p => p.hojaVidaId);
 

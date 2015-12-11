@@ -50,10 +50,7 @@
     </nav>
 </div>
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-    <h2>Cree una cuenta nueva.</h2>
-</hgroup>
+
 
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
@@ -61,22 +58,59 @@
 
     <fieldset>
         <legend>Formulario de registro</legend>
-        <ol>
+        @*<ol>
             <li>
                 @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control"})
+               
             </li>
             <li>
                 @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
             </li>
             <li>
                 @Html.LabelFor(m => m.ConfirmPassword)
-                @Html.PasswordFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
             </li>
-        </ol>
-        <input type="submit" value="Registrarse" />
-    </fieldset>
+        </ol>*@
+
+
+        <div class="col-sm-12">
+            <fodrm class="form-horizontal" role="form">
+                <div class="col-xs-offset-0">
+                    <span class="help-block">A través de este formulario creará los usuarios del sistema; <p>Tenga en cuenta que el sistema reconoce entre mayúsculas y minúsculas.</p></span>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Usuario</label>
+                        <div class="col-sm-4">
+                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.UserName)
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Contraseña</label>
+                        <div class="col-sm-4">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password)
+                        </div>
+
+                        <label class="col-sm-2 control-label">Confirme contraseña</label>
+                        <div class="col-sm-4">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+                        </div>
+
+                    </div>
+                </div>
+            </fodrm>
+
+        </div><!-- /.row -->
+            <input type="submit" value="Registrar" />
+</fieldset>
 }
 
 @section Scripts {

@@ -44,8 +44,15 @@ namespace MvcApplication2.Controllers
         }
 
 
+        public ActionResult BuscarEnDepartamento()
+        {
 
+            return View();
 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
 public ActionResult BuscarEnDepartamento(Estudiante estudiante) 
         {
             var estudiantes = from b in db.Estudiantes
@@ -61,11 +68,14 @@ public ActionResult BuscarEnDepartamento(Estudiante estudiante)
             }
             if (estudiante.estudianteId == 0)
             {
-                return View(estudiante);
+                ViewBag.AlertMessage = "Codigo incorrecto.";
+                return View();
             }
             else
             {
-                return RedirectToAction("../Estudiante/ReporteEstudianteA/" + estudiante.estudianteId);
+                return RedirectToAction("../Estudiante/ReporteEstudianteA/"  + estudiante.estudianteId);
+
+
             }
         }
 
