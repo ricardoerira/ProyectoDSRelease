@@ -22,6 +22,29 @@
                             <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
                         </ul>
                     </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Usuario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

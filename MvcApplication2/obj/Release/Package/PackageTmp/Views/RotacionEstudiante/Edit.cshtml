@@ -61,8 +61,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label" for="name">IPS/ESE</label>
                                     <div class="col-md-9">
-                                        @Html.DropDownList("IPS_ESEId", (IEnumerable<SelectListItem>)ViewBag.IPS_ESEId, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.IPS_ESEId)
+                                        @Html.DropDownList("IPS_ESEId", null, String.Empty, new { @class = "form-control" })
                                         
                                         
 

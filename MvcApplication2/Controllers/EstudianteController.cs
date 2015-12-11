@@ -219,9 +219,17 @@ public ActionResult EstadoHV(string num_documento, string programaId, string est
 //    }
 //}
 
+public ActionResult Buscar()
+{
+
+    return View();
+
+}
+
 
 [HttpPost]
 [ValidateAntiForgeryToken]
+
 public ActionResult Buscar(Estudiante estudiante)
 {
     var estudiantes = from b in db.Estudiantes
@@ -235,6 +243,8 @@ public ActionResult Buscar(Estudiante estudiante)
         }
 
     }
+
+    
 
     if (estudiante.estudianteId != 0)
    {
@@ -254,16 +264,9 @@ public ActionResult Buscar(Estudiante estudiante)
     }
 
         else{
-         ViewBag.AlertMessage = "Código incorrecto.";
-   return View(estudiante);
-        }
-    
-    //else
-    //{
-    //    return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
-    //}
-
-    
+         ViewBag.AlertMessage = "Codigo incorrecto.";
+   return View();
+        }   
 }
 
 

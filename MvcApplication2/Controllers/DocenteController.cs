@@ -776,7 +776,7 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "dip_espe", "tp_terr", "tp_dept", "tp_nal", "otro" };
+            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
 
@@ -798,7 +798,7 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "dip_espe", "tp_terr", "tp_dept", "tp_nal", "otro" };
+            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
           
@@ -808,7 +808,15 @@ namespace MvcApplication2.Controllers
             return View(docente);
         }
 
+        public ActionResult Buscar()
+        {
 
+            return View();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Buscar(Docente docente)
         {
             var docentes = from b in db.Docentes
@@ -824,7 +832,8 @@ namespace MvcApplication2.Controllers
             }
             if (docente.docenteId == 0)
             {
-                return View(docente);
+                ViewBag.AlertMessage = "Cedula incorrecta.";
+                return View();
             }
             else
             {

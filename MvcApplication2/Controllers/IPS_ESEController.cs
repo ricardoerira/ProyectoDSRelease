@@ -40,6 +40,7 @@ namespace MvcApplication2.Controllers
 
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RegistroEPS(IPS_ESE ips_ese)
@@ -78,6 +79,7 @@ namespace MvcApplication2.Controllers
                                 byte[] fileBytes = new byte[file.ContentLength];
                                 file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
                                 string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[i] + ips_ese.IPS_ESEId , ".jpg");
+                                //string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
                                 if (System.IO.File.Exists(path1))
                                     System.IO.File.Delete(path1);
 
@@ -87,12 +89,13 @@ namespace MvcApplication2.Controllers
                         }
                     }
                     
-                    return RedirectToAction("RegistroEPS");
+                    //return RedirectToAction("RegistroEPS");
+                    return RedirectToAction("Index");
 
                 }
                 else
                 {
-                    cargaDocumentos(ips_ese);
+                    //cargaDocumentos(ips_ese);
                     var municipios = db.Municipios.Include(h => h.Departamento);
                     List<Municipio> lista = municipios.ToList();
 

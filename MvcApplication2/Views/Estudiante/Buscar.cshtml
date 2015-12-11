@@ -1,15 +1,10 @@
 ﻿@model MvcApplication2.Models.Estudiante
 
-@{
-    ViewBag.Title = "Buscar";
-    Layout = "~/Views/Shared/_Layout.cshtml";}
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-
 
     if (!string.IsNullOrEmpty(ViewBag.AlertMessage))
     {
@@ -17,29 +12,52 @@
 
     }
 
-<div class="row">
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Hoja de vida<b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
-                            <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
-                            <li class="divider"></li>
-                            <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
-                            <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-</div>
+    <div class="row">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Hoja de vida<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
+                                <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
+                                <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                IPS/ESE<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                                <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Usuario<b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
 
 
 
@@ -54,54 +72,53 @@
             </div>
         </div>
     </fieldset>
- 
 
 
 
 
 
-     <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-        <form class="form-horizontal" role="form">
-            <fieldset>  
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form class="form-horizontal" role="form">
+                <fieldset>
                     <div class="form-group">
-                        @Html.TextBoxFor(model => model.codigo, new { @class = "form-control", @placeholder = "Código" })
+                        @Html.TextBoxFor(model => model.codigo, new { @class = "form-control", @placeholder = "Codigo" })
+                        @Html.ValidationMessageFor(model => model.codigo)
+
                         <span class="help-block">El criterio de búsqueda para los estudiantes es solo a través del código </span>
                     </div>
                     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Buscar" />
-               
-
-                
-            </fieldset>
-        </form>
-    </div><!-- /.col-lg-12 -->
-</div><!-- /.row -->
 
 
 
-    <div class="form-group">
+                </fieldset>
+            </form>
+        </div><!-- /.col-lg-12 -->
+    </div><!-- /.row -->
+
+
+
+    @*<div class="form-group">
 
 
 
 
-        <div class="col-sm-4">
+            <div class="col-sm-4">
 
-            @Html.HiddenFor(model => model.estudianteId)
-            @Html.HiddenFor(model => model.hojaVidaId)
-            @Html.HiddenFor(model => model.rotacionId)
-            @Html.HiddenFor(model => model.programaId)
-            @Html.HiddenFor(model => model.clave)
-            @Html.HiddenFor(model => model.modalidad)
-
-
-            @Html.HiddenFor(model => model.semestre)
-            @Html.HiddenFor(model => model.estado_academico)
+                @Html.HiddenFor(model => model.estudianteId)
+                @Html.HiddenFor(model => model.hojaVidaId)
+                @Html.HiddenFor(model => model.rotacionId)
+                @Html.HiddenFor(model => model.programaId)
+                @Html.HiddenFor(model => model.clave)
+                @Html.HiddenFor(model => model.modalidad)
 
 
-        </div>
-    </div>
+                @Html.HiddenFor(model => model.semestre)
+                @Html.HiddenFor(model => model.estado_academico)
 
-}
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+
+            </div>
+        </div>*@
+
 }

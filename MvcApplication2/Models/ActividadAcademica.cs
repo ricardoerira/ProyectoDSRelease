@@ -26,7 +26,8 @@ namespace MvcApplication2.Models
        
         public int DepartamentoSaludId { get; set; }//sale? 
         public int servicioId { get; set; }
-
+       
+       
         public virtual IPS_ESE IPS_ESE { get; set; }
  
         public virtual DepartamentoSalud DepartamentoSalud { get; set; }

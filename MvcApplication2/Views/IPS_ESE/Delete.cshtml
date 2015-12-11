@@ -4,18 +4,58 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Hoja de vida<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Usuario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
 
 <h3>Are you sure you want to delete this?</h3>
 <fieldset>
     <legend>IPS_ESE</legend>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.origen)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.origen)
-    </div>
+    
 
     <div class="display-label">
          @Html.DisplayNameFor(model => model.nombre)
@@ -73,12 +113,7 @@
         @Html.DisplayFor(model => model.cargo_representanteDS)
     </div>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.corregimiento_o_vereda)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.corregimiento_o_vereda)
-    </div>
+   
 
     <div class="display-label">
          @Html.DisplayNameFor(model => model.objeto_convenio)

@@ -144,9 +144,9 @@
                                 @Html.DisplayFor(modelItem => item.grupo)
                             </td>
                             <td class="text-center">
-                                @Html.ActionLink(" ", "../RotacionEstudiante/Index", new { id = item.rotacionId }, new { @class = "btn btn-sm btn-default btn-icon-only glyphicon glyphicon-ok" })
-                                @Html.ActionLink(" ", "Edit", new { id = item.rotacionId }, new { @class = "btn btn-sm btn-success btn-icon-only glyphicon glyphicon-pencil" })
-
+                                @Html.ActionLink(" ", "../RotacionEstudiante/Index", new { id = item.rotacionId }, new { @class = "btn btn-sm btn-default btn-icon-only glyphicon glyphicon-ok", title = "Asignar rotación" })
+                                @Html.ActionLink(" ", "Edit", new { id = item.rotacionId }, new { @class = "btn btn-sm btn-success btn-icon-only glyphicon glyphicon-pencil", title = "Editar horario" })
+                                
 
                             </td>
                         </tr>
