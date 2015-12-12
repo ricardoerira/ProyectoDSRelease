@@ -4,6 +4,20 @@
     ViewBag.Title = "Buscar";
     Layout = "~/Views/Shared/_Layout.cshtml";}
 
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    if (!string.IsNullOrEmpty(ViewBag.AlertMessage))
+    {
+        <script>alert("@ViewBag.AlertMessage");</script>
+
+    }
+
+
+
+
 
 <div class="row">
     <nav class="navbar navbar-default" role="navigation">
@@ -68,9 +82,9 @@
 
 
 
-@using (Html.BeginForm()) {
+@*@using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+    @Html.ValidationSummary(true)*@
 
 
 

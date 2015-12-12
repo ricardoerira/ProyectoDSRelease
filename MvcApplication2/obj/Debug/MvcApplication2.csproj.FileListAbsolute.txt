@@ -342,6 +342,7 @@ C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplicat
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\DotNetOpenAuth.OpenId.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.dll
+C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\Microsoft.Data.Edm.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\Microsoft.Data.OData.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\Microsoft.Web.Infrastructure.dll
@@ -366,6 +367,7 @@ C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplicat
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\WebMatrix.Data.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\WebMatrix.WebData.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.xml
+C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.xml
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\Newtonsoft.Json.xml
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\System.Net.Http.xml
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\System.Net.Http.Formatting.xml
@@ -423,3 +425,6 @@ C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplicat
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\bin\zh-Hant\System.Spatial.resources.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\obj\Debug\MvcApplication2.dll
 C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\obj\Debug\MvcApplication2.pdb
+C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\obj\Debug\MvcApplication2.csprojResolveAssemblyReference.cache
+C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\obj\Debug\MvcApplication2.Migrations.dd.resources
+C:\Users\Ricardo Erira\Documents\ProyectoDSRelease\ProyectoDSRelease\MvcApplication2\obj\Debug\MvcApplication2.csproj.GenerateResource.Cache
