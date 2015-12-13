@@ -82,6 +82,19 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="email">Docente</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("hojaVidaId", (IEnumerable<SelectListItem>)ViewBag.hojaVidaId, new { @class = "form-control" })
+                                       
+                                        @using (Html.BeginForm())
+                                        {
+                                            @Html.DropDownList("primer_nombre", ViewBag.hojaVidaId as List<SelectListItem>, new { @class = "form-control" })
+                                        }
+
+                                    </div>
+                                </div>
+
                                 <!-- Message body -->
                                 <div class="form-group">
                                     <label class="col-md-3 control-label" for="message">Horario</label>

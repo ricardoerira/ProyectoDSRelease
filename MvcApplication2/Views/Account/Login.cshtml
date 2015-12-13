@@ -1,6 +1,7 @@
 ﻿@model MvcApplication2.Models.LoginModel
 
-
+<link href="{! URLFor ($ Resource.BootstrapZip, 'bootstrap / bootstrap.min.css')}"
+      rel="stylesheet" />
 
 
 @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
@@ -28,7 +29,7 @@
             <div class="collapse navbar-collapse" id="navigation">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/Proyecto/Home/Index">Inicio</a></li>
-                    <li><a href="#">Quiénes somos</a></li>
+                    <li><a href="/Proyecto/Home/Contact">Quiénes somos</a></li>
                     <li><a href="#"></a></li>
                    
                     
