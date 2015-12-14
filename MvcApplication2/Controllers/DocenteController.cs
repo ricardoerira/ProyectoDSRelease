@@ -598,7 +598,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen2 = path1;
 
@@ -615,7 +615,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen3 = path1;
 
@@ -633,7 +633,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen4 = path1;
 
@@ -652,7 +652,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen5 = path1;
 
@@ -670,7 +670,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen6 = path1;
 
@@ -688,7 +688,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen7 = path1;
 
@@ -706,7 +706,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen8 = path1;
 
@@ -722,7 +722,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen9 = path1;
 
@@ -738,7 +738,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen10 = path1; ;
 
@@ -754,7 +754,7 @@ namespace MvcApplication2.Controllers
                   if (System.IO.File.Exists(path1))
                   {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + docente.num_documento, ".jpg");
 
                       ViewBag.imagen11 = path1;
 
@@ -909,8 +909,8 @@ namespace MvcApplication2.Controllers
         {
             docente = db.Docentes.Find(docente.docenteId);
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
-            const string fromPassword = "descargar";
+            var toAddress = new MailAddress("servidor.facsalud@ucaldas.edu.co", "To Name");
+            const string fromPassword = "Telesalud2011";
             const string subject = "Solicitud actualizacion hoja de vida";
             const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Cédula Docente </h3><h3><strong>Contrase&ntilde;a</strong>: Cédula docente&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
 
