@@ -1018,7 +1018,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_celular = docente.HojaVida.num_celular;
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
-                
+                ValidarCamposDocente(docente);
                 
                 docente1.tipo_vinculacion = docente.tipo_vinculacion;
                 docente1.categoria_escalafon_docente = docente.categoria_escalafon_docente;
@@ -1026,6 +1026,8 @@ namespace MvcApplication2.Controllers
                 docente1.certificado_TPN = docente.certificado_TPN;
                 docente1.certificado_DPE = docente.certificado_DPE; //Reemplaza titulo postgrado
                 docente1.otro_titulo = docente.otro_titulo;
+                
+                
 
                
 
@@ -1044,9 +1046,8 @@ namespace MvcApplication2.Controllers
                     docente1.num_libreta_militar = "NO APLICA";
                 }
                 
-                
-
                 docente.HojaVida = null;
+                ValidarCamposDocente(docente1);
                
                 db.Entry(docente1).State = EntityState.Modified;
 
@@ -1077,6 +1078,8 @@ namespace MvcApplication2.Controllers
                 }
                
                 db.SaveChanges();
+                ValidarCamposDocente(docente1);
+              
                 return RedirectToAction("../Docente/Personales/" + docente1.docenteId);
                 //return View(docente1);
             }
@@ -1108,10 +1111,20 @@ namespace MvcApplication2.Controllers
                 (f.celular_acudiente != 0) && (d.tipo_vinculacion !="Sin Asignar") &&
                 (d.dedicacion !=null) && (d.categoria_escalafon_docente!="Sin Asignar"))
             {
+                Docente estudianteAux = db.Docentes.Find(docente.docenteId);
+                estudianteAux.HojaVida.estado_HV = true;
+
+                db.Entry(estudianteAux).State = EntityState.Modified;
+                db.SaveChanges();
                 return true;
             }
             else
             {
+                Docente estudianteAux = db.Docentes.Find(docente.docenteId);
+                estudianteAux.HojaVida.estado_HV = false;
+
+                db.Entry(estudianteAux).State = EntityState.Modified;
+                db.SaveChanges();
                 return false;
             }
         }

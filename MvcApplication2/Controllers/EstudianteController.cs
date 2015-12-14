@@ -447,6 +447,11 @@ public ActionResult Buscar(Estudiante estudiante)
             }
             else
             {
+                Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
+                estudianteAux.HojaVida.estado_HV = false;
+
+                db.Entry(estudianteAux).State = EntityState.Modified;
+                db.SaveChanges();
                 return false;
             }
         }  
@@ -1759,7 +1764,7 @@ public ActionResult Buscar(Estudiante estudiante)
               oHojaVida.num_celular = estudiante.HojaVida.num_celular;
               oHojaVida.num_telefono = estudiante.HojaVida.num_telefono;
               oHojaVida.Familia = estudiante.HojaVida.Familia;
-
+              oHojaVida.estado_HV = true;
               int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
               string edadDocente = edad.ToString();
               est.barrio_procedencia = edadDocente;//Reemplaza edad
@@ -1767,11 +1772,13 @@ public ActionResult Buscar(Estudiante estudiante)
               estudiante.HojaVida = null;
 
                 db.Entry(est).State = EntityState.Modified;
-
+                ValidarCampos(est);
                 //cargaDocumento(estudiante);
                 guardaDocumentos(estudiante);
-
+                
                 db.SaveChanges();
+                ValidarCampos(est);
+              
                return RedirectToAction("../Estudiante/Personales/" + est.estudianteId);
                // return View(est);
             }
