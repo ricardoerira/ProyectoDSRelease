@@ -73,7 +73,8 @@ public ActionResult BuscarEnDepartamento(Estudiante estudiante)
             }
             else
             {
-                return RedirectToAction("../Estudiante/ReporteEstudianteA/"  + estudiante.estudianteId);
+                //return RedirectToAction("../Estudiante/ReporteEstudianteA/"  + estudiante.estudianteId);
+                return RedirectToAction("../Estudiante/PersonalesDpto/" + estudiante.estudianteId);
 
 
             }
@@ -1892,6 +1893,35 @@ public ActionResult Buscar(Estudiante estudiante)
             
         }
 
+        public ActionResult PersonalesDpto(int id = 0)
+        {
+            TempData["notice"] = null;
+
+            Estudiante estudiante = db.Estudiantes.Find(id);
+
+            cargaImagen(estudiante);
+            if (estudiante == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            Boolean estado = ValidarCampos(estudiante);
+            ViewBag.estado = estado;
+            Boolean estadoV = ValidarVacunas(estudiante);
+            ViewBag.estadoV = estadoV;
+
+            int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
+            string edadDocente = edad.ToString();
+            estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
+
+
+
+            cargaDocumentoDos(estudiante);
+            return View(estudiante);
+
+        }
+
 
         public ActionResult PersonalesResidentesDS(int id = 0)
         {
@@ -1937,8 +1967,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
            // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("servidor.facsalud@ucaldas.edu.co", "To Name");
-            const string fromPassword = "Telesalud2011";
+            var toAddress = new MailAddress("mgliliana1028@gmail.com", "To Name");
+            const string fromPassword = "descargar";
             const string subject = "Solicitud actualizacion hoja de vida";
             const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
              //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
@@ -1999,6 +2029,23 @@ public ActionResult Buscar(Estudiante estudiante)
                 //return View(estudiante);
                 return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
                 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PersonalesDpto(Estudiante estudiante)
+        {
+
+            estudiante = db.Estudiantes.Find(estudiante.estudianteId);
+
+            guardaDocumentos(estudiante);
+
+
+            Boolean estado = ValidarCampos(estudiante);
+            ViewBag.estado = estado;
+            //return View(estudiante);
+            return RedirectToAction("../Estudiante/PersonalesDpto/" + estudiante.estudianteId);
+
         }
 
         [HttpPost]

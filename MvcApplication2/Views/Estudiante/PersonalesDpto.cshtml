@@ -17,12 +17,12 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "VistaODS", "Rotacion")</li>
-                    <li>@Html.ActionLink("Personales", "PersonalesDS/" + Model.estudianteId, "Estudiante")</li>
-                    <li>@Html.ActionLink("Documentos", "SoportesCompletosDS/" + Model.estudianteId, "Estudiante")</li>
+                    <li>@Html.ActionLink("Inicio", "VistaDepartamentoSalud", "DepartamentoSalud")</li>
+                    @*<li>@Html.ActionLink("Personales", "PersonalesDpto/" + Model.estudianteId, "Estudiante")</li>
+                    <li>@Html.ActionLink("Documentos", "SoportesCompletosDpto/" + Model.estudianteId, "Estudiante")</li>
                     <li>@Html.ActionLink("Académicos", "AcademicosDS/" + Model.estudianteId, "Estudiante")</li>
                     <li>@Html.ActionLink("Vacunación", "CarnetVacunacionODS/" + Model.estudianteId, "Estudiante")</li>
-                    <li>@Html.ActionLink("Salud", "SaludDS/" + Model.estudianteId, "Estudiante")</li>
+                    <li>@Html.ActionLink("Salud", "SaludDS/" + Model.estudianteId, "Estudiante")</li>*@
                    @* <li>@Html.ActionLink("Reporte", "ReporteEstudianteA/" + Model.estudianteId, "Estudiante", new { target = "_blank" })</li>*@
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -390,7 +390,7 @@
                                         <td class="tdDocumentos">Documento de identidad</td>
 
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                            @*<input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
                                         </td>
                                         <td>
                                             <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen1 })'>
@@ -403,7 +403,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Carné Liberty Seguros</td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                           @* <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
                                         </td>
                                         <td>
                                             <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen2 })'>
@@ -417,7 +417,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Carné estudiantil</td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                           @* <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
 
                                         </td>
                                         <td>
@@ -431,7 +431,7 @@
 
                                         <td class="tdDocumentos">Carné EPS</td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                          @*  <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
                                         </td>
                                         <td>
                                             <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen4 })'>
@@ -444,7 +444,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Carné vacunación 1</td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                         @*   <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
 
                                         </td>
                                         <td>
@@ -457,7 +457,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Carné vacunación 2</td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                           @* <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
 
                                         </td>
                                         <td>
@@ -470,7 +470,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Anticuerpos contra varicela </td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                          @*  <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
 
                                         </td>
                                         <td>
@@ -483,7 +483,7 @@
                                     <tr>
                                         <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
                                         <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                           @* <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">*@
 
                                         </td>
                                         <td>

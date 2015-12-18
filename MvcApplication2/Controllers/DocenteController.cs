@@ -252,7 +252,8 @@ namespace MvcApplication2.Controllers
             }
             else
             {
-                return RedirectToAction("../Docente/ReporteDocenteA/" + docente.docenteId);
+                //return RedirectToAction("../Docente/ReporteDocenteA/" + docente.docenteId);
+                return RedirectToAction("../Docente/PersonalesDpto/" + docente.docenteId);
             }
         }
         //
@@ -903,14 +904,40 @@ namespace MvcApplication2.Controllers
             
         }
 
+        public ActionResult PersonalesDpto(int id = 0)
+        {
+            TempData["notice"] = null;
+
+
+
+            Docente docente = db.Docentes.Find(id);
+            HojaVida oHojaVida = db.HojaVidas.Find(docente.hojaVidaId);
+            cargaImagen(docente);
+            int edad = DateTime.Today.AddTicks(-docente.HojaVida.fecha_nacimiento.Ticks).Year - 1;
+            string edadDocente = edad.ToString();
+            docente.diploma_profesional = edadDocente;//Reemplaza edad
+
+            if (docente.HojaVida.genero.Equals("F"))
+            {
+                docente.num_libreta_militar = "NO APLICA";
+            }
+            Boolean estado = ValidarCamposDocente(docente);
+            ViewBag.estado = estado;
+
+            cargaDocumentos(docente);
+            return View(docente);
+
+
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SolicitarActualizacion(Docente docente)
         {
             docente = db.Docentes.Find(docente.docenteId);
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("servidor.facsalud@ucaldas.edu.co", "To Name");
-            const string fromPassword = "Telesalud2011";
+            var toAddress = new MailAddress("mgliliana1028@gmail.com", "To Name");
+            const string fromPassword = "descargar";
             const string subject = "Solicitud actualizacion hoja de vida";
             const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Cédula Docente </h3><h3><strong>Contrase&ntilde;a</strong>: Cédula docente&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
 
@@ -994,6 +1021,50 @@ namespace MvcApplication2.Controllers
 
 
             }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PersonalesDpto(Docente docente)
+        {
+            ModelState.Remove("certificado_TPDTS");
+
+            docente = db.Docentes.Find(docente.docenteId);
+            int numFiles = Request.Files.Count;
+            if (Request != null)
+            {
+
+
+                int uploadedCount = 0;
+                string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
+                for (int i = 0; i < numFiles; i++)
+                {
+                    HttpPostedFileBase file = Request.Files[i];
+                    if (file.ContentLength > 0)
+                    {
+                        string fileName = file.FileName;
+                        string fileContentType = file.ContentType;
+                        byte[] fileBytes = new byte[file.ContentLength];
+                        file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + docente.num_documento, ".jpg");
+                        if (System.IO.File.Exists(path1))
+                            System.IO.File.Delete(path1);
+
+                        file.SaveAs(path1);
+                        uploadedCount++;
+                    }
+                }
+            }
+            Boolean estado = ValidarCamposDocente(docente);
+            ViewBag.estado = estado;
+
+            cargaImagen(docente);
+            cargaDocumentos(docente);
+            return View(docente);
+
+
+
+        }
         
 
 
