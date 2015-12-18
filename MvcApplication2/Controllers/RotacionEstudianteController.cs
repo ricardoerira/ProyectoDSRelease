@@ -86,7 +86,7 @@ namespace MvcApplication2.Controllers
 
             ViewBag.IPS_ESEId = new SelectList(db.IPS_ESE, "IPS_ESEId", "nombre", rotacionestudiante.IPS_ESEId);
             ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "grupo", rotacionestudiante.rotacionId);
-            ViewBag.docenteId = new SelectList(db.Docentes, "docenteId", "num_documento", rotacionestudiante.docenteId);
+            ViewBag.docenteId = new SelectList(db.Docentes, "docenteId", "HojaVida.primer_nombre", rotacionestudiante.docenteId);
             ViewBag.estudianteId = new SelectList(db.Estudiantes, "estudianteId", "tipo", rotacionestudiante.estudianteId);
             return View(rotacionestudiante);
         }
@@ -106,7 +106,7 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.IPS_ESEId = new SelectList(db.IPS_ESE, "IPS_ESEId", "nombre", rotacionestudiante.IPS_ESEId);
             ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "grupo", rotacionestudiante.rotacionId);
-            ViewBag.docenteId = new SelectList(db.Docentes, "docenteId", "num_documento", rotacionestudiante.docenteId);
+            ViewBag.docenteId = new SelectList(db.Docentes, "docenteId", "HojaVida.primer_nombre", rotacionestudiante.docenteId);
             ViewBag.estudianteId = new SelectList(db.Estudiantes, "estudianteId", "tipo_documento", rotacionestudiante.estudianteId);
             return View(rotacionestudiante);
         }

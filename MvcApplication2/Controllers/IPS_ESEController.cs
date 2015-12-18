@@ -305,8 +305,8 @@ namespace MvcApplication2.Controllers
             var date = DateTime.MinValue;
            DateTime.TryParse(añoId + "/" +mesId+ "/01", out date);
          
-           DateTime date2 = new DateTime(añoId, mesId,
-                                     DateTime.DaysInMonth(añoId, mesId));
+           DateTime date2 = new DateTime(añoId, mesId+1,
+                                     DateTime.DaysInMonth(añoId, mesId + 1));
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
             rptH.Load(strRptPath);
@@ -319,12 +319,19 @@ namespace MvcApplication2.Controllers
             List<HojaVida> hojas2 = new List<HojaVida>();
             foreach (var item in re)
             {
+                if(item.Estudiante.HojaVida.estado_HV)
+                
+                {
                 docentes.Add(item.Docente);
                 hojas.Add(item.Docente.HojaVida);
                 estudiantes.Add(item.Estudiante);
                 hojas2.Add(item.Estudiante.HojaVida);
                 rotaciones.Add(item.Rotacion);
                 acti.Add(item.Rotacion.ActividadAcademica);
+                }
+
+                
+              
             }
 
             rptH.Database.Tables[0].SetDataSource(re);
@@ -349,7 +356,7 @@ namespace MvcApplication2.Controllers
 
             if(re.Count>0)
             {
-                EnviarEstudiantes(estudiantes, docentes);
+                EnviarEstudiantes(estudiantes, docentes, ips.correo);
                 Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
                 SaveStreamToFile(stream,"cartaPresentacion");
                 Stream stream2 = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
@@ -374,7 +381,7 @@ namespace MvcApplication2.Controllers
          
         }
 
-        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<Docente> docentes)
+        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<Docente> docentes, string correo)
         {
             string body = "<h2>Coordial Saludo.</h2><h2 style=\"text-align: justify;\">Se envía carta de presentación con sus respectivas hojas de vida</h2>";
             body += "<h2>Estudiantes</h2>";
@@ -485,10 +492,8 @@ namespace MvcApplication2.Controllers
             {
                 if (User.IsInRole("IPS"))
                 {
-                    int res = consultaIPS(User.Identity.Name);
-
-                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.IPS_ESEId == res);
-
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+                   
                     lista = municipios.ToList();
 
 
@@ -617,10 +622,12 @@ namespace MvcApplication2.Controllers
             {
                 if (User.IsInRole("IPS"))
                 {
-                    int res = consultaIPS(User.Identity.Name);
 
-                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.IPS_ESEId == res);
 
+
+
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+                   
                     lista = municipios.ToList();
 
 
@@ -727,10 +734,8 @@ namespace MvcApplication2.Controllers
             {
                 if (User.IsInRole("IPS"))
                 {
-                    int res = consultaIPS(User.Identity.Name);
-
-                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.IPS_ESEId == res);
-
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+                   
                     lista = municipios.ToList();
 
 
@@ -852,9 +857,8 @@ namespace MvcApplication2.Controllers
             {
                 if (User.IsInRole("IPS"))
                 {
-                    int res=consultaIPS(User.Identity.Name);
-
-                        var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.IPS_ESEId == res);
+                  
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals( User.Identity.Name));
                         
                         lista = municipios.ToList();
                     
