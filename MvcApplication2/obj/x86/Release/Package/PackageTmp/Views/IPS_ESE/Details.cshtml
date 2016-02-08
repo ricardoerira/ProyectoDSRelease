@@ -1,0 +1,134 @@
+﻿@model MvcApplication2.Models.IPS_ESE
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Hoja de vida<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Usuario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+<fieldset>
+    <legend>IPS_ESE</legend>
+
+    
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.representante_legal)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.representante_legal)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cargo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cargo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.correo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.correo)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.naturaleza_juridica)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.naturaleza_juridica)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nivel_complejidad)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nivel_complejidad)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.representanteDS)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.representanteDS)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.cargo_representanteDS)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.cargo_representanteDS)
+    </div>
+
+    
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.objeto_convenio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.objeto_convenio)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Municipio.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Municipio.nombre)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("EditEPS", "EditEPS", new { id = Model.IPS_ESEId }) |
+    @Html.ActionLink("Regresar", "Index")
+</p>

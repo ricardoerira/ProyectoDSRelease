@@ -1,0 +1,114 @@
+﻿@model IEnumerable<MvcApplication2.Models.IPS_ESE>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Hoja de vida<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Usuario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+<p>
+    @Html.ActionLink("Nueva IPS/ESE", "RegistroEPS")
+</p>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+
+            <th class="text-center">NOMBRE INSTITUCIÓN</th> 
+            <th class="text-center">REPRESENTANTE LEGAL</th>
+            <th class="text-center">CARGO</th>
+            <th class="text-center">CORREO</th>
+            <th class="text-center">REPRESENTANTE CODA</th>
+            <th class="text-center">CARGO</th>
+            <th class="text-center">OBJETO CONVENIO</th>
+            <th class="text-center">MUNICIPIO</th>
+            
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.representante_legal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cargo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.correo)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.representanteDS)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cargo_representanteDS)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.objeto_convenio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Municipio.nombre)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditEPS", new { id = item.IPS_ESEId }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IPS_ESEId }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IPS_ESEId })
+                </td>
+            </tr>
+        }
+
+</table>

@@ -23,7 +23,7 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-            
+
             var ips_ese = db.IPS_ESE.Include(i => i.Municipio);
             return View(ips_ese.ToList());
         }
@@ -31,7 +31,7 @@ namespace MvcApplication2.Controllers
         [AllowAnonymous]
         public ActionResult RegistroEPS()
         {
-            
+
             var municipios = db.Municipios.Include(h => h.Departamento);
             List<Municipio> lista = municipios.ToList();
 
@@ -47,16 +47,16 @@ namespace MvcApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(ips_ese.pass.Equals(ips_ese.passC))
+                if (ips_ese.pass.Equals(ips_ese.passC))
                 {
                     db.IPS_ESE.Add(ips_ese);
                     if (!WebSecurity.Initialized)
                     {
- 
+
                         WebSecurity.InitializeDatabaseConnection("DefaultConnection", "UserProfile", "UserId", "UserName", autoCreateTables: true);
-           
+
                     }
-                       
+
                     WebSecurity.CreateUserAndAccount(ips_ese.user, ips_ese.passC);
                     db.SaveChanges();
 
@@ -67,7 +67,7 @@ namespace MvcApplication2.Controllers
                         int uploadedCount = 0;
                         string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
                         int numFiles = Request.Files.Count;
-                 
+
                         for (int i = 0; i < numFiles; i++)
                         {
 
@@ -78,7 +78,7 @@ namespace MvcApplication2.Controllers
                                 string fileContentType = file.ContentType;
                                 byte[] fileBytes = new byte[file.ContentLength];
                                 file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[i] + ips_ese.IPS_ESEId , ".jpg");
+                                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
                                 //string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
                                 if (System.IO.File.Exists(path1))
                                     System.IO.File.Delete(path1);
@@ -88,7 +88,7 @@ namespace MvcApplication2.Controllers
                             }
                         }
                     }
-                    
+
                     //return RedirectToAction("RegistroEPS");
                     return RedirectToAction("Index");
 
@@ -103,7 +103,7 @@ namespace MvcApplication2.Controllers
                     ViewBag.AlertMessage = "Las contrasenias deben de coincidir";
                     return View();
                 }
-              
+
             }
 
             ViewBag.municipioId = new SelectList(db.Municipios, "municipioId", "nombre", ips_ese.municipioId);
@@ -255,8 +255,8 @@ namespace MvcApplication2.Controllers
         }
 
 
-       
-        
+
+
 
         public ActionResult VistaIPS_ESE()
         {
@@ -278,39 +278,49 @@ namespace MvcApplication2.Controllers
 
             var municipios = db.IPS_ESE.Include(h => h.Municipio);
             List<IPS_ESE> lista = municipios.ToList();
-            
+
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
-            
+
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
 
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
-            
+
 
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SeleccionRotacionCarta(IPS_ESE s,FormCollection value)
+        public ActionResult SeleccionRotacionCarta(IPS_ESE s, FormCollection value)
         {
 
             IPS_ESE ips = db.IPS_ESE.Find(s.IPS_ESEId);
 
-            int programaId =Int32.Parse( value["programaId"]);
+            int programaId = Int32.Parse(value["programaId"]);
             int departamentoId = Int32.Parse(value["DepartamentoSaludId"]);
             DepartamentoSalud ds = db.DepartamentoSaluds.Find(departamentoId);
-            Programa pr= db.Programas.Find(programaId);
+            Programa pr = db.Programas.Find(programaId);
             int mesId = Int32.Parse(value["mesId"]);
             int añoId = Int32.Parse(value["añoId"]);
             var date = DateTime.MinValue;
-           DateTime.TryParse(añoId + "/" +mesId+ "/01", out date);
-         
-           DateTime date2 = new DateTime(añoId, mesId+1,
+            DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
+            DateTime date2;
+            if (mesId == 12)
+            {
+                date2 = new DateTime(añoId, 1,
+                                     DateTime.DaysInMonth(añoId, 1));
+            }
+            else
+            {
+                date2 = new DateTime(añoId, mesId + 1,
                                      DateTime.DaysInMonth(añoId, mesId + 1));
+
+            }
+
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
             rptH.Load(strRptPath);
-            List<RotacionEstudiante> re = db.RotacionEstudiantes.Include(h => h.Docente).Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.Estudiante.programaId == programaId).Where(r => r.Rotacion.fecha_inicio >= date).Where(r => r.Rotacion.fecha_terminacion <= date2).Where(r=>r.Rotacion.ActividadAcademica.DepartamentoSaludId==departamentoId).ToList();
+            List<RotacionEstudiante> re = db.RotacionEstudiantes.Include(h => h.Docente).Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.Estudiante.programaId == programaId).Where(r => r.Rotacion.fecha_inicio >= date).Where(r => r.Rotacion.fecha_terminacion <= date2).Where(r => r.Rotacion.ActividadAcademica.DepartamentoSaludId == departamentoId).ToList();
             List<Docente> docentes = new List<Docente>();
             List<Estudiante> estudiantes = new List<Estudiante>();
             List<Rotacion> rotaciones = new List<Rotacion>();
@@ -319,19 +329,18 @@ namespace MvcApplication2.Controllers
             List<HojaVida> hojas2 = new List<HojaVida>();
             foreach (var item in re)
             {
-                if(item.Estudiante.HojaVida.estado_HV)
-                
+                if (item.Estudiante.HojaVida.estado_HV)
                 {
-                docentes.Add(item.Docente);
-                hojas.Add(item.Docente.HojaVida);
-                estudiantes.Add(item.Estudiante);
-                hojas2.Add(item.Estudiante.HojaVida);
-                rotaciones.Add(item.Rotacion);
-                acti.Add(item.Rotacion.ActividadAcademica);
+                    docentes.Add(item.Docente);
+                    hojas.Add(item.Docente.HojaVida);
+                    estudiantes.Add(item.Estudiante);
+                    hojas2.Add(item.Estudiante.HojaVida);
+                    rotaciones.Add(item.Rotacion);
+                    acti.Add(item.Rotacion.ActividadAcademica);
                 }
 
-                
-              
+
+
             }
 
             rptH.Database.Tables[0].SetDataSource(re);
@@ -340,27 +349,27 @@ namespace MvcApplication2.Controllers
             rptH.Database.Tables[3].SetDataSource(hojas2);
             rptH.Database.Tables[4].SetDataSource(acti);
             rptH.Database.Tables[5].SetDataSource(rotaciones);
-           
 
 
 
-            rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de "+pr.nombre+" Departamento "+ds.nombre+" que realizaran su rotación en su institución y los profesores con su horario.");
+
+            rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + pr.nombre + " Departamento " + ds.nombre + " que realizaran su rotación en su institución y los profesores con su horario.");
             rptH.SetParameterValue("fecha", "");
             rptH.SetParameterValue("dr", ips.representante);
-            rptH.SetParameterValue("cargo",ips.cargo); 
+            rptH.SetParameterValue("cargo", ips.cargo);
             rptH.SetParameterValue("nombreIPS", ips.nombre);
-            
 
 
 
 
-            if(re.Count>0)
+
+            if (re.Count > 0)
             {
                 EnviarEstudiantes(estudiantes, docentes, ips.correo);
                 Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-                SaveStreamToFile(stream,"cartaPresentacion");
+                SaveStreamToFile(stream, "cartaPresentacion");
                 Stream stream2 = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-               
+
                 return File(stream2, "application/pdf");
             }
             else
@@ -373,82 +382,85 @@ namespace MvcApplication2.Controllers
                 ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
 
                 ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
-            
+
                 ViewBag.AlertMessage = "No se encontraron resultados";
                 return View();
             }
 
-         
+
         }
 
         public void EnviarEstudiantes(List<Estudiante> estudiantes, List<Docente> docentes, string correo)
         {
             string body = "<h2>Coordial Saludo.</h2><h2 style=\"text-align: justify;\">Se envía carta de presentación con sus respectivas hojas de vida</h2>";
             body += "<h2>Estudiantes</h2>";
-            foreach(Estudiante estudiante in estudiantes)
+            foreach (Estudiante estudiante in estudiantes)
             {
-                body += "&nbsp;<a href=\"http://localhost:34649/Estudiante/ReporteEstudianteA/" + estudiante.estudianteId + "\">" + estudiante.num_documento + "</a>";
+                body += "&nbsp;<a href=\"http://salud.ucaldas.edu.co/Proyecto/Estudiante/ReporteEstudianteA/" + estudiante.estudianteId + "\">" + estudiante.num_documento + "</a>";
             }
             body += "<h2>Docentes</h2>";
 
             foreach (Docente docente in docentes.Distinct())
             {
-                body += "&nbsp;<a href=\"http://localhost:34649/Docente/ReporteDocenteA/" + docente.docenteId + "\">" + docente.num_documento + "</a>";
+                body += "&nbsp;<a href=\"http://salud.ucaldas.edu.co/Proyecto/Docente/ReporteDocenteA/" + docente.docenteId + "\">" + docente.num_documento + "</a>";
             }
-            body += "<p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
+            body += "<p><img src=\"http://st-listas.20minutos.es/images/2012-01/316846/3342344_640px.jpg?1326385884\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
 
+            //body += "<p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
+
+       
 
 
 
 
 
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
+            var toAddress = new MailAddress("mgliliana1028@gmail.com", "To Name");
             const string fromPassword = "descargar";
             const string subject = "Carta de presentación";
-                
 
-                try
+
+            try
+            {
+
+                var smtp = new SmtpClient
                 {
+                    Host = "72.29.75.91",
+                    Port = 25,
+                    EnableSsl = false,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Timeout = 10000,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+                var message = new MailMessage(fromAddress, toAddress);
+                message.To.Add("servidor.facsalud@ucaldas.edu.co");
+                message.IsBodyHtml = true;
+                message.Subject = subject;
+                message.Body = body;
+                string file = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), "CartaPresentacion", ".pdf");
 
-                    var smtp = new SmtpClient
-                    {
-                        Host = "72.29.75.91",
-                        Port = 25,
-                        EnableSsl = false,
-                        DeliveryMethod = SmtpDeliveryMethod.Network,
-                        UseDefaultCredentials = false,
-                        Timeout = 10000,
-                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-                    };
-                    var message = new MailMessage(fromAddress, toAddress);
-
-                    message.IsBodyHtml = true;
-                    message.Subject = subject;
-                    message.Body = body;
-                    string file = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), "CartaPresentacion", ".pdf");
-
-                    message.Attachments.Add(new System.Net.Mail.Attachment(file));
+                message.Attachments.Add(new System.Net.Mail.Attachment(file));
 
 
-                    smtp.EnableSsl = false;
-                    smtp.Send(message);
+                smtp.EnableSsl = false;
+                smtp.Send(message);
 
 
-                }
+            }
 
 
-                catch (Exception e)
-                {
+            catch (Exception e)
+            {
 
-                    Console.WriteLine("Ouch!" + e.ToString());
+                Console.WriteLine("Ouch!" + e.ToString());
 
-                }
+            }
 
-        
-        
+
+
         }
-       
+
         public void SaveStreamToFile(Stream stream, string filename)
         {
             string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), filename, ".pdf");
@@ -460,13 +472,13 @@ namespace MvcApplication2.Controllers
                 fileStream.Flush();
                 fileStream.Close();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
-          
+
         }
-       
+
 
         //Typically I implement this Write method as a Stream extension method. 
         //The framework handles buffering.
@@ -481,9 +493,9 @@ namespace MvcApplication2.Controllers
             to.Flush();
 
 
-         
+
         }
-        
+
         public ActionResult SeleccionRotacionContraPrestacionC()
         {
 
@@ -493,7 +505,7 @@ namespace MvcApplication2.Controllers
                 if (User.IsInRole("IPS"))
                 {
                     var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
-                   
+
                     lista = municipios.ToList();
 
 
@@ -531,7 +543,7 @@ namespace MvcApplication2.Controllers
 
 
             List<Curso> cursos = new List<Curso>();
-            
+
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteContraPrestacionC.rpt");
             rptH.Load(strRptPath);
@@ -539,16 +551,16 @@ namespace MvcApplication2.Controllers
             int mesId = Int32.Parse(value["mesId"]);
             int añoId = Int32.Parse(value["añoId"]);
             var date = DateTime.MinValue;
-           
-            if(mesId==13)
+
+            if (mesId == 13)
             {
                 DateTime.TryParse(añoId + "/01/01", out date);
                 DateTime date2 = new DateTime(añoId, 12,
                                      DateTime.DaysInMonth(añoId, 12));
                 cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaInicio >= date).Where(r => r.fechaFin <= date2).ToList();
-          
+
             }
-            else 
+            else
             {
                 DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
 
@@ -556,62 +568,62 @@ namespace MvcApplication2.Controllers
                                           DateTime.DaysInMonth(añoId, mesId));
 
                 cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaInicio >= date)
-                    .Where(r => r.fechaFin <= date2 ).ToList();
-       
+                    .Where(r => r.fechaFin <= date2).ToList();
+
             }
-          
-           if(cursos.Count>0)
-           {
-               rptH.Database.Tables[0].SetDataSource(cursos);
+
+            if (cursos.Count > 0)
+            {
+                rptH.Database.Tables[0].SetDataSource(cursos);
 
 
-               rptH.SetParameterValue("ips", ips.nombre);
-               rptH.SetParameterValue("email", ips.correo);
-               rptH.SetParameterValue("representante", ips.representante);
+                rptH.SetParameterValue("ips", ips.nombre);
+                rptH.SetParameterValue("email", ips.correo);
+                rptH.SetParameterValue("representante", ips.representante);
 
-               if(mesId==13)
-               {
-                   rptH.SetParameterValue("fecha",  "Año: " + añoId);
-              
-               }
-               else
-               {
-                   rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
-              
-               }
-               int total = 0;
+                if (mesId == 13)
+                {
+                    rptH.SetParameterValue("fecha", "Año: " + añoId);
 
-               if (cursos.Count > 0)
-               {
-                   total += cursos.Sum(d => d.totalContraprestacion);
+                }
+                else
+                {
+                    rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
 
-               }
+                }
+                int total = 0;
 
-               rptH.SetParameterValue("total", total);
+                if (cursos.Count > 0)
+                {
+                    total += cursos.Sum(d => d.totalContraprestacion);
 
+                }
 
-
-
-
-               Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+                rptH.SetParameterValue("total", total);
 
 
 
 
-               return File(stream, "application/pdf");
-           }
-           else
-           {
-               ViewBag.AlertMessage = "No se encontraron resultados";
 
-               var municipios = db.IPS_ESE.Include(h => h.Municipio);
-               List<IPS_ESE> lista = municipios.ToList();
-               ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
-               return View();
-           }
-            
-          
+
+
+
+                return File(stream, "application/pdf");
+            }
+            else
+            {
+                ViewBag.AlertMessage = "No se encontraron resultados";
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                List<IPS_ESE> lista = municipios.ToList();
+                ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+                return View();
+            }
+
+
         }
 
 
@@ -627,7 +639,7 @@ namespace MvcApplication2.Controllers
 
 
                     var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
-                   
+
                     lista = municipios.ToList();
 
 
@@ -665,7 +677,7 @@ namespace MvcApplication2.Controllers
 
 
             List<Induccion> inducciones = new List<Induccion>();
-          
+
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteContraPrestacionI.rpt");
             rptH.Load(strRptPath);
@@ -673,44 +685,44 @@ namespace MvcApplication2.Controllers
             int periodoId = Int32.Parse(value["periodoId"]);
             int añoId = Int32.Parse(value["añoId"]);
             var date = DateTime.MinValue;
-           
 
-           inducciones=  db.Induccions.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.periodo == periodoId)
-                    .Where(r => r.año == añoId ).ToList();
+
+            inducciones = db.Induccions.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.periodo == periodoId)
+                     .Where(r => r.año == añoId).ToList();
 
             rptH.Database.Tables[0].SetDataSource(inducciones);
 
-           
+
 
             rptH.SetParameterValue("ips", ips.nombre);
             rptH.SetParameterValue("fecha", "");
             rptH.SetParameterValue("representante", ips.representante);
             rptH.SetParameterValue("correo", ips.correo);
 
-            
 
 
-                rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: " + añoId);
 
-            
+            rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: " + añoId);
+
+
             //rptH.SetParameterValue("correo", ips.correo);
 
             int total = 0;
-           
+
             if (inducciones.ToList().Count > 0)
             {
                 total += inducciones.Sum(d => d.valor);
                 rptH.SetParameterValue("total", total);
 
-                 Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-                                
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
                 return File(stream, "application/pdf");
             }
             else
             {
                 ViewBag.AlertMessage = "No se encontraron resultados";
 
-             
+
                 var municipios = db.IPS_ESE.Include(h => h.Municipio);
                 List<IPS_ESE> lista = municipios.ToList();
                 ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
@@ -719,7 +731,7 @@ namespace MvcApplication2.Controllers
             }
 
 
-          
+
 
         }
 
@@ -735,7 +747,7 @@ namespace MvcApplication2.Controllers
                 if (User.IsInRole("IPS"))
                 {
                     var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
-                   
+
                     lista = municipios.ToList();
 
 
@@ -784,7 +796,7 @@ namespace MvcApplication2.Controllers
             var date = DateTime.MinValue;
 
             cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.periodoAcademico == periodoId).ToList();
-            
+
 
             rptH.Database.Tables[0].SetDataSource(cursos);
 
@@ -796,7 +808,7 @@ namespace MvcApplication2.Controllers
 
 
 
-            rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: " );
+            rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: ");
 
 
             int total = 0;
@@ -826,44 +838,42 @@ namespace MvcApplication2.Controllers
 
 
         }
-       public int consultaIPS(string nombre)
-       
-       {
-      
-           if(User.Identity.Name.Equals("hdecaldas"))
-      
-           {
+        public int consultaIPS(string nombre)
+        {
 
-               return 1;
-           }
-           if (User.Identity.Name.Equals("cversalles"))
-           {
+            if (User.Identity.Name.Equals("hdecaldas"))
+            {
 
-               return 2;
-           }
-           if (User.Identity.Name.Equals("hsantasofia"))
-           {
+                return 1;
+            }
+            if (User.Identity.Name.Equals("cversalles"))
+            {
 
-               return 15;
-           }
-           return -1;
+                return 2;
+            }
+            if (User.Identity.Name.Equals("hsantasofia"))
+            {
 
-       }
+                return 15;
+            }
+            return -1;
+
+        }
         public ActionResult SeleccionRotacionContraPrestacionE()
         {
 
-            List<IPS_ESE> lista =null;
+            List<IPS_ESE> lista = null;
             if (User.Identity.IsAuthenticated)
             {
                 if (User.IsInRole("IPS"))
                 {
-                  
-                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals( User.Identity.Name));
-                        
-                        lista = municipios.ToList();
-                    
-                    
-           
+
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+
+                    lista = municipios.ToList();
+
+
+
                 }
                 else
                 {
@@ -872,15 +882,15 @@ namespace MvcApplication2.Controllers
 
 
                 }
-               
-              
+
+
             }
             else
             {
 
-               var municipios = db.IPS_ESE.Include(h => h.Municipio);
-               lista = municipios.ToList();
-           
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                lista = municipios.ToList();
+
             }
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
 
@@ -913,52 +923,52 @@ namespace MvcApplication2.Controllers
                 DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
                 DateTime date2 = new DateTime(añoId, mesId,
                                           DateTime.DaysInMonth(añoId, mesId));
-                                equipos = db.Equipoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaPrestamo >= date).Where(r => r.fechaPrestamo <= date2).ToList();
+                equipos = db.Equipoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaPrestamo >= date).Where(r => r.fechaPrestamo <= date2).ToList();
             }
 
-          
-                      
+
+
             if (equipos.ToList().Count > 0)
             {
 
-            ReportDocument rptH = new ReportDocument();
-            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteEquipos.rpt");
-            rptH.Load(strRptPath);
+                ReportDocument rptH = new ReportDocument();
+                string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteEquipos.rpt");
+                rptH.Load(strRptPath);
 
 
 
-            int total = equipos.Sum((c => c.costo));
-            rptH.Database.Tables[0].SetDataSource(equipos.ToList());
-            if (mesId == 13)
-            {
-                rptH.SetParameterValue("fecha", "Año: " + añoId);
+                int total = equipos.Sum((c => c.costo));
+                rptH.Database.Tables[0].SetDataSource(equipos.ToList());
+                if (mesId == 13)
+                {
+                    rptH.SetParameterValue("fecha", "Año: " + añoId);
+
+                }
+                else
+                {
+                    rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
+
+                }
+
+                rptH.SetParameterValue("ips", ips.nombre);
+                rptH.SetParameterValue("total", total + "");
+                rptH.SetParameterValue("correo", ips.correo);
+                rptH.SetParameterValue("recibido", ips.representante);
+
+
+
+
+
+
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+
+
+
+                return File(stream, "application/pdf");
 
             }
             else
-            {
-                rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
-
-            }
-          
-            rptH.SetParameterValue("ips", ips.nombre);
-            rptH.SetParameterValue("total", total+"");
-            rptH.SetParameterValue("correo",ips.correo);
-            rptH.SetParameterValue("recibido",ips.representante);
-
-
-
-
-
-
-            Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-
-
-
-
-            return File(stream, "application/pdf");
-                
-            }
-                else
             {
                 ViewBag.AlertMessage = "No se encontraron resultados";
 
@@ -975,8 +985,8 @@ namespace MvcApplication2.Controllers
 
             IPS_ESE ips = db.IPS_ESE.Find(id);
 
-          
-            
+
+
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
             rptH.Load(strRptPath);
@@ -986,10 +996,10 @@ namespace MvcApplication2.Controllers
             rptH.Database.Tables[1].SetDataSource(db.HojaVidas.ToList());
             rptH.Database.Tables[2].SetDataSource(db.Rotacions.ToList());
 
-            
 
-           
-            rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes que realizaran su rotación en su institución y los profesores con su horario.");
+
+
+            rptH.SetParameterValue("presentacion", "A continuación relaciono el estudiante(s) asignado(s) a su Institución, el docente responsable y el respectivo horario");
             rptH.SetParameterValue("fecha", "");
 
 
@@ -1002,7 +1012,7 @@ namespace MvcApplication2.Controllers
             return File(stream, "application/pdf");
 
         }
-     
+
         //
         // GET: /IPS_ESE/Details/5
 
@@ -1025,11 +1035,11 @@ namespace MvcApplication2.Controllers
             List<Municipio> lista = municipios.ToList();
 
             ViewBag.municipioId = new SelectList(lista, "municipioId", "nombre");
-            
+
             return View();
         }
 
-       
+
 
         //
         // POST: /IPS_ESE/Create
@@ -1077,14 +1087,14 @@ namespace MvcApplication2.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.municipioId = new SelectList(db.Municipios, "municipioId", "nombre", ips_ese.municipioId);
-            
+
             return View(ips_ese);
 
-            
+
         }
 
-        
-         //
+
+        //
         // GET: /IPS_ESE/Edit/5---------------------
 
         public ActionResult EditEPS(int id = 0)
@@ -1127,7 +1137,7 @@ namespace MvcApplication2.Controllers
                             string fileContentType = file.ContentType;
                             byte[] fileBytes = new byte[file.ContentLength];
                             file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/" ), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
+                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
                             if (System.IO.File.Exists(path1))
                                 System.IO.File.Delete(path1);
 

@@ -169,7 +169,7 @@ namespace MvcApplication2.Controllers
                             }
                             re.estudianteId = estudiante2.estudianteId;
                             re.rotacionId = item.rotacionId;
-                            re.IPS_ESEId = 11;
+                            re.IPS_ESEId = 1;
                             db.RotacionEstudiantes.Add(re);
                             db.SaveChanges();
 
