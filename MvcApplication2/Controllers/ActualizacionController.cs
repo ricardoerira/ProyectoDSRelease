@@ -23,8 +23,8 @@ namespace MvcApplication2.Controllers
            // importaMaterias();
           //  importaGruposMateria();
           //  importaDocentes();
-            //importaEstudiantes();
-            importaEstudiantesRotacion();
+            importaEstudiantes();
+            //importaEstudiantesRotacion();
             return View();
         }
 
@@ -646,39 +646,34 @@ namespace MvcApplication2.Controllers
                                 List<HojaVida> hvs = hv.ToList();
                                 if (hvs.Count > 0)
                                 {
-                                    Estudiante estudiante = new Estudiante();
-
-                                    estudiante.num_documento = item3.NUM_DOC;
-                                    estudiante.codigo = Int64.Parse(item3.CODIGO);
-
-                                    estudiante.clave = item3.CODIGO;
-                                    estudiante.tipo_documento = item3.NOM_DOC;
-
-                                    estudiante.modalidad = item3.MODALIDAD;
-                                    estudiante.estado_academico = item3.NOM_ESTADO;
-                                    estudiante.rotacionId = 10;
-                                    estudiante.direccion_procedencia = item3.DIR_CORREO;
+                                 //   Estudiante estudiante = new Estudiante();
                                     HojaVida hvida = hvs.ElementAt(0);
-                                    hvida.genero = item3.SEXO;
-                                    hvida.municipio_procedencia = item3.MUN_PROC;
-                                    if (hvida.municipio_procedencia.Equals(String.Empty))
+                                    var estudiantes = db.Estudiantes.Where(r => r.hojaVidaId == hvida.hojaVidaId);
+                                    Estudiante estudiante=null;
+                                    try
                                     {
-                                        hvida.municipio_procedencia = ".";
+                                        List<Estudiante> sts = estudiantes.ToList();
+                                        estudiante = sts.ElementAt(0);
 
                                     }
+                                    catch(Exception e)
+                                    {
+
+                                    }
+
+                                    estudiante.estado_academico = item3.NOM_ESTADO;
+                                   
                                     short s;
                                     short.TryParse(item3.SEMESTRE, out s);
-                                    estudiante.semestre = s; estudiante.hojaVidaId = hvida.hojaVidaId;
+                                    estudiante.semestre = s; 
+                                  
 
 
-
-                                    estudiante.programaId = item.programaId;
-
-                                    db.Entry(hvida).State = EntityState.Modified;
+                                    
+                                    db.Entry(estudiante).State = EntityState.Modified;
                                     try
                                     {
 
-                                        db.Estudiantes.Add(estudiante);
                                         db.SaveChanges();
                                     }
                                     catch (System.Data.Entity.Validation.DbEntityValidationException e)
