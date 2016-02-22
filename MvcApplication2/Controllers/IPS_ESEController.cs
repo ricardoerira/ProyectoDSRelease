@@ -294,6 +294,7 @@ namespace MvcApplication2.Controllers
         public ActionResult SeleccionRotacionCarta(IPS_ESE s, FormCollection value)
         {
 
+
             IPS_ESE ips = db.IPS_ESE.Find(s.IPS_ESEId);
 
             int programaId = Int32.Parse(value["programaId"]);
@@ -365,7 +366,17 @@ namespace MvcApplication2.Controllers
 
             if (re.Count > 0)
             {
-                EnviarEstudiantes(estudiantes, docentes, ips.correo);
+                string path1 = string.Format("{0}{1}{2}", Server.MapPath("~/Images/"), "cartaPresentacion", ".pdf");
+
+                rptH.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat, path1);
+                if (Request.Form["submitbutton1"] != null)
+                {
+                    EnviarEstudiantes(estudiantes, docentes, ips.correo);
+
+
+                }
+
+
                 Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
                 SaveStreamToFile(stream, "cartaPresentacion");
                 Stream stream2 = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
@@ -408,14 +419,14 @@ namespace MvcApplication2.Controllers
 
             //body += "<p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
 
-       
+
 
 
 
 
 
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("mgliliana1028@gmail.com", "To Name");
+            var toAddress = new MailAddress("ricardoerirac@gmail.com", "To Name");
             const string fromPassword = "descargar";
             const string subject = "Carta de presentación";
 
@@ -438,7 +449,7 @@ namespace MvcApplication2.Controllers
                 message.IsBodyHtml = true;
                 message.Subject = subject;
                 message.Body = body;
-                string file = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), "CartaPresentacion", ".pdf");
+                string file = string.Format("{0}/{1}{2}", Server.MapPath("~/Images/"), "CartaPresentacion", ".pdf");
 
                 message.Attachments.Add(new System.Net.Mail.Attachment(file));
 
@@ -463,7 +474,7 @@ namespace MvcApplication2.Controllers
 
         public void SaveStreamToFile(Stream stream, string filename)
         {
-            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), filename, ".pdf");
+            string path1 = string.Format("{0}{1}{2}", Server.MapPath("~/Uploads/"), filename, ".pdf");
             try
             {
                 var fileStream = new FileStream(path1, FileMode.CreateNew, FileAccess.Write);
@@ -980,38 +991,7 @@ namespace MvcApplication2.Controllers
             }
 
         }
-        public ActionResult GeneraReporte(int id = 0)
-        {
 
-            IPS_ESE ips = db.IPS_ESE.Find(id);
-
-
-
-            ReportDocument rptH = new ReportDocument();
-            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
-            rptH.Load(strRptPath);
-
-
-            rptH.Database.Tables[0].SetDataSource(db.Estudiantes.ToList());
-            rptH.Database.Tables[1].SetDataSource(db.HojaVidas.ToList());
-            rptH.Database.Tables[2].SetDataSource(db.Rotacions.ToList());
-
-
-
-
-            rptH.SetParameterValue("presentacion", "A continuación relaciono el estudiante(s) asignado(s) a su Institución, el docente responsable y el respectivo horario");
-            rptH.SetParameterValue("fecha", "");
-
-
-
-
-
-
-            Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
-
-            return File(stream, "application/pdf");
-
-        }
 
         //
         // GET: /IPS_ESE/Details/5

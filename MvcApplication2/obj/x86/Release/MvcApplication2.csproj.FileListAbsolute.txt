@@ -87,9 +87,9 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\ru\System.Spatial.resources.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\zh-Hant\System.Spatial.resources.dll
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csprojResolveAssemblyReference.cache
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.dd.resources
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.jdgst.resources
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csproj.GenerateResource.Cache
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.pdb
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csprojResolveAssemblyReference.cache

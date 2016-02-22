@@ -569,7 +569,29 @@ public ActionResult Buscar(Estudiante estudiante)
             rptH.SetParameterValue("nombre_acudiente", estudiante.HojaVida.Familia.primer_nombre_acudiente + " " + estudiante.HojaVida.Familia.primer_apellido_acudiente + " " + estudiante.HojaVida.Familia.segundo_apellido_acudiente);
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
             rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
-          
+
+            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB" };
+
+            string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/doc_identidad", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("docIdentidad", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_LS", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("carne_LS", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_estudiantil", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("carne_estudiantil", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_EPS", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("carne_EPS", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV1", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("EV1", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_varicela", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("ant_varicela", path1);
+
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_hepatitisB", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("ant_hepatitisB", path1);
 
 
 
@@ -1014,6 +1036,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 if (System.IO.File.Exists(path1))
                 {
+
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
 
                     ViewBag.imagen2 =path1;
@@ -1773,8 +1796,8 @@ public ActionResult Buscar(Estudiante estudiante)
               estudiante.HojaVida = null;
 
                 db.Entry(est).State = EntityState.Modified;
-                ValidarCampos(est);
-                //cargaDocumento(estudiante);
+               
+               // cargaDocumento(estudiante);
                 guardaDocumentos(estudiante);
                 
                 db.SaveChanges();
@@ -1875,9 +1898,10 @@ public ActionResult Buscar(Estudiante estudiante)
             {
                 return HttpNotFound();
             }
-           
 
-            Boolean estado = ValidarCampos(estudiante);
+            HojaVida hv = db.HojaVidas.Find(estudiante.hojaVidaId);
+            
+            Boolean estado =hv.estado_HV;
             ViewBag.estado = estado;
             Boolean estadoV = ValidarVacunas(estudiante);
             ViewBag.estadoV = estadoV;
@@ -1967,7 +1991,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
            // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("mgliliana1028@gmail.com", "To Name");
+            var toAddress = new MailAddress("rcard@gmail.com", "To Name");
             const string fromPassword = "descargar";
             const string subject = "Solicitud actualizacion hoja de vida";
             const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";

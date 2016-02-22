@@ -20,6 +20,7 @@ namespace MvcApplication2.Controllers
         {
 
             var rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.rotacionId == id).Include(r=>r.Rotacion);
+            List<RotacionEstudiante> re = rotacionestudiantes.ToList();
             ViewBag.nombre = db.Rotacions.Find(id).ActividadAcademica.nombre;
             return View(rotacionestudiantes.ToList());
         }
