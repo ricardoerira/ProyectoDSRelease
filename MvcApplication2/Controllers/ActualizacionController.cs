@@ -6,8 +6,12 @@ using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace MvcApplication2.Controllers
 {
@@ -22,14 +26,106 @@ namespace MvcApplication2.Controllers
         {
           //  importaMaterias();
          //   importaGruposMateria();
-           importaDocentes();
+        //   importaDocentes();
        //     importaEstudiantes();
          //   importaEstudiantesRotacion();
           // actualizaImagenDocentes();
+       //     enviarCorreo("ricardoerira@gmail.com");
+
+
+       
             return View();
         }
 
+        public void enviaSolicituudTodosEstudiantes()
+        {
+            List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion).ToList();
 
+            foreach (Estudiante estudiante in estudiantes)
+            {
+                string correo = estudiante.HojaVida.correo;
+                if(correo!=null && correo.Equals(""))
+                {
+                    enviarCorreo(estudiante.HojaVida.correo);
+
+
+                }
+            }
+            
+        }
+        public void enviarCorreo(string mail)
+        {
+   
+
+
+
+
+
+
+            var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
+            var toAddress = new MailAddress(mail, "To Name");
+            const string fromPassword = "descargar";
+            const string subject = "Solicitud actualizacion hoja de vida";
+            const string body = "<p><br />Estimado Estudiante,&nbsp;</p><p>&nbsp;Para continuar avanzando con el proceso acad&eacute;mico, es importante realizar la actualizaci&oacute;n de su hoja de vida en el nuevo aplicativo de la Facultad de Ciencias para la Salud.</p><p>&nbsp;</p><p style=\"text-align: center;\"><strong>POR FAVOR LEA ESTE CORREO (antes de iniciar el proceso)</strong></p><p><br /><br />Como parte del proceso de inscripci&oacute;n a rotaciones, es&nbsp;<strong>OBLIGATORIO</strong>&nbsp;que realice v&iacute;a internet la actualizaci&oacute;n de sus datos personales y carga de archivos en nuestro sistema SDS (Sistema Docencia Servicio), porque se ha implementado como iniciativa de un cambio en la mejora de los procesos que actualmente se gestionan desde la oficina Docencia Servicio.<br /><br /></p><p>A continuaci&oacute;n se adjunta el manual con las instrucciones para que realice la actualizaci&oacute;n, cualquier inquietud estamos a sus &oacute;rdenes.&nbsp;</p><h2><span style=\"color: #ff0000;\"><a href=\"http://salud.ucaldas.edu.co/Proyecto/Manual%20Estudiante.pdf\"><strong>Ver Aqui</strong></a></span><br /><br /><strong>Fecha l&iacute;mite de actualizaci&oacute;n: 26 de Febrero&nbsp;de 2016</strong>&nbsp;<strong><br /></strong></h2><p>De tener dudas o inquietudes, puede escribirnos a nuestro correo&nbsp;<a href=\"mailto:servidor.facsalud@ucaldas.edu.co\">servidor.facsalud@ucaldas.edu.co</a>,&nbsp;&nbsp;docencia.servicio@ucaldas.edu.co &oacute; acercarse a la Oficina Docencia Servicio.<br /><br /></p><p>Tener a mano en formato jpg/png y por separado los siguientes documentos:</p><p>1.&nbsp;&nbsp;&nbsp;&nbsp;Documento de identidad (Ambos lados)<br />2.&nbsp;&nbsp;&nbsp;&nbsp;Carn&eacute; Liberty Seguros<br />3.&nbsp;&nbsp;&nbsp;&nbsp;Carn&eacute; estudiantil<br />4.&nbsp;&nbsp;&nbsp;&nbsp;Carn&eacute; EPS<br />5.&nbsp;&nbsp;&nbsp;&nbsp;Carn&eacute; vacunaci&oacute;n 1 (Carnet de vacunaci&oacute;n con esquema obligatorio)<br />6.&nbsp;&nbsp;&nbsp;&nbsp;Carn&eacute; vacunaci&oacute;n 2 (En caso que tenga m&aacute;s de un soporte de&nbsp; vacunaci&oacute;n)<br />7.&nbsp;&nbsp;&nbsp;&nbsp;Anticuerpos contra varicela<br />8.&nbsp;&nbsp;&nbsp;&nbsp;Anticuerpos contra hepatitis B<br />&nbsp;</p><p><strong>ANTICUERPOS DE VARICELA son OBLIGATORIOS, esto a ra&iacute;z de que las hojas de vida que estaban completas el semestre pasado a la gran mayor&iacute;a se les recomend&oacute; que se realizaran estos anticuerpos.</strong></p><p>&nbsp;</p><p>&nbsp;</p><p><strong>MAR&Iacute;A DEL PILAR GIL VALENCIA&nbsp;<br />Coordinadora&nbsp;<br />Oficina Docencia Servicio<br />Facultad Ciencias para la Salud<br />Universidad de Caldas<br />Carrera 25&nbsp; 48-57- Sede Versalles<br /></strong></p><div><div>878 30 60 Ext. 31255</div></div><p><img src=\"https://ci6.googleusercontent.com/proxy/FL7efXE8rOXxE9fg--htniHt2dU5_zUelHPV_ZgolYIoiqbitLuy6UTr-A56XfSCPeLLVSg4rVV1LUzivDRc7OrbZhxftNYOzxpCWRPk_Gf4zUuypCmb3-9aU1q_=s0-d-e1-ft#https://udecaldas.files.wordpress.com/2015/12/firma-institucional_n.jpg\" alt=\"\" width=\"900\" height=\"150\" /></p><p>&nbsp;</p>";
+
+
+            var smtp = new SmtpClient
+            {
+                Host = "72.29.75.91",
+                Port = 25,
+                EnableSsl = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Timeout = 10000,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            var message = new MailMessage();
+            message.From = fromAddress;
+
+         ///   List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida);
+            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion);
+
+            foreach (Estudiante estudiante in estudiantes.ToList())
+            {
+                string correo = estudiante.HojaVida.correo;
+                if (correo != null && !correo.Equals(""))
+                {
+                    string textResultado = Regex.Replace(correo, @"[^a-zA-z0-9 ]+", "");
+
+
+                    message.To.Add(textResultado);
+
+
+                }
+            }
+            message.To.Add(mail);
+
+
+
+            message.IsBodyHtml = true;
+            message.Subject = subject;
+            message.Body = body;
+
+
+
+
+
+            string file = string.Format("{0}/{1}{2}", Server.MapPath("~/Images/"), "ManualEstudiante", ".pdf");
+
+            message.Attachments.Add(new System.Net.Mail.Attachment(file));
+
+
+
+
+            smtp.EnableSsl = false;
+            smtp.Send(message);
+
+
+            
+
+
+         
+        }
         public void actualizaImagenEstudiantes()
         {
             List<HojaVida> estudiantes = db.HojaVidas.Where(r => r.imagen_DI == null).ToList();
@@ -697,8 +793,6 @@ namespace MvcApplication2.Controllers
 
         public void importaEstudiantes()
         {
-
-
 
             List<Programa> programas = db.Programas.ToList();
             foreach (var item in programas)

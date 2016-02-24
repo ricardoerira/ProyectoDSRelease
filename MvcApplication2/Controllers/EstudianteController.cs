@@ -20,7 +20,7 @@ namespace MvcApplication2.Controllers
         private UsersContext2 db = new UsersContext2();
 
 
-        public ActionResult BuscarEnVacuna(Estudiante estudiante) 
+        public ActionResult BuscarEnVacuna(Estudiante estudiante)
         {
             var estudiantes = from b in db.Estudiantes
                               select b;
@@ -53,7 +53,7 @@ namespace MvcApplication2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-public ActionResult BuscarEnDepartamento(Estudiante estudiante) 
+        public ActionResult BuscarEnDepartamento(Estudiante estudiante)
         {
             var estudiantes = from b in db.Estudiantes
                               select b;
@@ -82,87 +82,87 @@ public ActionResult BuscarEnDepartamento(Estudiante estudiante)
 
 
 
-public ActionResult EstadoHVdepto(string num_documento, string programaId, string estado_HV)
-{
-    int did = 0;
-    bool b = false;
-    if (!String.IsNullOrEmpty(programaId))
-    {
-        did = Int32.Parse(programaId);
-        b = estado_HV.Equals("True") ? true : false;
-
-    }
-
-    var estudiantes = new List<Estudiante>();
-    var estudiantesaux = new List<Estudiante>();
-    if (!String.IsNullOrEmpty(num_documento))
-    {
-        estudiantes = db.Estudiantes.Where(s => s.num_documento.Equals(num_documento)).Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
-
-    }
-    else
-    {
-        if (!String.IsNullOrEmpty(programaId))
+        public ActionResult EstadoHVdepto(string num_documento, string programaId, string estado_HV)
         {
-            estudiantes = db.Estudiantes.Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
-            estudiantesaux = db.Estudiantes.Where(s => s.programaId == did).ToList();
+            int did = 0;
+            bool b = false;
+            if (!String.IsNullOrEmpty(programaId))
+            {
+                did = Int32.Parse(programaId);
+                b = estado_HV.Equals("True") ? true : false;
 
+            }
+
+            var estudiantes = new List<Estudiante>();
+            var estudiantesaux = new List<Estudiante>();
+            if (!String.IsNullOrEmpty(num_documento))
+            {
+                estudiantes = db.Estudiantes.Where(s => s.num_documento.Equals(num_documento)).Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
+
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(programaId))
+                {
+                    estudiantes = db.Estudiantes.Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
+                    estudiantesaux = db.Estudiantes.Where(s => s.programaId == did).ToList();
+
+                }
+            }
+
+
+
+
+
+
+            ViewBag.busqueda = estudiantes.Count() + " / " + estudiantesaux.Count();
+
+
+            ViewBag.Programas = new SelectList(db.Programas, "programaId", "nombre");
+
+            return View(estudiantes.ToList());
         }
-    }
 
-
-
-
-
-
-    ViewBag.busqueda = estudiantes.Count() + " / " + estudiantesaux.Count();
-
-
-    ViewBag.Programas = new SelectList(db.Programas, "programaId", "nombre");
-
-    return View(estudiantes.ToList());
-}
-
-public ActionResult EstadoHV(string num_documento, string programaId, string estado_HV)
-{
-    int did = 0;
-    bool b = false;
-    if (!String.IsNullOrEmpty(programaId))
-    {
-        did = Int32.Parse(programaId);
-        b = estado_HV.Equals("True") ? true : false;
-
-    }
-
-    var estudiantes = new List<Estudiante>();
-    var estudiantesaux = new List<Estudiante>();
-    if (!String.IsNullOrEmpty(num_documento))
-    {
-        estudiantes = db.Estudiantes.Where(s => s.num_documento.Equals(num_documento)).Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
-
-    }
-    else
-    {
-        if (!String.IsNullOrEmpty(programaId))
+        public ActionResult EstadoHV(string num_documento, string programaId, string estado_HV)
         {
-            estudiantes = db.Estudiantes.Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
-            estudiantesaux = db.Estudiantes.Where(s => s.programaId == did).ToList();
-        
+            int did = 0;
+            bool b = false;
+            if (!String.IsNullOrEmpty(programaId))
+            {
+                did = Int32.Parse(programaId);
+                b = estado_HV.Equals("True") ? true : false;
+
+            }
+
+            var estudiantes = new List<Estudiante>();
+            var estudiantesaux = new List<Estudiante>();
+            if (!String.IsNullOrEmpty(num_documento))
+            {
+                estudiantes = db.Estudiantes.Where(s => s.num_documento.Equals(num_documento)).Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
+
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(programaId))
+                {
+                    estudiantes = db.Estudiantes.Where(s => s.programaId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
+                    estudiantesaux = db.Estudiantes.Where(s => s.programaId == did).ToList();
+
+                }
+            }
+
+
+
+
+
+
+            ViewBag.busqueda = estudiantes.Count() + " / " + estudiantesaux.Count();
+
+
+            ViewBag.Programas = new SelectList(db.Programas, "programaId", "nombre");
+
+            return View(estudiantes.ToList());
         }
-    }
-
-
-
-
-
-
-    ViewBag.busqueda = estudiantes.Count() + " / " + estudiantesaux.Count();
-   
-
-    ViewBag.Programas = new SelectList(db.Programas, "programaId", "nombre");
-
-    return View(estudiantes.ToList());
-}
         //
         // GET: /Estudiante/
         //public ActionResult Buscar(Estudiante estudiante)
@@ -188,97 +188,98 @@ public ActionResult EstadoHV(string num_documento, string programaId, string est
         //    }
 
 
-//public ActionResult Buscar(Estudiante estudiante)
-//{
-//    var estudiantes = from b in db.Estudiantes
-//                      select b;
+        //public ActionResult Buscar(Estudiante estudiante)
+        //{
+        //    var estudiantes = from b in db.Estudiantes
+        //                      select b;
 
-//    foreach (var b in estudiantes)
-//    {
-//        if (b.codigo.Equals(estudiante.codigo))
-//        {
-//            estudiante = b;
-//        }
+        //    foreach (var b in estudiantes)
+        //    {
+        //        if (b.codigo.Equals(estudiante.codigo))
+        //        {
+        //            estudiante = b;
+        //        }
 
-//    }
-//    if (estudiante.estudianteId == 0)
-//    {
-//        ViewBag.AlertMessage = "Código incorrecto.";
-//        return View(estudiante);
-//    }
-//    //else
-//    //{
-//    //    return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
-//    //}
+        //    }
+        //    if (estudiante.estudianteId == 0)
+        //    {
+        //        ViewBag.AlertMessage = "Código incorrecto.";
+        //        return View(estudiante);
+        //    }
+        //    //else
+        //    //{
+        //    //    return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
+        //    //}
 
-//    else
-//    {
-//        Estudiante e1 = estudiante;
-//        int id = e1.programaId;
-//        ViewBag.AlertMessage = null;
+        //    else
+        //    {
+        //        Estudiante e1 = estudiante;
+        //        int id = e1.programaId;
+        //        ViewBag.AlertMessage = null;
 
-//        if (id != 33 && id != 34 && id != 35 && id != 55 && id != 56 && id != 57 && id != 58 && id != 59 && id != 60 && id != 61)
-//        {
-//            return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + e1.estudianteId);
-//        }
-//        else
-//        {
-//            return RedirectToAction("../Estudiante/PersonalesDS/" + e1.estudianteId);
+        //        if (id != 33 && id != 34 && id != 35 && id != 55 && id != 56 && id != 57 && id != 58 && id != 59 && id != 60 && id != 61)
+        //        {
+        //            return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + e1.estudianteId);
+        //        }
+        //        else
+        //        {
+        //            return RedirectToAction("../Estudiante/PersonalesDS/" + e1.estudianteId);
 
-//        }
+        //        }
 
-//    }
-//}
+        //    }
+        //}
 
-public ActionResult Buscar()
-{
-
-    return View();
-
-}
-
-
-[HttpPost]
-[ValidateAntiForgeryToken]
-
-public ActionResult Buscar(Estudiante estudiante)
-{
-    var estudiantes = from b in db.Estudiantes
-                      select b;
-
-    foreach (var b in estudiantes)
-    {
-        if (b.codigo.Equals(estudiante.codigo))
+        public ActionResult Buscar()
         {
-            estudiante = b;
+
+            return View();
+
         }
 
-    }
 
-    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
 
-    if (estudiante.estudianteId != 0)
-   {
-        Estudiante e1 = estudiante;
-        int id = e1.programaId;
-        ViewBag.AlertMessage = null;
-
-        if (id != 33 && id != 34 && id != 35 && id != 55 && id != 56 && id != 57 && id != 58 && id != 59 && id != 60 && id != 61)
+        public ActionResult Buscar(Estudiante estudiante)
         {
-            return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + e1.estudianteId);
-        }
-        else
-        {
-            return RedirectToAction("../Estudiante/PersonalesDS/" + e1.estudianteId);
+            var estudiantes = from b in db.Estudiantes
+                              select b;
 
-        }
-    }
+            foreach (var b in estudiantes)
+            {
+                if (b.codigo.Equals(estudiante.codigo))
+                {
+                    estudiante = b;
+                }
 
-        else{
-         ViewBag.AlertMessage = "Codigo incorrecto.";
-   return View();
-        }   
-}
+            }
+
+
+
+            if (estudiante.estudianteId != 0)
+            {
+                Estudiante e1 = estudiante;
+                int id = e1.programaId;
+                ViewBag.AlertMessage = null;
+
+                if (id != 33 && id != 34 && id != 35 && id != 55 && id != 56 && id != 57 && id != 58 && id != 59 && id != 60 && id != 61)
+                {
+                    return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + e1.estudianteId);
+                }
+                else
+                {
+                    return RedirectToAction("../Estudiante/PersonalesDS/" + e1.estudianteId);
+
+                }
+            }
+
+            else
+            {
+                ViewBag.AlertMessage = "Codigo incorrecto.";
+                return View();
+            }
+        }
 
 
 
@@ -292,7 +293,7 @@ public ActionResult Buscar(Estudiante estudiante)
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad"};
+            string[] documentos = { "doc_identidad" };
 
 
 
@@ -362,7 +363,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
             return View(estudiante);
         }
-        
+
         public Boolean ValidarVacunas(Estudiante estudiante)
         {
             for (var i = 0; i < estudiante.HojaVida.Vacunas.Count; i++)
@@ -414,7 +415,7 @@ public ActionResult Buscar(Estudiante estudiante)
                     }
 
                 }
-              
+
 
 
 
@@ -423,7 +424,7 @@ public ActionResult Buscar(Estudiante estudiante)
             return true;
 
 
-}
+        }
         public Boolean ValidarCampos(Estudiante estudiante)
         {
             HojaVida hv = db.HojaVidas.Find(estudiante.hojaVidaId);
@@ -441,6 +442,22 @@ public ActionResult Buscar(Estudiante estudiante)
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 estudianteAux.HojaVida.estado_HV = true;
 
+
+                if (validaDocumentos(estudiante))
+                {
+                    estudianteAux.HojaVida.estado_HV = true;
+                    ViewBag.estado = estudianteAux.HojaVida.estado_HV;
+
+                }
+                else
+                {
+                    estudianteAux.HojaVida.estado_HV = false;
+                    ViewBag.estado = estudianteAux.HojaVida.estado_HV;
+
+                }
+
+
+
                 db.Entry(estudianteAux).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -448,6 +465,7 @@ public ActionResult Buscar(Estudiante estudiante)
             }
             else
             {
+               
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 estudianteAux.HojaVida.estado_HV = false;
 
@@ -455,9 +473,9 @@ public ActionResult Buscar(Estudiante estudiante)
                 db.SaveChanges();
                 return false;
             }
-        }  
+        }
 
-       
+
         public ActionResult Index()
         {
             var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion);
@@ -495,7 +513,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
             return View(estudiantes.ToList());
         }
-       
+
         public ActionResult ReporteEstudiante(string searchString, int id = 0)
         {
             var estudiantes = from s in db.Estudiantes
@@ -520,24 +538,21 @@ public ActionResult Buscar(Estudiante estudiante)
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporteEstudiante.rpt");
             rptH.Load(strRptPath);
-            DateTime dt= DateTime.Now.Date.AddMonths(-20);
-            var vacunas = db.Vacunas.Where(r => r.hojaVidaId == estudiante.hojaVidaId).Where(r => r.fecha_vacunacion >dt);
+            DateTime dt = DateTime.Now.Date.AddMonths(-20);
+            var vacunas = db.Vacunas.Where(r => r.hojaVidaId == estudiante.hojaVidaId).Where(r => r.fecha_vacunacion > dt);
             List<Vacuna> listav = vacunas.ToList();
-     
+
             rptH.Database.Tables[0].SetDataSource(listav);
-     
+
             rptH.SetParameterValue("programa", estudiante.Programa.nombre);
             rptH.SetParameterValue("modalidad", estudiante.modalidad + "");
             rptH.SetParameterValue("semestre", estudiante.semestre + "");
             rptH.SetParameterValue("estadom", estudiante.estado_academico + "");
-
-
-
             rptH.SetParameterValue("tipodoc", estudiante.tipo_documento);
             rptH.SetParameterValue("numdoc", estudiante.num_documento);
             rptH.SetParameterValue("codigo", estudiante.codigo);
             rptH.SetParameterValue("genero", estudiante.HojaVida.genero + "");
-            rptH.SetParameterValue("nombre", estudiante.HojaVida.primer_nombre+" "+estudiante.HojaVida.segundo_nombre);
+            rptH.SetParameterValue("nombre", estudiante.HojaVida.primer_nombre + " " + estudiante.HojaVida.segundo_nombre);
             rptH.SetParameterValue("apellidos", estudiante.HojaVida.primer_apellido + " " + estudiante.HojaVida.segundo_apellido);
             rptH.SetParameterValue("fecha_nacimiento", estudiante.HojaVida.fecha_nacimiento + "");
             rptH.SetParameterValue("hemoclasificacion", estudiante.HojaVida.hemoclasificacion + "");
@@ -548,18 +563,12 @@ public ActionResult Buscar(Estudiante estudiante)
             rptH.SetParameterValue("dir_local", estudiante.HojaVida.direccion_manizales + "");
             rptH.SetParameterValue("image", estudiante.HojaVida.imagen_DI + "");
             rptH.SetParameterValue("edad", estudiante.barrio_procedencia + "");
-
-
-            
             rptH.SetParameterValue("tel_proc", estudiante.HojaVida.num_telefono + "");
             rptH.SetParameterValue("tel_local", "");
-            rptH.SetParameterValue("estado_civil", estudiante.HojaVida.estado_civil+"");
+            rptH.SetParameterValue("estado_civil", estudiante.HojaVida.estado_civil + "");
             rptH.SetParameterValue("num_hijos", estudiante.HojaVida.hijos + "");
             rptH.SetParameterValue("mail", estudiante.HojaVida.correo + "");
-
             rptH.SetParameterValue("num_cel", estudiante.HojaVida.num_celular + "");
-
-            
             rptH.SetParameterValue("nombre_padre", estudiante.HojaVida.Familia.primer_nombre_padre + " " + estudiante.HojaVida.Familia.primer_apellido_padre + " " + estudiante.HojaVida.Familia.segundo_apellido_padre);
             rptH.SetParameterValue("direccion_padre", estudiante.HojaVida.Familia.direccion_padre + "");
             rptH.SetParameterValue("tel_padre", estudiante.HojaVida.Familia.telefono_padre + "");
@@ -587,13 +596,15 @@ public ActionResult Buscar(Estudiante estudiante)
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV1", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("EV1", path1);
 
+            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV2", +estudiante.codigo, ".jpg");
+            rptH.SetParameterValue("CV2", path1);
+
+            
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_varicela", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("ant_varicela", path1);
 
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_hepatitisB", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("ant_hepatitisB", path1);
-
-
 
             Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
@@ -626,8 +637,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
             return RedirectToAction("RotacionEstudiante/" + rotacion);
         }
-       
-      
+
+
         public ActionResult Details(int id = 0)
         {
             Estudiante estudiante = db.Estudiantes.Find(id);
@@ -662,7 +673,7 @@ public ActionResult Buscar(Estudiante estudiante)
         {
             if (ModelState.IsValid)
             {
-                
+
                 db.Estudiantes.Add(estudiante);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -750,27 +761,27 @@ public ActionResult Buscar(Estudiante estudiante)
         //
         //--------------------- Vista para Logeo del estudiante
 
-       
-        
-       
+
+
+
         public ActionResult Login()
         {
 
             return View();
 
         }
-        
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult Login(Estudiante estudiante) //PRIMER VERSION
         //{
-            
-            
+
+
         //    var b = db.Estudiantes.Where(s => s.codigo==estudiante.codigo).Where(s => s.clave==estudiante.clave);
         //    List<Estudiante> estudianteList = b.ToList();
-           
-          
+
+
 
         //    if (estudianteList.Count == 0)
         //    {
@@ -781,7 +792,7 @@ public ActionResult Buscar(Estudiante estudiante)
         //    {
         //        ViewBag.AlertMessage = null;
         //        Estudiante docente_aux = estudianteList.ElementAt(0);
-          
+
         //        return RedirectToAction("../Estudiante/Personales/" + docente_aux.estudianteId);
 
         //    }
@@ -802,7 +813,7 @@ public ActionResult Buscar(Estudiante estudiante)
                 return View(estudiante);
             }
 
-            else  
+            else
             {
                 Estudiante e1 = estudianteList.ElementAt(0);
                 int id = e1.programaId;
@@ -811,7 +822,7 @@ public ActionResult Buscar(Estudiante estudiante)
                 if (id != 33 && id != 34 && id != 35 && id != 55 && id != 56 && id != 57 && id != 58 && id != 59 && id != 60 && id != 61)
                 {
                     return RedirectToAction("../Estudiante/PersonalesResidentes/" + e1.estudianteId);
-                } 
+                }
                 else
                 {
                     return RedirectToAction("../Estudiante/Personales/" + e1.estudianteId);
@@ -823,9 +834,9 @@ public ActionResult Buscar(Estudiante estudiante)
         }
 
 
-        
 
-        public ActionResult LoginCC(int id=0)
+
+        public ActionResult LoginCC(int id = 0)
         {
             TempData["notice"] = null;
             Estudiante estudiante = db.Estudiantes.Find(id);
@@ -842,27 +853,27 @@ public ActionResult Buscar(Estudiante estudiante)
         public ActionResult LoginCC(Estudiante estudiante)
         {
             Estudiante estudianteReal = db.Estudiantes.Find(estudiante.estudianteId);
-            if(estudiante.clave.Equals(estudianteReal.clave))
+            if (estudiante.clave.Equals(estudianteReal.clave))
             {
-                
+
                 ViewBag.AlertMessage = null;
-                return RedirectToAction("../Estudiante/CambioContraseña/" + estudianteReal.estudianteId);  
+                return RedirectToAction("../Estudiante/CambioContraseña/" + estudianteReal.estudianteId);
             }
             else
             {
 
                 ViewBag.AlertMessage = "La contraseña que has introducido no coincide.";
                 return View(estudiante);
-               // return RedirectToAction("../Estudiante/LoginCC/" + estudianteReal.estudianteId);
-                
+                // return RedirectToAction("../Estudiante/LoginCC/" + estudianteReal.estudianteId);
+
             }
         }
 
         public ActionResult PaginaPrincipal()
         {
-                return View();
+            return View();
 
-            }
+        }
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult LoginCC(Estudiante estudiante)
@@ -870,8 +881,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
         //    var b = db.Estudiantes.Where(s => s.num_documento.Equals(estudiante.num_documento)).Where(s => s.clave.Equals(estudiante.clave));
         //    List<Estudiante> estudianteList = b.ToList();
-                       
-            
+
+
         //    if (estudianteList.Count == 0)
         //    {
 
@@ -902,8 +913,8 @@ public ActionResult Buscar(Estudiante estudiante)
         [ValidateAntiForgeryToken]
         public ActionResult CambioContraseña(Estudiante estudiante)
         {
-                Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
-            if(estudiante.clave!=null)
+            Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
+            if (estudiante.clave != null)
             {
                 if (estudiante.clave.Equals(estudiante.tipo_documento))
                 {
@@ -923,17 +934,18 @@ public ActionResult Buscar(Estudiante estudiante)
 
             ViewBag.AlertMessage = "Las contrasenias no coinciden";
             return View(estudiante);
-          //  return RedirectToAction("../Estudiante/CambioContraseña/" + estudiante.estudianteId);
+            //  return RedirectToAction("../Estudiante/CambioContraseña/" + estudiante.estudianteId);
         }
 
-        
-        
+
+
 
 
         //
         //------------------------- Vista para datos personales del estudiante
-        public ActionResult cargaImagen(Estudiante estudiante) {
-            
+        public ActionResult cargaImagen(Estudiante estudiante)
+        {
+
             HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
             try
             {
@@ -979,14 +991,15 @@ public ActionResult Buscar(Estudiante estudiante)
             Estudiante estudiante = db.Estudiantes.Find(id);
             HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
             cargaImagen(estudiante);
-           
+
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-
+            ValidarCampos(estudiante);
+          
             cargaDocumentoDos(estudiante);
             return View(estudiante);
-            
+
         }
 
         public ActionResult PersonalesResidentes(int id = 0)
@@ -1007,18 +1020,18 @@ public ActionResult Buscar(Estudiante estudiante)
         }
 
         //metodo que muestra imagen
-        public ActionResult cargaDocumentoDos(Estudiante estudiante) {
+        public ActionResult cargaDocumentoDos(Estudiante estudiante)
+        {
             {
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB"};
+                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB" };
 
 
-                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + estudiante.codigo, ".jpg");
-                               
-                
-                if (System.IO.File.Exists(path1))
-                {
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
+                  string path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
 
+
+                  if (RemoteFileExists(path1))
+                  {
+                  
                     ViewBag.imagen1 = path1;
 
                 }
@@ -1031,15 +1044,13 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
+                   path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
 
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen2 =path1;
+              
+                    ViewBag.imagen2 = path1;
 
                 }
                 else
@@ -1049,13 +1060,12 @@ public ActionResult Buscar(Estudiante estudiante)
                 }
 
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + estudiante.codigo, ".jpg");
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen3 =path1;
+                   
+                    ViewBag.imagen3 = path1;
 
                 }
                 else
@@ -1066,12 +1076,11 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + estudiante.codigo, ".jpg");
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
-
+               
                     ViewBag.imagen4 = path1;
 
                 }
@@ -1084,12 +1093,11 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + estudiante.codigo, ".jpg");
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
-
+                
                     ViewBag.imagen5 = path1;
 
                 }
@@ -1100,13 +1108,11 @@ public ActionResult Buscar(Estudiante estudiante)
                 }
 
 
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
-
+                
                     ViewBag.imagen6 = path1;
 
                 }
@@ -1118,12 +1124,11 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + estudiante.codigo, ".jpg");
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
-
+        
                     ViewBag.imagen7 = path1;
 
                 }
@@ -1135,12 +1140,11 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + estudiante.codigo, ".jpg");
+                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
-
+                 
                     ViewBag.imagen8 = path1;
 
                 }
@@ -1161,18 +1165,17 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-        public ActionResult   cargaDocumentoResidentes(Estudiante estudiante)
+        public ActionResult cargaDocumentoResidentes(Estudiante estudiante)
         {
             {
-                string[] documentos = {"doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado"};
+                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
 
 
                 string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
-
+                
                     ViewBag.imagen1 = path1;
 
                 }
@@ -1184,7 +1187,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
 
@@ -1200,7 +1203,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
 
@@ -1217,7 +1220,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
 
@@ -1235,7 +1238,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
 
@@ -1252,7 +1255,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
 
@@ -1269,7 +1272,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
 
@@ -1286,7 +1289,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
 
@@ -1302,8 +1305,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[8] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
-                {
+                      if (!RemoteFileExists(path1))
+                      {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + estudiante.codigo, ".jpg");
 
                     ViewBag.imagen9 = path1;
@@ -1317,7 +1320,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[9] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
+          
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + estudiante.codigo, ".jpg");
 
@@ -1333,7 +1337,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[10] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
+          
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + estudiante.codigo, ".jpg");
 
@@ -1349,7 +1354,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[11] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
+          
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[11] + estudiante.codigo, ".jpg");
 
@@ -1365,7 +1371,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[12] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
+          
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[12] + estudiante.codigo, ".jpg");
 
@@ -1382,7 +1389,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
                 path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[13] + estudiante.codigo, ".jpg");
 
-                if (System.IO.File.Exists(path1))
+                if (!RemoteFileExists(path1))
+          
                 {
                     path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[13] + estudiante.codigo, ".jpg");
 
@@ -1667,7 +1675,7 @@ public ActionResult Buscar(Estudiante estudiante)
         //   return View(estudiante);
         //}
         public ActionResult guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
-        {  
+        {
             int numFiles = Request.Files.Count;
             if (Request != null)
             {
@@ -1685,7 +1693,7 @@ public ActionResult Buscar(Estudiante estudiante)
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
+                        string path1 = string.Format("{0}{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
                         if (System.IO.File.Exists(path1))
                             System.IO.File.Delete(path1);
 
@@ -1698,6 +1706,57 @@ public ActionResult Buscar(Estudiante estudiante)
         }
 
 
+
+        private bool RemoteFileExists(string url)
+        {
+            try
+            {
+                //Creating the HttpWebRequest
+                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
+                //Setting the Request method HEAD, you can also use GET too.
+                request.Method = "HEAD";
+                //Getting the Web Response.
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                //Returns TRUE if the Status code == 200
+                response.Close();
+                return (response.StatusCode == HttpStatusCode.OK);
+            }
+            catch
+            {
+                //Any exception will returns false.
+                return false;
+            }
+        }
+
+
+        public Boolean validaDocumentos(Estudiante estudiante)//
+        {
+            Boolean estado = true;
+            int uploadedCount = 0;
+            int numFiles = Request.Files.Count;
+
+            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "ant_varicela", "ant_hepatitisB" };
+
+            for (int i = 0; i < documentos.Length; i++)
+            {
+                string path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[i] + estudiante.codigo, ".jpg");
+
+   
+
+                    if (!RemoteFileExists(path1))
+                    {
+                        estado = false;
+                        return estado;
+                    }
+
+
+                    uploadedCount++;
+                
+            }
+            return estado;
+
+        }
+
         public ActionResult guardaDocumentosResidentes(Estudiante estudiante)//GUARDA ARCHIVOS
         {
             int numFiles = Request.Files.Count;
@@ -1706,8 +1765,8 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
                 int uploadedCount = 0;
-                
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado"};
+
+                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
 
                 for (int i = 0; i < numFiles; i++)
                 {
@@ -1719,7 +1778,7 @@ public ActionResult Buscar(Estudiante estudiante)
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
                         string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
-                        if (System.IO.File.Exists(path1))
+                        if (RemoteFileExists(path1))
                             System.IO.File.Delete(path1);
 
                         file.SaveAs(path1);
@@ -1751,7 +1810,8 @@ public ActionResult Buscar(Estudiante estudiante)
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
                         string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
-                        if (System.IO.File.Exists(path1))
+                        if (RemoteFileExists(path1))
+          
                             System.IO.File.Delete(path1);
 
                         file.SaveAs(path1);
@@ -1763,10 +1823,10 @@ public ActionResult Buscar(Estudiante estudiante)
         }
 
 
-                        
-                     
-       
-                
+
+
+
+
 
 
         [HttpPost]
@@ -1775,45 +1835,38 @@ public ActionResult Buscar(Estudiante estudiante)
         {
             if (ModelState.IsValid)
             {
+
+                HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
+                Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
+                oHojaVida.direccion_manizales = estudiante.HojaVida.direccion_manizales;
+                oHojaVida.hemoclasificacion = estudiante.HojaVida.hemoclasificacion;
+                oHojaVida.municipio_procedencia = estudiante.HojaVida.municipio_procedencia;
+                oHojaVida.hijos = estudiante.HojaVida.hijos;
+                oHojaVida.correo = estudiante.HojaVida.correo;
+                oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
+                oHojaVida.num_celular = estudiante.HojaVida.num_celular;
+                oHojaVida.num_telefono = estudiante.HojaVida.num_telefono;
+                oHojaVida.Familia = estudiante.HojaVida.Familia;
              
-              HojaVida oHojaVida=  db.HojaVidas.Find(estudiante.hojaVidaId);
-              Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
-
-              oHojaVida.direccion_manizales = estudiante.HojaVida.direccion_manizales;
-              oHojaVida.hemoclasificacion = estudiante.HojaVida.hemoclasificacion;
-              oHojaVida.municipio_procedencia = estudiante.HojaVida.municipio_procedencia;
-              oHojaVida.hijos = estudiante.HojaVida.hijos;
-              oHojaVida.correo = estudiante.HojaVida.correo;
-              oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
-              oHojaVida.num_celular = estudiante.HojaVida.num_celular;
-              oHojaVida.num_telefono = estudiante.HojaVida.num_telefono;
-              oHojaVida.Familia = estudiante.HojaVida.Familia;
-              oHojaVida.estado_HV = true;
-              int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
-              string edadDocente = edad.ToString();
-              est.barrio_procedencia = edadDocente;//Reemplaza edad
-              
-              estudiante.HojaVida = null;
-
+                int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
+                string edadDocente = edad.ToString();
+                est.barrio_procedencia = edadDocente;//Reemplaza edad
+                estudiante.HojaVida = null;
                 db.Entry(est).State = EntityState.Modified;
-               
-               // cargaDocumento(estudiante);
                 guardaDocumentos(estudiante);
-                
                 db.SaveChanges();
-                ValidarCampos(est);
-              
-               return RedirectToAction("../Estudiante/Personales/" + est.estudianteId);
-               // return View(est);
+                ValidarCampos(estudiante);
+                cargaDocumentoDos(estudiante);
+                return RedirectToAction("../Estudiante/Personales/" + est.estudianteId);
+             
             }
             else
             {
                 cargaDocumentoDos(estudiante);
-                Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);              
-                
+                Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
                 return View(estudiante2);
             }
-           
+
         }
 
 
@@ -1863,19 +1916,19 @@ public ActionResult Buscar(Estudiante estudiante)
             }
 
         }
-  
-            
-           
-                       
-               
-            
-         
-    
+
+
+
+
+
+
+
+
         public String ImagePath(Estudiante estudiante)
         {
-            
+
             {
-                return "~/Uploads/img/cedula_"+estudiante.codigo+".jpg";
+                return "~/Uploads/img/cedula_" + estudiante.codigo + ".jpg";
             }
 
         }
@@ -1884,7 +1937,7 @@ public ActionResult Buscar(Estudiante estudiante)
         //
         //------------------------- Vista para datos familia del estudiante
 
-        
+
 
 
         public ActionResult PersonalesDS(int id = 0)
@@ -1892,7 +1945,7 @@ public ActionResult Buscar(Estudiante estudiante)
             TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
-           
+
             cargaImagen(estudiante);
             if (estudiante == null)
             {
@@ -1900,21 +1953,21 @@ public ActionResult Buscar(Estudiante estudiante)
             }
 
             HojaVida hv = db.HojaVidas.Find(estudiante.hojaVidaId);
-            
-            Boolean estado =hv.estado_HV;
-            ViewBag.estado = estado;
+            ValidarCampos(estudiante);
+
+          
             Boolean estadoV = ValidarVacunas(estudiante);
             ViewBag.estadoV = estadoV;
 
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            
-           
+
+
 
             cargaDocumentoDos(estudiante);
             return View(estudiante);
-            
+
         }
 
         public ActionResult PersonalesDpto(int id = 0)
@@ -1979,7 +2032,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-       
+
 
 
         [HttpPost]
@@ -1987,15 +2040,15 @@ public ActionResult Buscar(Estudiante estudiante)
         public ActionResult SolicitarActualizacion(Estudiante estudiante)
         {
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
-        
 
-           // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
+
+            // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("rcard@gmail.com", "To Name");
+            var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
             const string fromPassword = "descargar";
             const string subject = "Solicitud actualizacion hoja de vida";
             const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
-             //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
+            //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
 
 
             try
@@ -2042,17 +2095,17 @@ public ActionResult Buscar(Estudiante estudiante)
         [ValidateAntiForgeryToken]
         public ActionResult PersonalesDS(Estudiante estudiante)
         {
-            
-             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
-             guardaDocumentos(estudiante);
+            estudiante = db.Estudiantes.Find(estudiante.estudianteId);
+
+            guardaDocumentos(estudiante);
 
 
-                Boolean estado = ValidarCampos(estudiante);
-                ViewBag.estado = estado;
-                //return View(estudiante);
-                return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
-                
+            Boolean estado = ValidarCampos(estudiante);
+          
+            //return View(estudiante);
+            return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
+
         }
 
         [HttpPost]
@@ -2144,7 +2197,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
 
-       
+
 
 
         //
@@ -2209,10 +2262,10 @@ public ActionResult Buscar(Estudiante estudiante)
 
         public ActionResult CarnetVacunacion(int id = 0)
         {
-           
+
 
             Estudiante estudiante = db.Estudiantes.Find(id);
-          
+
             if (estudiante == null)
             {
                 return HttpNotFound();
@@ -2264,7 +2317,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
 
         }
-        
+
 
 
 
@@ -2307,7 +2360,7 @@ public ActionResult Buscar(Estudiante estudiante)
                     // Do something else
                 }
             }
-            
+
             return View(estudiante);
 
         }
@@ -2344,7 +2397,7 @@ public ActionResult Buscar(Estudiante estudiante)
 
         }
 
-       
+
 
         public ActionResult SaludDS(int id = 0)
         {
@@ -2395,7 +2448,7 @@ public ActionResult Buscar(Estudiante estudiante)
             if (estudiante == null)
             {
                 return HttpNotFound();
-            }  
+            }
             if (Request != null)
             {
                 HttpPostedFileBase file = Request.Files["InputFile"];
@@ -2408,7 +2461,7 @@ public ActionResult Buscar(Estudiante estudiante)
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
                     string extension = System.IO.Path.GetExtension(Request.Files["InputFile"].FileName);
                     string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/"), "cedula_", extension);
-                    if (System.IO.File.Exists(path1))
+                    if (RemoteFileExists(path1))
                         System.IO.File.Delete(path1);
 
                     Request.Files["InputFile"].SaveAs(path1);

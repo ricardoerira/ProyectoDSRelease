@@ -987,3 +987,16 @@ width:5000px;
     margin-left: 45px;
     padding: 15px;
 }
+
+
+.form-group.required .control-label:after { 
+    color: #d00;
+    content: "*";
+    position: absolute;
+    margin-left: 8px;
+    top:7px;
+    font-family: 'Glyphicons Halflings';
+font-weight: normal;
+font-size: 8px;
+}
+
