@@ -278,7 +278,8 @@ namespace MvcApplication2.Controllers
 
             var municipios = db.IPS_ESE.Include(h => h.Municipio);
             List<IPS_ESE> lista = municipios.ToList();
-
+            lista = lista.OrderBy(x => x.nombre)
+           .ToList();
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
 
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
@@ -303,6 +304,7 @@ namespace MvcApplication2.Controllers
             Programa pr = db.Programas.Find(programaId);
             int mesId = Int32.Parse(value["mesId"]);
             int añoId = Int32.Parse(value["añoId"]);
+          
             var date = DateTime.MinValue;
             DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
             DateTime date2;
@@ -321,27 +323,25 @@ namespace MvcApplication2.Controllers
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
             rptH.Load(strRptPath);
-            List<RotacionEstudiante> re = db.RotacionEstudiantes.Include(h => h.Docente).Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.Estudiante.programaId == programaId).Where(r => r.Rotacion.fecha_inicio >= date).Where(r => r.Rotacion.fecha_terminacion <= date2).Where(r => r.Rotacion.ActividadAcademica.DepartamentoSaludId == departamentoId).ToList();
+            List<RotacionEstudiante> re = db.RotacionEstudiantes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.Estudiante.programaId == programaId).Where(r => r.Rotacion.fecha_inicio >= date).Where(r => r.Rotacion.fecha_terminacion <= date2).Where(r => r.Rotacion.ActividadAcademica.DepartamentoSaludId == departamentoId).ToList();
             List<Docente> docentes = new List<Docente>();
             List<Estudiante> estudiantes = new List<Estudiante>();
             List<Rotacion> rotaciones = new List<Rotacion>();
             List<ActividadAcademica> acti = new List<ActividadAcademica>();
             List<HojaVida> hojas = new List<HojaVida>();
             List<HojaVida> hojas2 = new List<HojaVida>();
+           List<RotacionDocente> rotacionDocentes = new List<RotacionDocente>();
             foreach (var item in re)
             {
-                if (item.Estudiante.HojaVida.estado_HV)
-                {
-                    docentes.Add(item.Docente);
-                    hojas.Add(item.Docente.HojaVida);
+                //if (item.Estudiante.HojaVida.estado_HV)
+              //  {
+                    rotacionDocentes.AddRange(db.RotacionDocentes.Where(r=>r.rotacionEstudianteId==item.rotacionEstudianteId).ToList());
+          
                     estudiantes.Add(item.Estudiante);
                     hojas2.Add(item.Estudiante.HojaVida);
                     rotaciones.Add(item.Rotacion);
                     acti.Add(item.Rotacion.ActividadAcademica);
-                }
-
-
-
+                //}
             }
 
             rptH.Database.Tables[0].SetDataSource(re);
@@ -349,8 +349,10 @@ namespace MvcApplication2.Controllers
             rptH.Database.Tables[2].SetDataSource(estudiantes);
             rptH.Database.Tables[3].SetDataSource(hojas2);
             rptH.Database.Tables[4].SetDataSource(acti);
-            rptH.Database.Tables[5].SetDataSource(rotaciones);
+            rptH.Database.Tables[5].SetDataSource(rotacionDocentes);
 
+
+            rptH.Database.Tables[6].SetDataSource(rotaciones);
 
 
 

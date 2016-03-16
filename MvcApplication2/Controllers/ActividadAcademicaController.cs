@@ -15,13 +15,14 @@ namespace MvcApplication2.Controllers
     public class ActividadAcademicaController : Controller
     {
         private UsersContext2 db = new UsersContext2();
-
+      
         //
         // GET: /ActividadAcademica/
 
         public ActionResult Index()
         {
             //importaMaterias();
+            
             var actividadacademicas = db.ActividadAcademicas.Include(a => a.DepartamentoSalud);
             return View(actividadacademicas.ToList());
         }

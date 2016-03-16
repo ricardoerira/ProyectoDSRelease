@@ -216,24 +216,7 @@
                                 }
 
                             </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Vacunas </label>
-
-                                    @if (ViewBag.estadoV)
-                                    {
-                                        <button type="submit" class="alert-info">Vacunas Actualizadas</button>
-
-                                    }
-
-                                    else
-                                    {
-                                        <button type="submit" class="alert-danger">Solicitar Actualizacion</button>
-
-
-                                    }
-
-
-                                </div>
+                         
 
 
 
@@ -247,7 +230,7 @@
 
                                     @Html.HiddenFor(model => model.estudianteId)
                                     @Html.HiddenFor(model => model.hojaVidaId)
-                                    @Html.HiddenFor(model => model.rotacionId)
+                                  
                                     @Html.HiddenFor(model => model.programaId)
                                     @Html.HiddenFor(model => model.clave)
                                     @Html.HiddenFor(model => model.modalidad)

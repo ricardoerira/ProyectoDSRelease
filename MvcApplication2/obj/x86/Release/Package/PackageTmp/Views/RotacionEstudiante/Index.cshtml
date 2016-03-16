@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MvcApplication2.Models.RotacionEstudiante>
+﻿@model IList<MvcApplication2.Models.RotacionEstudiante>
 
 @{
     ViewBag.Title = "Index";
@@ -50,78 +50,113 @@
 
         <div class="widget-content">
 
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
+            @if (ViewBag.alert!=null)
+            {
+                <script>alert("Debes seleccionar al menos un item");</script>
 
-                        <th class="text-center">
-                            Grupo
-                        </th>
-                        <th>
-                            Horario
-                        </th>
-                        <th>
-                            Fecha Inicio
-                        </th>
-                        <th>
-                            Fecha Fin
-                        </th>
-                        <th>
-                            Docente
-                        </th>
-                        <th>
-                            Estudiante
-                        </th>
-                        <th>
-                            Estado
-                        </th>
-                        <th>
-                            IPS/ESE
-                        </th>
-                        <th class="td-actions text-center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            }
+         @using (Html.BeginForm())
+         { 
+             
+                <div class="form-group">
+                    <div class="col-md-12 text-left">
+
+                        <input type="submit" name="submitbutton1" class="btn btn-primary" value="Editar Docentes" />
+                        <input type="submit" name="submitbutton2" class="btn btn-primary" value="Editar Horarios e IPS" />
+                    </div>
+                </div>
+
+                <table class="table table-striped table-bordered">
+
+                    <thead>
                         <tr>
-                            <td class="text-center">
-                                @Html.DisplayFor(modelItem => item.Rotacion.grupo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.horario)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Rotacion.fecha_inicio)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Rotacion.fecha_terminacion)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Docente.HojaVida.primer_nombre)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estudiante.HojaVida.primer_nombre)
-                                @Html.DisplayFor(modelItem => item.Estudiante.HojaVida.primer_apellido)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estudiante.HojaVida.estado_HV)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IPS_ESE.nombre)
-                            </td>
-
-                            <td class="text-center">
-                                @Html.ActionLink(" ", "Edit", new { id = item.rotacionEstudianteId }, new { @class = "btn btn-sm btn-success btn-icon-only glyphicon glyphicon-pencil", title = "Asignar rotación" })
-
-
-                            </td>
-
+                            <th>
+                                Estado
+                            </th>
+                            <th class="text-center">
+                                Grupo
+                            </th>
+                            <th>
+                                Horario
+                            </th>
+                            <th>
+                                Fecha Inicio
+                            </th>
+                            <th>
+                                Fecha Fin
+                            </th>
+                            <th>
+                                Docente
+                            </th>
+       
+                            <th>
+                                Estudiante
+                            </th>
+                            <th>
+                                Estado Hoja Vida
+                            </th>
+                            <th>
+                                IPS/ESE
+                            </th>
+                          
                         </tr>
-                    }
+                    </thead>
+                    <tbody>
 
-                </tbody>
-            </table>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+
+                            <tr>
+                                <td class="text-center">
+                                    @Html.CheckBoxFor(x => Model[i].estadoSeleccionado, new { @checked = "checked" })
+                                </td>
+
+
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => Model[i].Rotacion.grupo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].horario)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Rotacion.fecha_inicio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Rotacion.fecha_terminacion)
+                                </td>
+                                <td>
+
+                                    @{int j = 0;
+                                    foreach (var item2 in Model[i].rotacionesDocente)
+                                    {
+                                        @Html.DisplayFor(modelItem => Model[i].rotacionesDocente.ElementAt(j).Docente.HojaVida.primer_nombre)
+                                        <br>
+
+                                        j++;
+                                    }
+                                    }
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Estudiante.HojaVida.primer_nombre)
+                                    @Html.DisplayFor(modelItem => Model[i].Estudiante.HojaVida.primer_apellido)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].Estudiante.HojaVida.estado_HV)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model[i].IPS_ESE.nombre)
+                                </td>
+
+                     
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            }
         </div> <!-- /widget-content -->
 
     </div> <!-- /widget -->

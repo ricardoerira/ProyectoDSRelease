@@ -27,7 +27,9 @@
         </div><!-- /.container-fluid -->
     </nav>
 </div>
-
+<div class="pull-left">
+    @Html.ActionLink("Regresar ", "Index", new { id = @Model.Rotacion.rotacionId }, new { @class = "btn btn-primary" })
+</div>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -57,14 +59,7 @@
 
                                     </div>
                                 </div>
-                                <!-- Email input-->
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label" for="email">Docente</label>
-                                    <div class="col-md-9">
-                                        @Html.DropDownList("docenteId", null, String.Empty, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.IPS_ESEId)
-                                    </div>
-                                </div>
+                           
                                 <!-- Message body -->
                                 <div class="form-group">
                                     <label class="col-md-3 control-label" for="message">Horario</label>

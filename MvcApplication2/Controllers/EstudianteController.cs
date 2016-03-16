@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using System.Data.Entity.Validation;
 
 namespace MvcApplication2.Controllers
 {
@@ -286,16 +287,14 @@ namespace MvcApplication2.Controllers
         public ActionResult Soporte(int id = 0)
         {
             string imagen = Request.Params["imagen"];
-            imagen = imagen.Replace("%2F", "/");
+            imagen = imagen.Replace("%", "/");
 
             Estudiante estudiante = db.Estudiantes.Find(id);
             if (estudiante == null)
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad" };
-
-
+            
 
             ViewBag.imagen1 = imagen;
 
@@ -457,10 +456,9 @@ namespace MvcApplication2.Controllers
                 }
 
 
-
+                
                 db.Entry(estudianteAux).State = EntityState.Modified;
-                db.SaveChanges();
-
+               
                 return true;
             }
             else
@@ -468,9 +466,33 @@ namespace MvcApplication2.Controllers
                
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 estudianteAux.HojaVida.estado_HV = false;
+                ViewBag.estado = estudianteAux.HojaVida.estado_HV;
+                estudianteAux.HojaVida.municipio_procedencia = ".";
+                estudianteAux.HojaVida.num_celular = 3000000000;
 
                 db.Entry(estudianteAux).State = EntityState.Modified;
-                db.SaveChanges();
+
+                 try
+                {
+
+                    db.SaveChanges();
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                            eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    throw;
+                }
+                
+                
                 return false;
             }
         }
@@ -478,7 +500,7 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion);
+            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa);
             return View(estudiantes.ToList());
         }
         public ActionResult RotacionEstudiante(string searchString, int id = 0)
@@ -492,10 +514,8 @@ namespace MvcApplication2.Controllers
             else
             {
                 Estudiante estudiante = db.Estudiantes.Find(id);
-                estudiante.rotacionId = Convert.ToInt32(rotacion);
                 Rotacion rotacionE = db.Rotacions.Find(Convert.ToInt32(rotacion));
                 rotacionE.numero_estudiantes = rotacionE.numero_estudiantes + 1;
-                estudiante.Rotacion = rotacionE;
                 db.Entry(rotacionE).State = EntityState.Modified;
                 db.SaveChanges();
                 db.Entry(estudiante).State = EntityState.Modified;
@@ -622,13 +642,10 @@ namespace MvcApplication2.Controllers
             else
             {
                 Estudiante estudiante = db.Estudiantes.Find(id);
-                estudiante.rotacionId = Convert.ToInt32(rotacion);
                 Rotacion rotacionE = db.Rotacions.Find(Convert.ToInt32(rotacion));
                 rotacionE.numero_estudiantes = rotacionE.numero_estudiantes + 1;
-                estudiante.Rotacion = rotacionE;
                 db.Entry(rotacionE).State = EntityState.Modified;
                 db.SaveChanges();
-                estudiante.Rotacion = rotacionE;
                 db.Entry(estudiante).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -681,8 +698,7 @@ namespace MvcApplication2.Controllers
 
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", estudiante.hojaVidaId);
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre", estudiante.programaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", estudiante.rotacionId);
-            return View(estudiante);
+             return View(estudiante);
         }
 
         //
@@ -697,8 +713,7 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", estudiante.hojaVidaId);
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre", estudiante.programaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", estudiante.rotacionId);
-            return View(estudiante);
+             return View(estudiante);
         }
 
         //
@@ -716,7 +731,6 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", estudiante.hojaVidaId);
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre", estudiante.programaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", estudiante.rotacionId);
             return View(estudiante);
         }
 
@@ -984,7 +998,7 @@ namespace MvcApplication2.Controllers
             } return View(estudiante);
         }
 
-        public ActionResult Personales(int id = 0)
+        public ActionResult  Personales(int id = 0)
         {
             TempData["notice"] = null;
 
@@ -1023,7 +1037,7 @@ namespace MvcApplication2.Controllers
         public ActionResult cargaDocumentoDos(Estudiante estudiante)
         {
             {
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB" };
+                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "influenza" };
 
 
                   string path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
@@ -1033,7 +1047,7 @@ namespace MvcApplication2.Controllers
                   {
                   
                     ViewBag.imagen1 = path1;
-
+                      ViewBag.imagen1a = documentos[0] + estudiante.codigo + ".jpg";
                 }
                 else
                 {
@@ -1048,6 +1062,7 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
+                    ViewBag.imagen2a = documentos[1] + estudiante.codigo + ".jpg";
 
               
                     ViewBag.imagen2 = path1;
@@ -1064,7 +1079,8 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
-                   
+                    ViewBag.imagen3a = documentos[2] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen3 = path1;
 
                 }
@@ -1080,7 +1096,8 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
-               
+                    ViewBag.imagen4a = documentos[3] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen4 = path1;
 
                 }
@@ -1097,7 +1114,8 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
-                
+                    ViewBag.imagen5a = documentos[4] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen5 = path1;
 
                 }
@@ -1112,7 +1130,8 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
-                
+                    ViewBag.imagen6a = documentos[5] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen6 = path1;
 
                 }
@@ -1128,7 +1147,8 @@ namespace MvcApplication2.Controllers
 
                 if (RemoteFileExists(path1))
                 {
-        
+                    ViewBag.imagen7a = documentos[6] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen7 = path1;
 
                 }
@@ -1140,11 +1160,12 @@ namespace MvcApplication2.Controllers
 
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
 
                 if (RemoteFileExists(path1))
                 {
-                 
+                    ViewBag.imagen8a = documentos[7] + estudiante.codigo + ".jpg";
+
                     ViewBag.imagen8 = path1;
 
                 }
@@ -1153,6 +1174,22 @@ namespace MvcApplication2.Controllers
                     ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
                 }
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + estudiante.codigo, ".jpg");
+
+                if (RemoteFileExists(path1))
+                {
+                    ViewBag.imagen9a = documentos[8] + estudiante.codigo + ".jpg";
+
+                    ViewBag.imagen9 = path1;
+
+                }
+                else
+                {
+                    ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+                }
+            
 
 
 
@@ -1163,7 +1200,28 @@ namespace MvcApplication2.Controllers
         }
 
 
+        public ActionResult DeleteImage(int id)
+        {
+               
+            string imagen = Request.Params["imagen"];
+            imagen = imagen.Replace("%", "/");
+            string path1 = string.Format("{0}{1}", Server.MapPath("../../Uploads/"), imagen);
+            if (System.IO.File.Exists(path1))
+                System.IO.File.Delete(path1);
 
+            Estudiante estudiante = db.Estudiantes.Find(id);
+            if (estudiante == null)
+            {
+                return HttpNotFound();
+            }
+            
+
+            ViewBag.imagen1 = imagen;
+            return RedirectToAction("../Estudiante/Personales/" + estudiante.estudianteId);
+            
+
+            
+        }
 
         public ActionResult cargaDocumentoResidentes(Estudiante estudiante)
         {
@@ -1674,7 +1732,8 @@ namespace MvcApplication2.Controllers
         //    }
         //   return View(estudiante);
         //}
-        public ActionResult guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
+        public ActionResult 
+            guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
         {
             int numFiles = Request.Files.Count;
             if (Request != null)
@@ -1683,7 +1742,7 @@ namespace MvcApplication2.Controllers
 
                 int uploadedCount = 0;
 
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB" };
+                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB","influenza" };
                 for (int i = 0; i < numFiles; i++)
                 {
                     HttpPostedFileBase file = Request.Files[i];
@@ -1735,7 +1794,7 @@ namespace MvcApplication2.Controllers
             int uploadedCount = 0;
             int numFiles = Request.Files.Count;
 
-            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "ant_varicela", "ant_hepatitisB" };
+            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "ant_varicela", "ant_hepatitisB","influenza" };
 
             for (int i = 0; i < documentos.Length; i++)
             {
@@ -1862,6 +1921,8 @@ namespace MvcApplication2.Controllers
             }
             else
             {
+
+                ValidarCampos(estudiante);
                 cargaDocumentoDos(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
                 return View(estudiante2);
@@ -2041,51 +2102,54 @@ namespace MvcApplication2.Controllers
         {
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
-
-            // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
-            var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
-            const string fromPassword = "descargar";
-            const string subject = "Solicitud actualizacion hoja de vida";
-            const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
-            //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
-
-
-            try
+            if(!estudiante.HojaVida.correo.Equals(""))
             {
+                var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
+                var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
+                const string fromPassword = "descargar";
+                const string subject = "Solicitud actualizacion hoja de vida";
+                const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Num de Documento de Identidad&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
+                //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
 
-                var smtp = new SmtpClient
+
+                try
                 {
-                    Host = "72.29.75.91",
-                    Port = 25,
-                    EnableSsl = false,
-                    DeliveryMethod = SmtpDeliveryMethod.Network,
-                    UseDefaultCredentials = false,
-                    Timeout = 10000,
-                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-                };
-                var message = new MailMessage(fromAddress, toAddress);
 
-                message.IsBodyHtml = true;
-                message.Subject = subject;
-                message.Body = body;
+                    var smtp = new SmtpClient
+                    {
+                        Host = "72.29.75.91",
+                        Port = 25,
+                        EnableSsl = false,
+                        DeliveryMethod = SmtpDeliveryMethod.Network,
+                        UseDefaultCredentials = false,
+                        Timeout = 10000,
+                        Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                    };
+                    var message = new MailMessage(fromAddress, toAddress);
+
+                    message.IsBodyHtml = true;
+                    message.Subject = subject;
+                    message.Body = body;
 
 
 
-                smtp.EnableSsl = false;
-                smtp.Send(message);
+                    smtp.EnableSsl = false;
+                    smtp.Send(message);
 
+
+                }
+
+
+                catch (Exception e)
+                {
+
+                    Console.WriteLine("Ouch!" + e.ToString());
+
+                }
 
             }
-
-
-            catch (Exception e)
-            {
-
-                Console.WriteLine("Ouch!" + e.ToString());
-
-            }
-
+            // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
+         
 
             return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
 

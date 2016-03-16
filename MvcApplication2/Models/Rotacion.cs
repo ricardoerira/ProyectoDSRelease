@@ -12,6 +12,7 @@ namespace MvcApplication2.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
     using System.Web;
     
@@ -19,8 +20,6 @@ namespace MvcApplication2.Models
     {
         public Rotacion()
         {
-            this.Docente = new HashSet<Docente>();
-            this.Estudiante = new HashSet<Estudiante>();
           
          }
      
@@ -45,16 +44,18 @@ namespace MvcApplication2.Models
         
         public int IPS_ESEId { get; set; }
 
-        public int actividadacademicaId { get; set; } 
+        public int actividadacademicaId { get; set; }
+
+
+        public string servicio { get; set; }
+
+        public string observaciones { get; set; }  
        
         public virtual ActividadAcademica ActividadAcademica { get; set; }
         
         public virtual IPS_ESE IPS_ESE { get; set; }
 
                 
-        public virtual ICollection<Docente> Docente { get; set; }
-        public virtual ICollection<Estudiante> Estudiante { get; set; }
-      
     }
     public class Grupos
     {

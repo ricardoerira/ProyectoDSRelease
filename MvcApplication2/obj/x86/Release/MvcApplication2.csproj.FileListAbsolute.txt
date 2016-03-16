@@ -13,7 +13,6 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\DotNetOpenAuth.OpenId.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\DotNetOpenAuth.OpenId.RelyingParty.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.dll
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\log4net.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\Microsoft.Data.Edm.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\Microsoft.Data.OData.dll
@@ -36,7 +35,6 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\WebMatrix.Data.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\WebMatrix.WebData.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.xml
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.xml
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\log4net.xml
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\Newtonsoft.Json.xml
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\System.Net.Http.xml
@@ -87,9 +85,15 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\ru\System.Spatial.resources.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\zh-Hans\System.Spatial.resources.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\zh-Hant\System.Spatial.resources.dll
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.dd.resources
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.jdgst.resources
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csproj.GenerateResource.Cache
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.pdb
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.dll
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.xml
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.sd.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.ljl.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.sd1.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.sdf.resources
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csprojResolveAssemblyReference.cache
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.dd.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.asdfads.resources

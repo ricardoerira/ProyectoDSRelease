@@ -29,213 +29,6 @@ namespace MvcApplication2.Controllers
             return View(rotacions.ToList());
         }
 
-        public void importaEstudiantesRotacion()
-        {
-            ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
-
-            List<Rotacion> rotaciones = db.Rotacions.ToList();
-            foreach (var item in rotaciones)
-            {
-                string json2 = ser.getInscritosGrupo(item.ActividadAcademica.codigo_AA, item.grupo, item.year_academico + "", item.periodo_academico + "");
-                if (json2 != null && !json2.Equals(""))
-                {
-
-                    try
-                    {
-                        MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(json2);
-                        foreach (var item3 in gruposInscritos.inscritosGrupo)
-                        {
-                            long codigo = Int64.Parse(item3.CODIGO);
-                            string cedula = item3.CEDULA_PROFESOR;
-                            Docente docente2 = null;
-                            Estudiante estudiante2 = null;
-
-                            cedula = cedula.Substring(0, cedula.Length - 1);
-
-
-
-                            if (!cedula.Equals(""))
-                            {
-
-                                var docente = db.Docentes.Where(r => r.num_documento == cedula);
-                                 if (docente.ToList().Count()>0)
-                                 {
-                                     docente2 = (Docente)docente.ToList().ElementAt(0);
-                                     if (docente2 == null)
-                                     {
-                                         docente2.rotacionId = item.rotacionId;
-                                         
-                                     }
-                                 }
-                               
-                               
-
-
-                            }
-                            var estudiante = db.Estudiantes.Where(r => r.codigo == codigo);
-
-
-                            estudiante2 = (Estudiante)estudiante.ToList().ElementAt(0);
-                            estudiante2.rotacionId = item.rotacionId;
-
-
-                            RotacionEstudiante re = new RotacionEstudiante();
-                            if(docente2!=null)
-                                
-                            {
-                                re.docenteId = docente2.docenteId;
-
-                            }
-                            else
-                            {
-                                re.docenteId = 165;
-
-                            }
-                            re.estudianteId = estudiante2.estudianteId;
-                            re.rotacionId = item.rotacionId;
-                            re.IPS_ESEId = 11;
-                            db.RotacionEstudiantes.Add(re);
-                            db.SaveChanges();
-
-
-
-
-
-
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        continue;
-                    }
-                }
-            }
-
-        }
-        public void importaGruposMateria()
-        {
-            List<ActividadAcademica> materias = db.ActividadAcademicas.ToList();
-            foreach (var item in materias)
-            {
-                ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
-
-                string json = ser.getGruposMateria(item.codigo_AA);
-                if (json != null && !json.Equals(""))
-                {
-
-
-                    MvcApplication2.Models.Grupos.ESObject0 gruposMaterias = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.Grupos.ESObject0>(json);
-                    foreach (var item2 in gruposMaterias.gruposMaterias)
-                    {
-
-
-
-                        if (item2.ANO >= 2015 && item2.PERIODO == 2)
-                        {
-                            var datos = db.Rotacions.Where(r => r.actividadacademicaId == item.actividadacademicaId).Where(r => r.year_academico == item2.ANO).Where(r => r.periodo_academico == item2.PERIODO).Where(r => r.grupo.Equals(item2.GRUPO));
-                            List<Rotacion> lista = datos.ToList();
-                            if (lista.Count() == 0)
-                            {
-                                Rotacion rotacion = new Rotacion();
-                                rotacion.year_academico = item2.ANO;
-                                rotacion.periodo_academico = item2.PERIODO;
-
-
-                                rotacion.grupo = item2.GRUPO;
-
-                                rotacion.horario = "";
-                                rotacion.numero_estudiantes = item2.INSCRITOS;
-                                DateTime myDate = DateTime.ParseExact(item2.FECHA_INICIO, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                rotacion.fecha_inicio = myDate;
-
-                                DateTime myDate2 = DateTime.ParseExact(item2.FECHA_FINAL, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                rotacion.fecha_terminacion = myDate2;
-                                rotacion.actividadacademicaId = item.actividadacademicaId;
-                                rotacion.IPS_ESEId = 1;
-                                rotacion.grupo = item2.GRUPO;
-                                db.Rotacions.Add(rotacion);
-                                db.SaveChanges();
-                                string json2 = ser.getInscritosGrupo(item2.COD_MATERIA, item2.GRUPO, item2.ANO + "", item2.PERIODO + "");
-                                if (json2 != null && !json2.Equals(""))
-                                {
-                                    MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(json2);
-                                    foreach (var item3 in gruposInscritos.inscritosGrupo)
-                                    {
-                                        long codigo = Int64.Parse(item3.CODIGO);
-                                        string cedula = item3.CEDULA_PROFESOR;
-                                        var iffam = db.Rotacions.Max(p => p.rotacionId);
-                                        Docente docente2 = null;
-                                        Estudiante estudiante2 = null;
-                                        if (!cedula.Equals(""))
-                                        {
-
-                                            cedula = cedula.Substring(0, cedula.Length - 1);
-                                            var docente = db.Docentes.Where(r => r.num_documento == cedula);
-                                            List<Docente> listest2 = docente.ToList();
-
-                                            if (listest2.Count > 0)
-                                            {
-                                                docente2 = listest2.ElementAt(0);
-                                                docente2.rotacionId = iffam;
-                                            }
-
-                                        }
-                                        var estudiante = db.Estudiantes.Where(r => r.codigo == codigo);
-                                        List<Estudiante> listest = estudiante.ToList();
-
-                                        if (listest.Count > 0)
-                                        {
-                                            estudiante2 = listest.ElementAt(0);
-                                            estudiante2.rotacionId = iffam;
-                                        }
-                                        if (estudiante2 != null && docente2 != null)
-                                        {
-                                            RotacionEstudiante re = new RotacionEstudiante();
-                                            re.docenteId = docente2.docenteId;
-                                            re.estudianteId = estudiante2.estudianteId;
-                                            re.rotacionId = iffam;
-                                            re.IPS_ESEId = 1;
-                                            re.horario = "";
-                                            db.RotacionEstudiantes.Add(re);
-                                            try
-                                            {
-
-                                                db.SaveChanges();
-                                            }
-                                            catch (DbEntityValidationException e)
-                                            {
-                                                foreach (var eve in e.EntityValidationErrors)
-                                                {
-                                                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                                                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                                                    foreach (var ve in eve.ValidationErrors)
-                                                    {
-                                                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                                            ve.PropertyName, ve.ErrorMessage);
-                                                    }
-                                                }
-                                                throw;
-                                            }
-                                        }
-
-
-
-
-                                    }
-
-                                }
-
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-
         public ActionResult SeleccionRotacion()
         {
             if (User.Identity.IsAuthenticated)
@@ -321,8 +114,8 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("Nombre_Doctor", rotacion.IPS_ESE.representante_legal);
             rptH.SetParameterValue("cargo", rotacion.IPS_ESE.cargo_representanteDS);
             rptH.SetParameterValue("clinica", rotacion.IPS_ESE.nombre);
-            rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + rotacion.Estudiante.ElementAt(0).Programa.nombre + ", que realizaran su rotación en su institución y los profesores con su horario.");
-            rptH.SetParameterValue("docente", rotacion.Docente.ElementAt(0).HojaVida.primer_nombre + " " + rotacion.Docente.ElementAt(0).HojaVida.primer_apellido + " " + rotacion.Docente.ElementAt(0).HojaVida.segundo_apellido);
+            //rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + rotacion.Estudiante.ElementAt(0).Programa.nombre + ", que realizaran su rotación en su institución y los profesores con su horario.");
+            //rptH.SetParameterValue("docente", rotacion.Docente.ElementAt(0).HojaVida.primer_nombre + " " + rotacion.Docente.ElementAt(0).HojaVida.primer_apellido + " " + rotacion.Docente.ElementAt(0).HojaVida.segundo_apellido);
             rptH.SetParameterValue("fecha", rotacion.fecha_inicio);
 
 
@@ -438,7 +231,11 @@ namespace MvcApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(rotacion).State = EntityState.Modified;
+                Rotacion rotacionE = db.Rotacions.Find(rotacion.rotacionId);
+                rotacionE.fecha_inicio = rotacion.fecha_inicio;
+                rotacionE.fecha_terminacion = rotacion.fecha_terminacion;
+
+                db.Entry(rotacionE).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("SeleccionRotacion");
             }

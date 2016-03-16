@@ -36,12 +36,11 @@ using System.ComponentModel.DataAnnotations.Schema;
       
         public int hojaVidaId { get; set; }
         public int DepartamentoSaludId { get; set; } 
-        public int rotacionId { get; set; } 
     
         public virtual DepartamentoSalud DepartamentoSalud { get; set; }
     
         public virtual HojaVida HojaVida { get; set; }
-        public virtual Rotacion Rotacion { get; set; }
+
     }
 
     public class DocenteWS

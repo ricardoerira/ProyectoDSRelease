@@ -27,12 +27,11 @@ namespace MvcApplication2.Models
         public short semestre { get; set; }     
         public String estado_academico { get; set; }
         public int hojaVidaId { get; set; }
-        public int rotacionId { get; set; }
         
     
         public virtual HojaVida HojaVida{ get; set; }
         public virtual Programa Programa { get; set; }
-        public virtual Rotacion Rotacion { get; set; }
+      
     }
 
     public class EstudianteWS

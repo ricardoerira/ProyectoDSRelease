@@ -54,7 +54,8 @@ namespace MvcApplication2.Models
 
         public DbSet<nombreCurso> nombreCursoes { get; set; }
 
-     
+        public DbSet<RotacionDocente> RotacionDocentes { get; set; }
+
 
 
     }

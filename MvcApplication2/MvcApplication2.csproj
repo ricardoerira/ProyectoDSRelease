@@ -58,12 +58,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net40-full\log4net.dll</HintPath>
@@ -241,13 +241,29 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201512120416478_dd.cs" />
-    <Compile Include="Migrations\201512120416478_dd.Designer.cs">
-      <DependentUpon>201512120416478_dd.cs</DependentUpon>
+    <Compile Include="Migrations\201602272040303_sd.cs" />
+    <Compile Include="Migrations\201602272040303_sd.Designer.cs">
+      <DependentUpon>201602272040303_sd.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201512170558455_jdgst.cs" />
-    <Compile Include="Migrations\201512170558455_jdgst.Designer.cs">
-      <DependentUpon>201512170558455_jdgst.cs</DependentUpon>
+    <Compile Include="Migrations\201602272051139_ljl.cs" />
+    <Compile Include="Migrations\201602272051139_ljl.Designer.cs">
+      <DependentUpon>201602272051139_ljl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602272105337_sd1.cs" />
+    <Compile Include="Migrations\201602272105337_sd1.Designer.cs">
+      <DependentUpon>201602272105337_sd1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201602282053214_sdf.cs" />
+    <Compile Include="Migrations\201602282053214_sdf.Designer.cs">
+      <DependentUpon>201602282053214_sdf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603132003072_dd.cs" />
+    <Compile Include="Migrations\201603132003072_dd.Designer.cs">
+      <DependentUpon>201603132003072_dd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603150414051_asdfads.cs" />
+    <Compile Include="Migrations\201603150414051_asdfads.Designer.cs">
+      <DependentUpon>201603150414051_asdfads.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -270,12 +286,19 @@
     <Compile Include="Models\Postgrado.cs" />
     <Compile Include="Models\Programa.cs" />
     <Compile Include="Models\Rotacion.cs" />
+    <Compile Include="Models\RotacionDocente.cs" />
     <Compile Include="Models\RotacionEstudiante.cs" />
     <Compile Include="Models\Servicio.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Vacuna.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="reporte.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="reporte2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>reporte2.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ReporteContraPrestacion.cs">
@@ -1141,6 +1164,7 @@
     <None Include="Service References\ServiceReference2\WsFacultadSalud.wsdl" />
     <Content Include="Views\Estudiante\PersonalesDpto.cshtml" />
     <Content Include="Views\Docente\PersonalesDpto.cshtml" />
+    <Content Include="Views\RotacionEstudiante\EditDocente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1156,12 +1180,31 @@
     <WCFMetadataStorage Include="Service References\ServiceReference2\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201512120416478_dd.resx">
-      <DependentUpon>201512120416478_dd.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602272040303_sd.resx">
+      <DependentUpon>201602272040303_sd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512170558455_jdgst.resx">
-      <DependentUpon>201512170558455_jdgst.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201602272051139_ljl.resx">
+      <DependentUpon>201602272051139_ljl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602272105337_sd1.resx">
+      <DependentUpon>201602272105337_sd1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201602282053214_sdf.resx">
+      <DependentUpon>201602282053214_sdf.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603132003072_dd.resx">
+      <DependentUpon>201603132003072_dd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603150414051_asdfads.resx">
+      <DependentUpon>201603150414051_asdfads.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="reporte2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>reporte2.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

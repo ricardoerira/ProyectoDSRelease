@@ -12,6 +12,7 @@ namespace MvcApplication2.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     
     public partial class RotacionEstudiante
     {
@@ -25,7 +26,6 @@ namespace MvcApplication2.Models
         public int rotacionId { get; set; }    
         
         public int IPS_ESEId { get; set; }
-        public int docenteId { get; set; }
         public int estudianteId { get; set; }
 
 
@@ -35,8 +35,13 @@ namespace MvcApplication2.Models
         public virtual IPS_ESE IPS_ESE { get; set; }
         public virtual Rotacion Rotacion { get; set; }
 
-        public virtual Docente Docente { get; set; }
         public virtual Estudiante Estudiante { get; set; }
-      
+       
+        public bool estadoSeleccionado { get; set; } 
+
+
+        public virtual ICollection<RotacionDocente> rotacionesDocente { get; set; }
+
+
     }
 }

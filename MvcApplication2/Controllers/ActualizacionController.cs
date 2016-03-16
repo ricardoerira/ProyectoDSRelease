@@ -24,43 +24,37 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-          //  importaMaterias();
-         //   importaGruposMateria();
-        //   importaDocentes();
-       //     importaEstudiantes();
-         //   importaEstudiantesRotacion();
-          // actualizaImagenDocentes();
-       //     enviarCorreo("ricardoerira@gmail.com");
+            //importaMaterias();
+           //  importaGruposMateria();
+            //
+         //     importaDocentes();
+         //        importaEstudiantes();
+           importaEstudiantesRotacion();
+            // actualizaImagenDocentes();
 
 
-       
+
             return View();
         }
 
         public void enviaSolicituudTodosEstudiantes()
         {
-            List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion).ToList();
+            List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).ToList();
 
             foreach (Estudiante estudiante in estudiantes)
             {
                 string correo = estudiante.HojaVida.correo;
-                if(correo!=null && correo.Equals(""))
+                if (correo != null && correo.Equals(""))
                 {
                     enviarCorreo(estudiante.HojaVida.correo);
 
 
                 }
             }
-            
+
         }
         public void enviarCorreo(string mail)
         {
-   
-
-
-
-
-
 
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
             var toAddress = new MailAddress(mail, "To Name");
@@ -82,8 +76,8 @@ namespace MvcApplication2.Controllers
             var message = new MailMessage();
             message.From = fromAddress;
 
-         ///   List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida);
-            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).Include(e => e.Rotacion);
+            ///   List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida);
+            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa);
 
             foreach (Estudiante estudiante in estudiantes.ToList())
             {
@@ -121,10 +115,10 @@ namespace MvcApplication2.Controllers
             smtp.Send(message);
 
 
-            
 
 
-         
+
+
         }
         public void actualizaImagenEstudiantes()
         {
@@ -132,7 +126,7 @@ namespace MvcApplication2.Controllers
             foreach (HojaVida hojavida in estudiantes)
             {
                 List<Estudiante> estudiante = db.Estudiantes.Where(r => r.hojaVidaId == hojavida.hojaVidaId).ToList();
-                if(estudiante.Count()>0)
+                if (estudiante.Count() > 0)
                 {
                     hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotos/" + estudiante[0].codigo + ".jpg";
                     hojavida.municipio_procedencia = ".";
@@ -162,7 +156,7 @@ namespace MvcApplication2.Controllers
 
                 }
 
-            
+
             }
         }
 
@@ -238,24 +232,27 @@ namespace MvcApplication2.Controllers
             foreach (var item in listmaterias.materias)
             {
                 var materias = db.ActividadAcademicas.Where(r => r.codigo_AA.Equals(item.COD_MATERIA));
-                if(materias.ToList().Count==0)
+                if (materias.ToList().Count == 0)
                 {
                     ActividadAcademica academica = new ActividadAcademica();
                     Boolean estado = false;
                     int iddept = 0;
-                    foreach (var item2 in departamentos)
+                    var dpto = departamentos.Where(r => r.codigo.Equals("G9K")).ToList();
+                    var item2 = dpto.ElementAt(0);
+
+                    //foreach (var item2 in departamentos)
+                    // {
+
+                    if (item2.nombre.ToUpper().Equals(item.NOM_DEPTO))
                     {
+                        estado = true;
 
-                        if (item2.nombre.ToUpper().Equals(item.NOM_DEPTO))
-                        {
-                            estado = true;
-
-                            iddept = item2.DepartamentoSaludId;
-                        }
-
-
-
+                        iddept = item2.DepartamentoSaludId;
                     }
+
+
+
+                    //}
                     if (estado)
                     {
                         academica.DepartamentoSaludId = iddept;
@@ -280,7 +277,7 @@ namespace MvcApplication2.Controllers
 
                     }
                 }
-                
+
 
             }
         }
@@ -292,82 +289,98 @@ namespace MvcApplication2.Controllers
             ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
 
             List<Rotacion> rotaciones = db.Rotacions.ToList();
-            foreach (var item in rotaciones)
+            foreach (var rotacion in rotaciones)
             {
-                string json2 = ser.getInscritosGrupo(item.ActividadAcademica.codigo_AA, item.grupo, item.year_academico + "", item.periodo_academico + "");
-                if (json2 != null && !json2.Equals(""))
-                {
-
-                    try
+               
+                    string jsonInscritosGrupo = ser.getInscritosGrupo(rotacion.ActividadAcademica.codigo_AA, rotacion.grupo, rotacion.year_academico + "", rotacion.periodo_academico + "");
+                    if (jsonInscritosGrupo != null && !jsonInscritosGrupo.Equals(""))
                     {
-                        MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(json2);
-                        foreach (var item3 in gruposInscritos.inscritosGrupo)
-                        {
-                            long codigo = Int64.Parse(item3.CODIGO);
-                            string cedula = item3.CEDULA_PROFESOR;
-                            Docente docente2 = null;
-                            Estudiante estudiante2 = null;
+                      
+                            MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(jsonInscritosGrupo);
 
-                            cedula = cedula.Substring(0, cedula.Length - 1);
-
-
-
-                            if (!cedula.Equals(""))
+                            for (int i = 0; i < gruposInscritos.inscritosGrupo.Count;i++ )
                             {
+                                var item3 = gruposInscritos.inscritosGrupo.ElementAt(i);
 
-                                var docente = db.Docentes.Where(r => r.num_documento == cedula);
-                                if (docente.ToList().Count() > 0)
+                                string[] cedulas = item3.CEDULA_PROFESOR.Split(';');
+
+                                long codigo = Int64.Parse(item3.CODIGO);
+                                var datos = db.RotacionEstudiantes.Where(r => r.Estudiante.codigo == codigo).Where(r => r.rotacionId == rotacion.rotacionId);
+                                List<RotacionEstudiante> lista = datos.ToList();
+                                if (lista.Count() == 0)
                                 {
-                                    docente2 = (Docente)docente.ToList().ElementAt(0);
-                                    if (docente2 == null)
+                                    Estudiante estudiante2 = null;
+
+                                    var estudiantes = db.Estudiantes.Where(r => r.codigo == codigo).ToList();
+                                    if(estudiantes.Count==0)
                                     {
-                                        docente2.rotacionId = item.rotacionId;
+                                        continue;
 
                                     }
+                                    estudiante2 = (Estudiante)estudiantes.ElementAt(0);
+                                    RotacionEstudiante rotacionEstudiante = new RotacionEstudiante();
+                                    rotacionEstudiante.estudianteId = estudiante2.estudianteId;
+                                    rotacionEstudiante.rotacionId = rotacion.rotacionId;
+                                    rotacionEstudiante.IPS_ESEId = 1;
+                                    db.RotacionEstudiantes.Add(rotacionEstudiante);
+                                    db.SaveChanges();
+                                    var rotacionEstudianteId = db.RotacionEstudiantes.Max(p => p.rotacionEstudianteId);
+                                    InsertarRotacionDocente(cedulas, rotacionEstudianteId);
+
+
+
+
+
+
                                 }
-
-
-
-
                             }
-                            var estudiante = db.Estudiantes.Where(r => r.codigo == codigo);
-
-
-                            estudiante2 = (Estudiante)estudiante.ToList().ElementAt(0);
-                            estudiante2.rotacionId = item.rotacionId;
-
-
-                            RotacionEstudiante re = new RotacionEstudiante();
-                            if (docente2 != null)
-                            {
-                                re.docenteId = docente2.docenteId;
-
-                            }
-                            else
-                            {
-                                re.docenteId = 1385;
-
-                            }
-                            re.estudianteId = estudiante2.estudianteId;
-                            re.rotacionId = item.rotacionId;
-                            re.IPS_ESEId = 1;
-                            db.RotacionEstudiantes.Add(re);
-                            db.SaveChanges();
-
-
-
 
 
 
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        continue;
-                    }
+                       
+                    
                 }
             }
+       
 
+
+        public void InsertarRotacionDocente(string[] cedulas, int rotacionEstudianteId)
+        {
+            for (int i = 0; i < cedulas.Length; i++)
+            {
+                string cedula = cedulas[i];
+                if (!cedula.Equals(""))
+                {
+                    RotacionDocente rotacionDocente = new RotacionDocente();
+
+                    var docente = db.Docentes.Where(r => r.num_documento == cedula);
+                    if (docente.ToList().Count() > 0)
+                    {
+                        Docente docenteTemp = (Docente)docente.ToList().ElementAt(0);
+
+
+                        rotacionDocente.docenteId = docenteTemp.docenteId;
+
+
+
+
+
+
+
+                    }
+                    else
+                    {
+
+                        rotacionDocente.docenteId = 542;
+
+                    }
+                    rotacionDocente.rotacionEstudianteId = rotacionEstudianteId;
+                    db.RotacionDocentes.Add(rotacionDocente);
+                    db.SaveChanges();
+                }
+
+            }
         }
         public void importaGruposMateria()
         {
@@ -384,9 +397,6 @@ namespace MvcApplication2.Controllers
                     MvcApplication2.Models.Grupos.ESObject0 gruposMaterias = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.Grupos.ESObject0>(json);
                     foreach (var item2 in gruposMaterias.gruposMaterias)
                     {
-
-
-
                         if (item2.ANO >= 2016 && item2.PERIODO == 1)
                         {
                             var datos = db.Rotacions.Where(r => r.actividadacademicaId == item.actividadacademicaId).Where(r => r.year_academico == item2.ANO).Where(r => r.periodo_academico == item2.PERIODO).Where(r => r.grupo.Equals(item2.GRUPO));
@@ -412,79 +422,77 @@ namespace MvcApplication2.Controllers
                                 rotacion.grupo = item2.GRUPO;
                                 db.Rotacions.Add(rotacion);
                                 db.SaveChanges();
-                                string json2 = ser.getInscritosGrupo(item2.COD_MATERIA, item2.GRUPO, item2.ANO + "", item2.PERIODO + "");
-                                if (json2 != null && !json2.Equals(""))
-                                {
-                                    MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(json2);
-                                    foreach (var item3 in gruposInscritos.inscritosGrupo)
-                                    {
-                                        long codigo = Int64.Parse(item3.CODIGO);
-                                        string cedula = item3.CEDULA_PROFESOR;
-                                        var iffam = db.Rotacions.Max(p => p.rotacionId);
-                                        Docente docente2 = null;
-                                        Estudiante estudiante2 = null;
-                                        if (!cedula.Equals(""))
-                                        {
+                                //string json2 = ser.getInscritosGrupo(item2.COD_MATERIA, item2.GRUPO, item2.ANO + "", item2.PERIODO + "");
+                                //if (json2 != null && !json2.Equals(""))
+                                //{
+                                //    MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(json2);
+                                //    foreach (var item3 in gruposInscritos.inscritosGrupo)
+                                //    {
+                                //        long codigo = Int64.Parse(item3.CODIGO);
+                                //        string cedula = item3.CEDULA_PROFESOR;
+                                //        var iffam = db.Rotacions.Max(p => p.rotacionId);
+                                //        Docente docente2 = null;
+                                //        Estudiante estudiante2 = null;
+                                //        if (!cedula.Equals(""))
+                                //        {
 
-                                            cedula = cedula.Substring(0, cedula.Length - 1);
-                                            var docente = db.Docentes.Where(r => r.num_documento == cedula);
-                                            List<Docente> listest2 = docente.ToList();
+                                //            cedula = cedula.Substring(0, cedula.Length - 1);
+                                //            var docente = db.Docentes.Where(r => r.num_documento == cedula);
+                                //            List<Docente> listest2 = docente.ToList();
 
-                                            if (listest2.Count > 0)
-                                            {
-                                                docente2 = listest2.ElementAt(0);
-                                                docente2.rotacionId = iffam;
-                                            }
+                                //            if (listest2.Count > 0)
+                                //            {
+                                //                docente2 = listest2.ElementAt(0);
+                                //                docente2.rotacionId = iffam;
+                                //            }
 
-                                        }
-                                        var estudiante = db.Estudiantes.Where(r => r.codigo == codigo);
-                                        List<Estudiante> listest = estudiante.ToList();
+                                //        }
+                                //        var estudiante = db.Estudiantes.Where(r => r.codigo == codigo);
+                                //        List<Estudiante> listest = estudiante.ToList();
 
-                                        if (listest.Count > 0)
-                                        {
-                                            estudiante2 = listest.ElementAt(0);
-                                            estudiante2.rotacionId = iffam;
-                                        }
-                                        if (estudiante2 != null && docente2 != null)
-                                        {
-                                            RotacionEstudiante re = new RotacionEstudiante();
-                                            re.docenteId = docente2.docenteId;
-                                            re.estudianteId = estudiante2.estudianteId;
-                                            re.rotacionId = iffam;
-                                            re.IPS_ESEId = 1;
-                                            re.horario = "";
-                                            db.RotacionEstudiantes.Add(re);
-                                            try
-                                            {
+                                //        if (listest.Count > 0)
+                                //        {
+                                //            estudiante2 = listest.ElementAt(0);
+                                //            estudiante2.rotacionId = iffam;
+                                //        }
+                                //        if (estudiante2 != null && docente2 != null)
+                                //        {
+                                //            RotacionEstudiante re = new RotacionEstudiante();
+                                //          //  re.docenteId = docente2.docenteId;
+                                //            re.estudianteId = estudiante2.estudianteId;
+                                //            re.rotacionId = iffam;
+                                //            re.IPS_ESEId = 1;
+                                //            re.horario = "";
+                                //            db.RotacionEstudiantes.Add(re);
+                                //            try
+                                //            {
 
-                                                db.SaveChanges();
-                                            }
-                                            catch (DbEntityValidationException e)
-                                            {
-                                                foreach (var eve in e.EntityValidationErrors)
-                                                {
-                                                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                                                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                                                    foreach (var ve in eve.ValidationErrors)
-                                                    {
-                                                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                                            ve.PropertyName, ve.ErrorMessage);
-                                                    }
-                                                }
-                                                throw;
-                                            }
-                                        }
-
-
+                                //                db.SaveChanges();
+                                //            }
+                                //            catch (DbEntityValidationException e)
+                                //            {
+                                //                foreach (var eve in e.EntityValidationErrors)
+                                //                {
+                                //                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                                //                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                                //                    foreach (var ve in eve.ValidationErrors)
+                                //                    {
+                                //                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                //                            ve.PropertyName, ve.ErrorMessage);
+                                //                    }
+                                //                }
+                                //                throw;
+                                //            }
+                                //        }
 
 
-                                    }
-
-                                }
 
 
                             }
+
                         }
+
+
                     }
                 }
             }
@@ -493,201 +501,204 @@ namespace MvcApplication2.Controllers
 
 
 
-
         public void importaDocentes()
         {
 
             List<DepartamentoSalud> departamentos = db.DepartamentoSaluds.ToList();
-            foreach (var item in departamentos)
+                     foreach (var item in departamentos)
+                   {
+            ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
+            string json;
+
+            try
             {
-                ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
-                string json;
+                json = ser.getProfesoresActivos(item.codigo);
+            }
 
-                try
+            catch (Exception e)
+            {
+                json = null;
+            }
+            if (json != null)
+            {
+                MvcApplication2.Models.Profesor.ESObject0 profesoresActivos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.Profesor.ESObject0>(json);
+                foreach (var item2 in profesoresActivos.profesoresActivos)
                 {
-                    json = ser.getProfesoresActivos(item.codigo.Trim());
-                }
-
-                catch (Exception e)
-                {
-                    json = null;
-                }
-                if (json != null)
-                {
-                    MvcApplication2.Models.Profesor.ESObject0 profesoresActivos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.Profesor.ESObject0>(json);
-                    foreach (var item2 in profesoresActivos.profesoresActivos)
+                    string json2;
+                    try
                     {
-                        string json2;
-                        try
-                        {
-                            json2 = ser.getDatosProfesor(item2.CEDULA);
-                        }
+                        json2 = ser.getDatosProfesor(item2.CEDULA);
+                    }
 
-                        catch (Exception e)
+                    catch (Exception e)
+                    {
+                        json2 = null;
+                    }
+                    if (json2 != null)
+                    {
+                        MvcApplication2.Models.DocenteWS.ESObject0 profesores = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.DocenteWS.ESObject0>(json2);
+                        foreach (var item3 in profesores.datosProfesor)
                         {
-                            json2 = null;
-                        }
-                        if (json2 != null)
-                        {
-                            MvcApplication2.Models.DocenteWS.ESObject0 profesores = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.DocenteWS.ESObject0>(json2);
-                            foreach (var item3 in profesores.datosProfesor)
-                            {
 
-                                var hv = db.HojaVidas.Where(r => r.correo.Equals(item3.EMAIL));
-                                List<HojaVida> hvs = hv.ToList();
-                                if (hvs.Count > 0 && !item3.EMAIL.Equals(""))
+                           
+                            string imagen_DI = "http://acad.ucaldas.edu.co/fotosp/" + item3.CEDULA + ".jpg";
+
+                            var hv = db.HojaVidas.Where(r => r.imagen_DI.Equals(imagen_DI));
+                               
+                            List<HojaVida> hvs = hv.ToList();
+                         //   if (hvs.Count > 0 && !item3.EMAIL.Equals(""))
+                           // {
+
+                                //HojaVida hvida = hvs.ElementAt(0);
+                                //var docentes = db.Docentes.Where(r => r.hojaVidaId == hvida.hojaVidaId);
+                                //Docente docente = null;
+                                //try
+                                //{
+                                //    List<Docente> sts = docentes.ToList();
+                                //    docente = sts.ElementAt(0);
+                                //    docente.titulo_pregrado = item3.CHIN_TITULO;
+                                //    docente.maximo_nivel_formacion = item3.CNIA_DESCRIPCION;
+                                //    docente.dedicacion = item3.CTUR_DESCRIPCION;
+                                //}
+                                //catch (Exception e)
+                                //{
+
+                                //}
+
+
+
+                                //db.Entry(docente).State = EntityState.Modified;
+                                //try
+                                //{
+
+                                //    db.SaveChanges();
+                                //}
+                                //catch (System.Data.Entity.Validation.DbEntityValidationException e)
+                                //{
+                                //    Console.WriteLine(e.Data);
+                                //}
+
+                           // }
+                            //else
+                            //{
+
+
+                                InsertaFamilia();
+                                var iffam = db.Familias.Max(p => p.familiaId);
+                                HojaVida hojavida = new HojaVida();
+                                hojavida.familiaId = iffam;
+
+
+                                Docente docente = new Docente();
+                                docente.tipo_documento = "CC";
+                                docente.num_documento = item3.CEDULA;
+                                if (!item3.LIBREMIL.Equals(""))
                                 {
+                                    docente.num_libreta_militar = item3.LIBREMIL;
+                                }
 
-                                    //HojaVida hvida = hvs.ElementAt(0);
-                                    //var docentes = db.Docentes.Where(r => r.hojaVidaId == hvida.hojaVidaId);
-                                    //Docente docente = null;
-                                    //try
-                                    //{
-                                    //    List<Docente> sts = docentes.ToList();
-                                    //    docente = sts.ElementAt(0);
-                                    //    docente.titulo_pregrado = item3.CHIN_TITULO;
-                                    //    docente.maximo_nivel_formacion = item3.CNIA_DESCRIPCION;
-                                    //    docente.dedicacion = item3.CTUR_DESCRIPCION;
-                                    //}
-                                    //catch (Exception e)
-                                    //{
+                                docente.clave = item3.CEDULA;
+                                docente.titulo_pregrado = item3.CHIN_TITULO;
+                                docente.maximo_nivel_formacion = item3.CNIA_DESCRIPCION;
+                                docente.dedicacion = item3.CTUR_DESCRIPCION;
 
-                                    //}
-
-
-
-                                    //db.Entry(docente).State = EntityState.Modified;
-                                    //try
-                                    //{
-
-                                    //    db.SaveChanges();
-                                    //}
-                                    //catch (System.Data.Entity.Validation.DbEntityValidationException e)
-                                    //{
-                                    //    Console.WriteLine(e.Data);
-                                    //}
+                                hojavida.primer_nombre = item3.NOMBRE;
+                                hojavida.primer_apellido = item3.P_APELLIDO;
+                                hojavida.segundo_apellido = item3.S_APELLIDO;
+                                if (!item3.DIRECCION.Equals(""))
+                                {
+                                    hojavida.direccion_manizales = item3.DIRECCION;
 
                                 }
                                 else
                                 {
-
-
-                                    InsertaFamilia();
-                                    var iffam = db.Familias.Max(p => p.familiaId);
-                                    HojaVida hojavida = new HojaVida();
-                                    hojavida.familiaId = iffam;
-
-
-                                    Docente docente = new Docente();
-                                    docente.tipo_documento = "CC";
-                                    docente.num_documento = item3.CEDULA;
-                                    if (!item3.LIBREMIL.Equals(""))
-                                    {
-                                        docente.num_libreta_militar = item3.LIBREMIL;
-                                    }
-
-                                    docente.clave = item3.CEDULA;
-                                    docente.titulo_pregrado = item3.CHIN_TITULO;
-                                    docente.maximo_nivel_formacion = item3.CNIA_DESCRIPCION;
-                                    docente.dedicacion = item3.CTUR_DESCRIPCION;
-
-                                    hojavida.primer_nombre = item3.NOMBRE;
-                                    hojavida.primer_apellido = item3.P_APELLIDO;
-                                    hojavida.segundo_apellido = item3.S_APELLIDO;
-                                    if (!item3.DIRECCION.Equals(""))
-                                    {
-   hojavida.direccion_manizales = item3.DIRECCION;
-                                 
-                                    }
-                                    else{
-                                          hojavida.direccion_manizales = ".";
-                                    }
-                                    hojavida.num_celular = 3000000000;
-                                    hojavida.municipio_procedencia = ".";
-
-                                    hojavida.num_telefono = item3.TELEFONO;
-
-                                    if (!item3.FECHANAC.Equals(""))
-                                    {
-
-                                        DateTime myDate = DateTime.ParseExact(item3.FECHANAC, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                        hojavida.fecha_nacimiento = myDate;
-                                    }
-                                    else
-                                    {
-                                        hojavida.fecha_nacimiento = SqlDateTime.MinValue.Value;
-                                    }
-
-                                    if(! item3.EMAIL.Equals(""))
-                                    {
- hojavida.correo = item3.EMAIL;
-
-                                    }
-                                    else
-                                    {
- hojavida.correo =item3.NOMBRE+item3.P_APELLIDO+item3.S_APELLIDO+ "@ucaldas.edu.co";
-
-                                    }
-                                   
-
-                                    try
-                                    {
-                                        db.HojaVidas.Add(hojavida);
-                                        db.SaveChanges();
-                                    }
-                                    catch (System.Data.Entity.Validation.DbEntityValidationException e)
-                                    {
-                                        Console.WriteLine(e.Data);
-                                    }
-                                    iffam = db.HojaVidas.Max(p => p.hojaVidaId);
-
-                                    docente.hojaVidaId = iffam;
-                                    docente.rotacionId = 10;
-                                    Boolean estado = false;
-                                    int iddept = 3;
-                                    foreach (var item4 in departamentos)
-                                    {
-
-                                        if (item3.NOM_DEPTO.Equals(item4.nombre.ToUpper()))
-                                        {
-                                            estado = true;
-                                            iddept = item4.DepartamentoSaludId;
-                                        }
-
-                                    }
-
-                                    docente.DepartamentoSaludId = iddept;
-
-                                    try
-                                    {
-
-                                        db.Docentes.Add(docente);
-                                        db.SaveChanges();
-                                    }
-                                    catch (System.Data.Entity.Validation.DbEntityValidationException e)
-                                    {
-                                        Console.WriteLine(e.Data);
-                                    }
-
-
-                                    if (hojavida.Docente != null)
-                                        hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotosp/" + hojavida.Docente.ElementAt(0).num_documento + ".jpg";
-                                    // else
-                                    //    hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotos/" + estudiante.codigo + ".jpg";
-                                    //  hojavida = getSalud(hojavida);
-                                    InsertaVacunas(iffam);
+                                    hojavida.direccion_manizales = ".";
                                 }
-                            }
+                                hojavida.num_celular = 3000000000;
+                                hojavida.municipio_procedencia = ".";
+
+                                hojavida.num_telefono = item3.TELEFONO;
+
+                                if (!item3.FECHANAC.Equals(""))
+                                {
+
+                                    DateTime myDate = DateTime.ParseExact(item3.FECHANAC, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    hojavida.fecha_nacimiento = myDate;
+                                }
+                                else
+                                {
+                                    hojavida.fecha_nacimiento = SqlDateTime.MinValue.Value;
+                                }
+
+                                if (!item3.EMAIL.Equals(""))
+                                {
+                                    hojavida.correo = item3.EMAIL;
+
+                                }
+                                else
+                                {
+                                    hojavida.correo = item3.NOMBRE + item3.P_APELLIDO + item3.S_APELLIDO + "@ucaldas.edu.co";
+
+                                }
+
+
+                                try
+                                {
+                                    db.HojaVidas.Add(hojavida);
+                                    db.SaveChanges();
+                                }
+                                catch (System.Data.Entity.Validation.DbEntityValidationException e)
+                                {
+                                    Console.WriteLine(e.Data);
+                                }
+                                iffam = db.HojaVidas.Max(p => p.hojaVidaId);
+
+                                docente.hojaVidaId = iffam;
+                                Boolean estado = false;
+                                int iddept = 3;
+                                foreach (var item4 in departamentos)
+                                {
+
+                                    if (item3.NOM_DEPTO.Equals(item4.nombre.ToUpper()))
+                                    {
+                                        estado = true;
+                                        iddept = item4.DepartamentoSaludId;
+                                    }
+
+                                }
+
+                                docente.DepartamentoSaludId = iddept;
+
+                                try
+                                {
+
+                                    db.Docentes.Add(docente);
+                                    db.SaveChanges();
+                                }
+                                catch (System.Data.Entity.Validation.DbEntityValidationException e)
+                                {
+                                    Console.WriteLine(e.Data);
+                                }
+
+
+                                if (hojavida.Docente != null)
+                                    hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotosp/" + hojavida.Docente.ElementAt(0).num_documento + ".jpg";
+                                // else
+                                //    hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotos/" + estudiante.codigo + ".jpg";
+                                //  hojavida = getSalud(hojavida);
+                                InsertaVacunas(iffam);
+                           // }
                         }
                     }
-
-
                 }
 
 
-
-
             }
+
+
+
+
+               }
 
 
 
@@ -699,96 +710,98 @@ namespace MvcApplication2.Controllers
             vacuna.hojaVidaId = iffam;
             vacuna.lote = ".";
 
-            try{
-            vacuna.nombre_generico = ("Hepatitis B Dosis 1");
-            vacuna.fecha_vacunacion = SqlDateTime.MinValue.Value;
-            vacuna.fecha_prox_vacunacion = SqlDateTime.MinValue.Value;
+            try
+            {
+                vacuna.nombre_generico = ("Hepatitis B Dosis 1");
+                vacuna.fecha_vacunacion = SqlDateTime.MinValue.Value;
+                vacuna.fecha_prox_vacunacion = SqlDateTime.MinValue.Value;
 
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Hepatitis B Dosis 2");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Hepatitis B Dosis 2");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Hepatitis B Dosis 3");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Hepatitis B Dosis 3");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Hepatitis A Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Hepatitis A Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Hepatitis A Dosis 2");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Hepatitis A Dosis 2");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Triple Viral Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Triple Viral Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Varicela Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Varicela Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Toxoide Tetánico Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Toxoide Tetánico Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Toxoide Tetánico Dosis 2");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Toxoide Tetánico Dosis 2");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Toxoide Tetánico Dosis 3");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Toxoide Tetánico Dosis 3");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Toxoide Tetánico Dosis 4");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Toxoide Tetánico Dosis 4");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Toxoide Tetánico Dosis 5");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Toxoide Tetánico Dosis 5");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Fiebre Amarilla Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Fiebre Amarilla Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Influenza Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Influenza Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("DTP Acelular Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("DTP Acelular Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Virus del papiloma humano Dosis 1");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Virus del papiloma humano Dosis 1");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Anticuerpos contra varicela");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Anticuerpos contra varicela");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-            vacuna.nombre_generico = ("Anticuerpos contra hepatitis B");
-            db.Vacunas.Add(vacuna);
-            db.SaveChanges();
+                vacuna.nombre_generico = ("Anticuerpos contra hepatitis B");
+                db.Vacunas.Add(vacuna);
+                db.SaveChanges();
 
-        }  catch (DbEntityValidationException e)
-                                    {
-                                        foreach (var eve in e.EntityValidationErrors)
-                                        {
-                                            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                                                eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                                            foreach (var ve in eve.ValidationErrors)
-                                            {
-                                                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                                                    ve.PropertyName, ve.ErrorMessage);
-                                            }
-                                        }
-                                     
-                                    }
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+
+            }
         }
 
         public void importaEstudiantes()
@@ -822,34 +835,36 @@ namespace MvcApplication2.Controllers
                             MvcApplication2.Models.EstudianteWS.ESObject0 profesores = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.EstudianteWS.ESObject0>(json2);
                             foreach (var item3 in profesores.datosEstudiante)
                             {
-                                var hv = db.HojaVidas.Where(r => r.correo.Equals(item3.EMAIL));
+                                string imagen_DI = "http://acad.ucaldas.edu.co/fotos/" + item3.CODIGO + ".jpg";
+
+                                var hv = db.HojaVidas.Where(r => r.imagen_DI.Equals(imagen_DI));
                                 List<HojaVida> hvs = hv.ToList();
                                 if (hvs.Count > 0)
                                 {
-                                 //   Estudiante estudiante = new Estudiante();
+                                    //   Estudiante estudiante = new Estudiante();
                                     HojaVida hvida = hvs.ElementAt(0);
                                     var estudiantes = db.Estudiantes.Where(r => r.hojaVidaId == hvida.hojaVidaId);
-                                    Estudiante estudiante=null;
+                                    Estudiante estudiante = null;
                                     try
                                     {
                                         List<Estudiante> sts = estudiantes.ToList();
                                         estudiante = sts.ElementAt(0);
 
                                     }
-                                    catch(Exception e)
+                                    catch (Exception e)
                                     {
 
                                     }
 
                                     estudiante.estado_academico = item3.NOM_ESTADO;
-                                   
+
                                     short s;
                                     short.TryParse(item3.SEMESTRE, out s);
-                                    estudiante.semestre = s; 
-                                  
+                                    estudiante.semestre = s;
 
 
-                                    
+
+
                                     db.Entry(estudiante).State = EntityState.Modified;
                                     try
                                     {
@@ -902,9 +917,7 @@ namespace MvcApplication2.Controllers
 
 
                                     estudiante.estado_academico = item3.NOM_ESTADO;
-                                    estudiante.rotacionId = 1;
-
-
+                                  
                                     hojavida.primer_nombre = item3.NOMBRE;
                                     hojavida.primer_apellido = item3.P_APELLIDO;
                                     hojavida.segundo_apellido = item3.S_APELLIDO;
@@ -944,7 +957,7 @@ namespace MvcApplication2.Controllers
                                     try
                                     {
                                         hojavida.imagen_DI = "http://acad.ucaldas.edu.co/fotos/" + estudiante.codigo + ".jpg";
-                                   
+
                                         db.HojaVidas.Add(hojavida);
                                         db.SaveChanges();
                                     }
@@ -958,7 +971,6 @@ namespace MvcApplication2.Controllers
                                     iffam = db.HojaVidas.Max(p => p.hojaVidaId);
 
                                     estudiante.hojaVidaId = iffam;
-                                    estudiante.rotacionId = 10;
 
 
                                     estudiante.programaId = item.programaId;
@@ -1015,12 +1027,12 @@ namespace MvcApplication2.Controllers
                 db.Familias.Add(familia);
                 db.SaveChanges();
             }
-            catch(System.Data.Entity.Validation.DbEntityValidationException  e)
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
             {
                 Console.WriteLine(e.Data);
             }
 
-          
+
         }
 
 

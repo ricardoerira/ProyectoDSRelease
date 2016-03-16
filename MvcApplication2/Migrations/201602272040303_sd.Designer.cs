@@ -7,13 +7,13 @@ namespace MvcApplication2.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.0-20911")]
-    public sealed partial class jdgst : IMigrationMetadata
+    public sealed partial class sd : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(jdgst));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(sd));
         
         string IMigrationMetadata.Id
         {
-            get { return "201512170558455_jdgst"; }
+            get { return "201602272040303_sd"; }
         }
         
         string IMigrationMetadata.Source

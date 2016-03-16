@@ -22,7 +22,7 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-            var docentes = db.Docentes.Include(d => d.DepartamentoSalud).Include(d => d.HojaVida).Include(d => d.Rotacion);
+            var docentes = db.Docentes.Include(d => d.DepartamentoSalud).Include(d => d.HojaVida);
             return View(docentes.ToList());
         }
 
@@ -39,11 +39,11 @@ namespace MvcApplication2.Controllers
             }
 
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
-           
+
             return View(docentes.ToList());
         }
 
-        
+
 
         public ActionResult ReporteDocenteA(int id = 0)
         {
@@ -57,10 +57,10 @@ namespace MvcApplication2.Controllers
             DateTime dt = DateTime.Now.Date.AddMonths(-20);
             var vacunas = db.Vacunas.Where(r => r.hojaVidaId == docente.hojaVidaId).Where(r => r.fecha_vacunacion > dt);
             List<Vacuna> listav = vacunas.ToList();
-     
+
             rptH2.Database.Tables[0].SetDataSource(listav.ToList());
 
-            
+
             rptH2.SetParameterValue("departamento", docente.DepartamentoSalud.nombre);
             rptH2.SetParameterValue("titlePre", docente.titulo_pregrado + "");
             rptH2.SetParameterValue("dedicacion", docente.dedicacion + "");
@@ -69,7 +69,7 @@ namespace MvcApplication2.Controllers
             rptH2.SetParameterValue("categoria", docente.categoria_escalafon_docente + "");
 
 
-            
+
             rptH2.SetParameterValue("numdoc", docente.num_documento);
             rptH2.SetParameterValue("numLB", docente.num_libreta_militar + "");
             rptH2.SetParameterValue("genero", docente.HojaVida.genero + "");
@@ -97,11 +97,11 @@ namespace MvcApplication2.Controllers
             rptH2.SetParameterValue("celAcudiente", docente.HojaVida.Familia.celular_acudiente + "");
 
             rptH2.SetParameterValue("tituloPostgrado", docente.certificado_DPE + "");
-            rptH2.SetParameterValue("TPD", docente.certificado_TPDTS+ "");
+            rptH2.SetParameterValue("TPD", docente.certificado_TPDTS + "");
             rptH2.SetParameterValue("TPN", docente.certificado_TPN + "");
-            rptH2.SetParameterValue("edad", docente.diploma_profesional+ "");
-            rptH2.SetParameterValue("EPS", docente.HojaVida.entidad_salud+ "");
-            rptH2.SetParameterValue("ARL", docente.HojaVida.ARL+ "");
+            rptH2.SetParameterValue("edad", docente.diploma_profesional + "");
+            rptH2.SetParameterValue("EPS", docente.HojaVida.entidad_salud + "");
+            rptH2.SetParameterValue("ARL", docente.HojaVida.ARL + "");
 
 
 
@@ -157,7 +157,7 @@ namespace MvcApplication2.Controllers
         {
             TempData["notice"] = null;
 
-            
+
             Docente docente = db.Docentes.Find(id);
             HojaVida oHojaVida = db.HojaVidas.Find(docente.hojaVidaId);
 
@@ -296,7 +296,7 @@ namespace MvcApplication2.Controllers
 
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre", docente.DepartamentoSaludId);
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", docente.hojaVidaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", docente.rotacionId);
+
             return View(docente);
         }
 
@@ -312,7 +312,6 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre", docente.DepartamentoSaludId);
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", docente.hojaVidaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", docente.rotacionId);
             return View(docente);
         }
 
@@ -331,7 +330,6 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre", docente.DepartamentoSaludId);
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", docente.hojaVidaId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "tipo", docente.rotacionId);
             return View(docente);
         }
 
@@ -381,15 +379,15 @@ namespace MvcApplication2.Controllers
 
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(Docente docente)
         {
-            
-         var  b =   db.Docentes.Where(s => s.num_documento.Equals(docente.num_documento)).Where(s => s.clave.Equals(docente.clave));
-          List<Docente> docenteList=b.ToList(); 
-         if (docenteList.Count == 0)
+
+            var b = db.Docentes.Where(s => s.num_documento.Equals(docente.num_documento)).Where(s => s.clave.Equals(docente.clave));
+            List<Docente> docenteList = b.ToList();
+            if (docenteList.Count == 0)
             {
 
                 ViewBag.AlertMessage = "El usuario y la contraseña que has introducido no coinciden.";
@@ -399,7 +397,7 @@ namespace MvcApplication2.Controllers
             {
                 ViewBag.AlertMessage = null;
                 Docente docente_aux = docenteList.ElementAt(0);
-          
+
                 return RedirectToAction("../Docente/Personales/" + docente_aux.docenteId);
             }
         }
@@ -422,36 +420,36 @@ namespace MvcApplication2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CambioContraseña(Docente docente)
         {
-           
+
             Docente doc = db.Docentes.Find(docente.docenteId);
             if (docente.clave != null)
             {
-            if (docente.clave.Equals(docente.tipo_documento))
-            {
-                doc.clave = docente.clave;
+                if (docente.clave.Equals(docente.tipo_documento))
+                {
+                    doc.clave = docente.clave;
 
 
-                db.Entry(doc).State = EntityState.Modified;
+                    db.Entry(doc).State = EntityState.Modified;
 
 
 
-                db.SaveChanges();
-                return RedirectToAction("../Docente/Personales/" + doc.docenteId);
+                    db.SaveChanges();
+                    return RedirectToAction("../Docente/Personales/" + doc.docenteId);
 
+                }
             }
-                 }
 
             ViewBag.AlertMessage = "Las contrasenias deben coincidir";
             return View(docente);
-        
+
         }
 
-        
-        
 
 
 
-      
+
+
+
 
 
 
@@ -508,9 +506,9 @@ namespace MvcApplication2.Controllers
 
         public ActionResult cargaImagen(Docente docente)
         {
-            
+
             HojaVida oHojaVida = db.HojaVidas.Find(docente.hojaVidaId);
-             try
+            try
             {
                 var request = WebRequest.Create(oHojaVida.imagen_DI);
                 using (var response = request.GetResponse())
@@ -521,41 +519,42 @@ namespace MvcApplication2.Controllers
                     }
                 }
             }
-             catch (WebException ex)
-             {
-                 if (ex.Status == WebExceptionStatus.ProtocolError &&
-                     ex.Response != null)
-                 {
-                     var resp = (HttpWebResponse)ex.Response;
-                     if (resp.StatusCode == HttpStatusCode.NotFound)
-                     {
-                         oHojaVida.imagen_DI = "http://www.tagetik.com/intouch2015/user.png";
-                     }
-                     else
-                     {
-                         // Do something else
-                     }
-                 }
-                 else
-                 {
-                     // Do something else
-                 }
-             }
-             if (docente == null)// Do something else NO ESTOY SEGURA DONDE VAAAAAAAAAAAAAA 
-             {
-                 return HttpNotFound();
-             }
-             return View(docente);
+            catch (WebException ex)
+            {
+                if (ex.Status == WebExceptionStatus.ProtocolError &&
+                    ex.Response != null)
+                {
+                    var resp = (HttpWebResponse)ex.Response;
+                    if (resp.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        oHojaVida.imagen_DI = "http://www.tagetik.com/intouch2015/user.png";
+                    }
+                    else
+                    {
+                        // Do something else
+                    }
+                }
+                else
+                {
+                    // Do something else
+                }
+            }
+            if (docente == null)// Do something else NO ESTOY SEGURA DONDE VAAAAAAAAAAAAAA 
+            {
+                return HttpNotFound();
+            }
+            return View(docente);
         }
-        public ActionResult Personales(int id = 0) {
+        public ActionResult Personales(int id = 0)
+        {
 
-            TempData["notice"] = null;           
+            TempData["notice"] = null;
 
             Docente docente = db.Docentes.Find(id);
             HojaVida oHojaVida = db.HojaVidas.Find(docente.hojaVidaId);
             cargaImagen(docente);
-            
-          
+
+
             int edad = DateTime.Today.AddTicks(-docente.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             docente.diploma_profesional = edadDocente;//Reemplaza edad
@@ -565,214 +564,215 @@ namespace MvcApplication2.Controllers
             }
 
             cargaDocumentos(docente);
-             return View(docente);
+            return View(docente);
 
-            
+
         }
 
 
-        public ActionResult cargaDocumentos(Docente docente){
-            string[] documentos = {"doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp"};
-        
-
-                  string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + docente.num_documento, ".jpg");
-
-                  if (System.IO.File.Exists(path1))
-                  {
-
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
-
-                      ViewBag.imagen1 = path1;
-
-                  }
-                  else
-                  {
-                      ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                  }
+        public ActionResult cargaDocumentos(Docente docente)
+        {
+            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
+            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + docente.num_documento, ".jpg");
+
+            if (System.IO.File.Exists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen1 = path1;
+
+            }
+            else
+            {
+                ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
 
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + docente.num_documento, ".jpg");
 
-                      ViewBag.imagen2 = path1;
+            if (System.IO.File.Exists(path1))
+            {
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + docente.num_documento, ".jpg");
 
-                  }
-                 
-            
+                ViewBag.imagen2 = path1;
+
+            }
+            else
+            {
+                ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
+
+
             path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
+            if (System.IO.File.Exists(path1))
+            {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + docente.num_documento, ".jpg");
 
-                      ViewBag.imagen3 = path1;
+                ViewBag.imagen3 = path1;
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+            }
+            else
+            {
+                ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
-                  }
-
-
-
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + docente.num_documento, ".jpg");
-
-                  if (System.IO.File.Exists(path1))
-                  {
-
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + docente.num_documento, ".jpg");
-
-                      ViewBag.imagen4 = path1;
-
-                  }
-                  else
-                  {
-                      ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                  }
+            }
 
 
 
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + docente.num_documento, ".jpg");
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + docente.num_documento, ".jpg");
+            if (System.IO.File.Exists(path1))
+            {
 
-                  if (System.IO.File.Exists(path1))
-                  {
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + docente.num_documento, ".jpg");
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + docente.num_documento, ".jpg");
+                ViewBag.imagen4 = path1;
 
-                      ViewBag.imagen5 = path1;
+            }
+            else
+            {
+                ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                  }
-
-
-
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + docente.num_documento, ".jpg");
-
-                  if (System.IO.File.Exists(path1))
-                  {
-
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + docente.num_documento, ".jpg");
-
-                      ViewBag.imagen6 = path1;
-
-                  }
-                  else
-                  {
-                      ViewBag.imagen6 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                  }
+            }
 
 
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + docente.num_documento, ".jpg");
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + docente.num_documento, ".jpg");
+            if (System.IO.File.Exists(path1))
+            {
 
-                      ViewBag.imagen7 = path1;
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + docente.num_documento, ".jpg");
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen7 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen5 = path1;
 
-                  }
+            }
+            else
+            {
+                ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
 
 
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
+            if (System.IO.File.Exists(path1))
+            {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + docente.num_documento, ".jpg");
 
-                      ViewBag.imagen8 = path1;
+                ViewBag.imagen6 = path1;
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+            }
+            else
+            {
+                ViewBag.imagen6 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
-                  }
+            }
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[8] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + docente.num_documento, ".jpg");
 
-                      ViewBag.imagen9 = path1;
+            if (System.IO.File.Exists(path1))
+            {
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + docente.num_documento, ".jpg");
 
-                  }
+                ViewBag.imagen7 = path1;
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[9] + docente.num_documento, ".jpg");
+            }
+            else
+            {
+                ViewBag.imagen7 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
-                  if (System.IO.File.Exists(path1))
-                  {
+            }
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + docente.num_documento, ".jpg");
 
-                      ViewBag.imagen10 = path1; ;
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen10 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + docente.num_documento, ".jpg");
 
-                  }
+            if (System.IO.File.Exists(path1))
+            {
 
-                  path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[10] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + docente.num_documento, ".jpg");
 
-                  if (System.IO.File.Exists(path1))
-                  {
+                ViewBag.imagen8 = path1;
 
-                      path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + docente.num_documento, ".jpg");
+            }
+            else
+            {
+                ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
 
-                      ViewBag.imagen11 = path1;
+            }
 
-                  }
-                  else
-                  {
-                      ViewBag.imagen11 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[8] + docente.num_documento, ".jpg");
 
-                  }
-              
-         
-            
-            
-           
+            if (System.IO.File.Exists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen9 = path1;
+
+            }
+            else
+            {
+                ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
+
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[9] + docente.num_documento, ".jpg");
+
+            if (System.IO.File.Exists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen10 = path1; ;
+
+            }
+            else
+            {
+                ViewBag.imagen10 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
+
+            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[10] + docente.num_documento, ".jpg");
+
+            if (System.IO.File.Exists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen11 = path1;
+
+            }
+            else
+            {
+                ViewBag.imagen11 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+
+            }
+
+
+
+
+
             return View(docente);
 
-            
+
         }
 
 
@@ -823,14 +823,14 @@ namespace MvcApplication2.Controllers
 
             return View(docente);
         }
-     
+
         public ActionResult SoportesDS(int id = 0)
         {
             //TempData["notice"] = null;
             string imagen = Request.Params["imagen"];
             imagen = imagen.Replace("%2F", "/");
-       
-          
+
+
             Docente docente = db.Docentes.Find(id);
             if (docente == null)
             {
@@ -839,10 +839,10 @@ namespace MvcApplication2.Controllers
             string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
-          
-                ViewBag.imagen1 = imagen;
 
-           
+            ViewBag.imagen1 = imagen;
+
+
             return View(docente);
         }
 
@@ -858,7 +858,7 @@ namespace MvcApplication2.Controllers
         public ActionResult Buscar(Docente docente)
         {
             var docentes = from b in db.Docentes
-                              select b;
+                           select b;
 
             foreach (var b in docentes)
             {
@@ -901,7 +901,7 @@ namespace MvcApplication2.Controllers
             cargaDocumentos(docente);
             return View(docente);
 
-            
+
         }
 
         public ActionResult PersonalesDpto(int id = 0)
@@ -982,17 +982,18 @@ namespace MvcApplication2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PersonalesDS(Docente docente) {
+        public ActionResult PersonalesDS(Docente docente)
+        {
             ModelState.Remove("certificado_TPDTS");
 
-             docente = db.Docentes.Find(docente.docenteId);
+            docente = db.Docentes.Find(docente.docenteId);
             int numFiles = Request.Files.Count;
             if (Request != null)
             {
 
 
                 int uploadedCount = 0;
-                string[] documentos = {"doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp"};
+                string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
                 for (int i = 0; i < numFiles; i++)
                 {
                     HttpPostedFileBase file = Request.Files[i];
@@ -1015,12 +1016,12 @@ namespace MvcApplication2.Controllers
             ViewBag.estado = estado;
 
             cargaImagen(docente);
-            cargaDocumentos(docente); 
+            cargaDocumentos(docente);
             return View(docente);
-           
 
 
-            }
+
+        }
 
 
         [HttpPost]
@@ -1065,7 +1066,7 @@ namespace MvcApplication2.Controllers
 
 
         }
-        
+
 
 
 
@@ -1079,7 +1080,7 @@ namespace MvcApplication2.Controllers
 
                 HojaVida oHojaVida = db.HojaVidas.Find(docente.hojaVidaId);
                 Docente docente1 = db.Docentes.Find(docente.docenteId);
-                
+
 
                 oHojaVida.direccion_manizales = docente.HojaVida.direccion_manizales;
                 oHojaVida.correo = docente.HojaVida.correo;
@@ -1090,25 +1091,25 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
                 ValidarCamposDocente(docente);
-                
+
                 docente1.tipo_vinculacion = docente.tipo_vinculacion;
                 docente1.categoria_escalafon_docente = docente.categoria_escalafon_docente;
                 docente1.certificado_TPDTS = docente.certificado_TPDTS;
                 docente1.certificado_TPN = docente.certificado_TPN;
                 docente1.certificado_DPE = docente.certificado_DPE; //Reemplaza titulo postgrado
                 docente1.otro_titulo = docente.otro_titulo;
-                
-                
 
-               
+
+
+
 
                 int edad = DateTime.Today.AddTicks(-docente.HojaVida.fecha_nacimiento.Ticks).Year - 1;
                 string edadDocente = edad.ToString();
                 docente1.diploma_profesional = edadDocente;//Reemplaza edad
-                
-                
-                
-                               
+
+
+
+
                 oHojaVida.ARL = docente.HojaVida.ARL;
                 oHojaVida.Familia = docente.HojaVida.Familia;
 
@@ -1116,22 +1117,22 @@ namespace MvcApplication2.Controllers
                 {
                     docente1.num_libreta_militar = "NO APLICA";
                 }
-                
+
                 docente.HojaVida = null;
                 ValidarCamposDocente(docente1);
-               
+
                 db.Entry(docente1).State = EntityState.Modified;
 
                 int numFiles = Request.Files.Count;
                 if (Request != null)
                 {
-                   
-                   
+
+
                     int uploadedCount = 0;
-                    string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp"};
+                    string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
                     for (int i = 0; i < numFiles; i++)
                     {
-                         HttpPostedFileBase  file = Request.Files[i];
+                        HttpPostedFileBase file = Request.Files[i];
                         if (file.ContentLength > 0)
                         {
                             string fileName = file.FileName;
@@ -1147,10 +1148,10 @@ namespace MvcApplication2.Controllers
                         }
                     }
                 }
-               
+
                 db.SaveChanges();
                 ValidarCamposDocente(docente1);
-              
+
                 return RedirectToAction("../Docente/Personales/" + docente1.docenteId);
                 //return View(docente1);
             }
@@ -1159,11 +1160,11 @@ namespace MvcApplication2.Controllers
                 cargaImagen(docente);
                 cargaDocumentos(docente);
                 Docente docente2 = db.Docentes.Find(docente.docenteId);
-               
-                
+
+
                 return View(docente2);
             }
-            
+
         }
 
 
@@ -1174,13 +1175,13 @@ namespace MvcApplication2.Controllers
             Familia f = db.Familias.Find(hv.familiaId);
 
 
-            if ((d.certificado_TPDTS !=null) && (hv.municipio_procedencia != null) && (hv.direccion_manizales != null) &&
+            if ((d.certificado_TPDTS != null) && (hv.municipio_procedencia != null) && (hv.direccion_manizales != null) &&
                 (hv.ARL != "Sin Asignar") && (hv.hemoclasificacion != "Sin Asignar") &&
                 (hv.num_celular != 0) &&
                 (hv.estado_civil != "Sin Asignar") && (f.primer_nombre_acudiente != null) &&
                 (f.primer_apellido_acudiente != null) && (f.direccion_acudiente != null) &&
-                (f.celular_acudiente != 0) && (d.tipo_vinculacion !="Sin Asignar") &&
-                (d.dedicacion !=null) && (d.categoria_escalafon_docente!="Sin Asignar"))
+                (f.celular_acudiente != 0) && (d.tipo_vinculacion != "Sin Asignar") &&
+                (d.dedicacion != null) && (d.categoria_escalafon_docente != "Sin Asignar"))
             {
                 Docente estudianteAux = db.Docentes.Find(docente.docenteId);
                 estudianteAux.HojaVida.estado_HV = true;
@@ -1249,26 +1250,26 @@ namespace MvcApplication2.Controllers
 
 
 
-       
 
-        public ActionResult EstadoHV(string num_documento,string departamentoSaludId,string estado_HV )
+
+        public ActionResult EstadoHV(string num_documento, string departamentoSaludId, string estado_HV)
         {
             int did = 0;
             bool b = false;
             if (!String.IsNullOrEmpty(departamentoSaludId))
             {
-                 did = Int32.Parse(departamentoSaludId);
-                 b = estado_HV.Equals("True") ? true : false;
-            
+                did = Int32.Parse(departamentoSaludId);
+                b = estado_HV.Equals("True") ? true : false;
+
             }
-               
-            var docentes= new List<Docente>();
+
+            var docentes = new List<Docente>();
             var docentesaux = new List<Docente>();
-           
-            if (!String.IsNullOrEmpty(num_documento))   
+
+            if (!String.IsNullOrEmpty(num_documento))
             {
                 docentes = db.Docentes.Where(s => s.num_documento.Equals(num_documento)).Where(s => s.DepartamentoSaludId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
-              
+
             }
             else
             {
@@ -1276,7 +1277,7 @@ namespace MvcApplication2.Controllers
                 {
                     docentes = db.Docentes.Where(s => s.DepartamentoSaludId == did).Where(s => s.HojaVida.estado_HV == b).ToList();
                     docentesaux = db.Docentes.Where(s => s.DepartamentoSaludId == did).ToList();
-            
+
                 }
             }
 
@@ -1284,43 +1285,17 @@ namespace MvcApplication2.Controllers
 
 
             ViewBag.busqueda = docentes.Count() + " / " + docentesaux.Count();
-   
 
-                        
-           
+
+
+
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
-           
+
             return View(docentes.ToList());
         }
 
 
-
-
-        public ActionResult RotacionDocente2(string searchString, int id = 0)
-        {
-
-            string rotacion = Request.Params["rotacion"];
-            if (rotacion == null)
-            {
-                ViewBag.id = id;
-            }
-            else
-            {
-                Docente docente = db.Docentes.Find(id);
-                docente.rotacionId = Convert.ToInt32(rotacion);
-                Rotacion rotacionE = db.Rotacions.Find(Convert.ToInt32(rotacion));
-                
-                docente.Rotacion = rotacionE;
-                db.Entry(rotacionE).State = EntityState.Modified;
-                db.SaveChanges();
-                docente.Rotacion = rotacionE;
-                db.Entry(docente).State = EntityState.Modified;
-                db.SaveChanges();
-
-            }
-
-
-            return RedirectToAction("RotacionDocente/" + rotacion);
-        }
     }
 }
+
+     
