@@ -14,9 +14,3 @@ select  DISTINCT hojavidaid from HojaVidas h where h.hojaVidaId not in (select h
 
 select  rotacionId,estudianteId from RotacionEstudiantes where rotacionid=35 group by  rotacionId,estudianteId
 
-WITH CTE AS(
-   SELECT rotacionId,estudianteId,
-       RN = ROW_NUMBER()OVER(PARTITION BY rotacionId,estudianteId ORDER BY rotacionId,estudianteId)
-   FROM RotacionEstudiantes
-)
-DELETE FROM CTE WHERE RN > 1

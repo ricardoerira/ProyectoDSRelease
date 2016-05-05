@@ -41,7 +41,7 @@ namespace MvcApplication2.Controllers
         public ActionResult Index(List<RotacionEstudiante> rotaciones, int id)
         {
             List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.rotacionId == id).Include(r => r.Rotacion).ToList();
-
+            
             int i = 0;
             int cont = 0;
             foreach (RotacionEstudiante item in rotacionestudiantes)
@@ -73,6 +73,7 @@ namespace MvcApplication2.Controllers
                 {
                     return RedirectToAction("Edit/" + rotacionestudiantes.ElementAt(0).rotacionEstudianteId);
                 }
+              
             }
             else
             {
@@ -168,7 +169,20 @@ namespace MvcApplication2.Controllers
                 return HttpNotFound();
             }
             ViewBag.rotacionEstudianteId = rotacionestudiante.rotacionEstudianteId;
+            ViewBag.rotacionid = rotacionestudiante.rotacionId;
+            
             ViewBag.docenteId = new SelectList(docentes, "docenteId", "HojaVida.primer_nombre", docentes.ElementAt(0).docenteId);
+            if(rotacionDocentes.Count()==0)
+            {
+                RotacionDocente rotacionDocente= new RotacionDocente();
+                rotacionDocente.rotacionEstudianteId=rotacionestudiante.rotacionEstudianteId;
+                rotacionDocente.docenteId=590;
+                rotacionDocente.nombre="Sin asignar";
+                rotacionDocente.RotacionDocenteId=22222;
+                rotacionDocente.Rotacion =rotacionestudiante;
+                rotacionDocentes.Add(rotacionDocente);
+            }
+               
             return View(rotacionDocentes.ToList());
         }
     
@@ -177,8 +191,6 @@ namespace MvcApplication2.Controllers
         public ActionResult EditDocente(RotacionDocente rotacionDocente, FormCollection value, int id)
         {
 
-            if (ModelState.IsValid)
-            {
                 List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDocente.Rotacion.rotacionId).Include(r => r.Rotacion).ToList();
                 foreach (RotacionEstudiante item in rotacionestudiantes)
                 {
@@ -187,6 +199,9 @@ namespace MvcApplication2.Controllers
                         rotacionDocente.rotacionEstudianteId = item.rotacionEstudianteId;
                         rotacionDocente.Rotacion= null;
                         int docenteId = Int32.Parse(value["docenteId"]);
+
+                      
+                        
                         Docente docente = db.Docentes.Find(docenteId);
                         rotacionDocente.nombre = docente.HojaVida.primer_nombre;
                        
@@ -200,11 +215,7 @@ namespace MvcApplication2.Controllers
 
                 return RedirectToAction("EditDocente/" + rotacionDocente.rotacionEstudianteId);
 
-            }
-
-
-
-            return RedirectToAction("EditDocente/" + rotacionDocente.rotacionEstudianteId);
+       
 
         }
 

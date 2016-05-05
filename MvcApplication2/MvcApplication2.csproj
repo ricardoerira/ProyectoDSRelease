@@ -324,6 +324,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Util\Constantes.cs" />
+    <Compile Include="Util\Utilidades.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-datepicker.css" />
@@ -897,13 +899,13 @@
     <Content Include="reporteDocente.rpt" />
     <Content Include="ReporteEquipos.rpt" />
     <Content Include="reporteEstudiante.rpt" />
-    <None Include="Service References\ServiceReference2\WsFacultadSalud.disco" />
     <None Include="Service References\ServiceReference2\configuration91.svcinfo" />
     <None Include="Service References\ServiceReference2\configuration.svcinfo" />
     <None Include="Service References\ServiceReference2\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <None Include="Service References\ServiceReference2\WsFacultadSalud1.disco" />
     <Content Include="Views\Estudiante\Partial1.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1161,10 +1163,10 @@
     <Content Include="Views\Vacuna\PreciosIpsU.cshtml" />
     <Content Include="Views\Vacuna\VistaIPS_Universitaria.cshtml" />
     <Content Include="Scripts\js\.DS_Store" />
-    <None Include="Service References\ServiceReference2\WsFacultadSalud.wsdl" />
     <Content Include="Views\Estudiante\PersonalesDpto.cshtml" />
     <Content Include="Views\Docente\PersonalesDpto.cshtml" />
     <Content Include="Views\RotacionEstudiante\EditDocente.cshtml" />
+    <None Include="Service References\ServiceReference2\WsFacultadSalud1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

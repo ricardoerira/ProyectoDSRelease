@@ -31,7 +31,7 @@
 
  
         <div class="pull-left">
-            @Html.ActionLink("Regresar ", "Index", new { id = @Model.ElementAt(0).Rotacion.rotacionId }, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Regresar ", "Index", new { id = ViewBag.rotacionId }, new { @class = "btn btn-primary" })
         </div>
    
 
@@ -41,9 +41,19 @@
     @Html.ValidationSummary(true)
 
     <fieldset>
-
+        
         @Html.HiddenFor(model => model.ElementAt(0).rotacionEstudianteId)
         @Html.HiddenFor(model => model.ElementAt(0).Rotacion.rotacionId)
+
+
+        
+
+
+
+
+
+
+
 
 
 
@@ -106,7 +116,7 @@
 
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Docente.HojaVida.primer_nombre)
+                Primer Nombre 
             </th>
 
             <th></th>
@@ -116,12 +126,13 @@
         {
             <tr>
                 <td>
+                  
                     @Html.DisplayFor(modelItem => item.Docente.HojaVida.primer_nombre)
                 </td>
 
                 <td>
 
-                    @Html.ActionLink("Delete", "Delete", new { id = item.RotacionDocenteId })
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.RotacionDocenteId })
                 </td>
             </tr>
         }

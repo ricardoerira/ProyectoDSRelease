@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://acadtest.ucaldas.edu.co:8084/WsFacultadSalud.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://acad.ucaldas.edu.co/WsFacultadSalud.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="WsFacultadSalud.disco" MetadataType="Disco" ID="22a11e24-0004-4214-a76d-cab16b2e7f38" SourceId="1" SourceUrl="http://acadtest.ucaldas.edu.co:8084/WsFacultadSalud.asmx?disco" />
-    <MetadataFile FileName="WsFacultadSalud.wsdl" MetadataType="Wsdl" ID="da769332-0237-448d-bbf2-25ea4c5fe90d" SourceId="1" SourceUrl="http://acadtest.ucaldas.edu.co:8084/WsFacultadSalud.asmx?wsdl" />
+    <MetadataFile FileName="WsFacultadSalud1.wsdl" MetadataType="Wsdl" ID="c44ec59a-15a9-43a6-882b-df20743012c9" SourceId="1" SourceUrl="http://acad.ucaldas.edu.co/WsFacultadSalud.asmx?wsdl" />
+    <MetadataFile FileName="WsFacultadSalud1.disco" MetadataType="Disco" ID="2617404d-3aa6-402a-a11c-efdae7017c5e" SourceId="1" SourceUrl="http://acad.ucaldas.edu.co/WsFacultadSalud.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

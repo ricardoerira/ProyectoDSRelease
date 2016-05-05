@@ -27,7 +27,7 @@ namespace MvcApplication2.Controllers
             //importaMaterias();
            //  importaGruposMateria();
             //
-         //     importaDocentes();
+            //  importaDocentes();
          //        importaEstudiantes();
            importaEstudiantesRotacion();
             // actualizaImagenDocentes();
@@ -359,20 +359,13 @@ namespace MvcApplication2.Controllers
                     {
                         Docente docenteTemp = (Docente)docente.ToList().ElementAt(0);
 
-
                         rotacionDocente.docenteId = docenteTemp.docenteId;
-
-
-
-
-
-
-
+                        rotacionDocente.nombre = docenteTemp.HojaVida.primer_nombre;
                     }
                     else
                     {
 
-                        rotacionDocente.docenteId = 542;
+                        rotacionDocente.docenteId = 590;
 
                     }
                     rotacionDocente.rotacionEstudianteId = rotacionEstudianteId;
@@ -546,8 +539,8 @@ namespace MvcApplication2.Controllers
                             var hv = db.HojaVidas.Where(r => r.imagen_DI.Equals(imagen_DI));
                                
                             List<HojaVida> hvs = hv.ToList();
-                         //   if (hvs.Count > 0 && !item3.EMAIL.Equals(""))
-                           // {
+                            //if (hvs.Count > 0 )
+                            //{
 
                                 //HojaVida hvida = hvs.ElementAt(0);
                                 //var docentes = db.Docentes.Where(r => r.hojaVidaId == hvida.hojaVidaId);
@@ -578,7 +571,7 @@ namespace MvcApplication2.Controllers
                                 //    Console.WriteLine(e.Data);
                                 //}
 
-                           // }
+                            //}
                             //else
                             //{
 
@@ -688,7 +681,7 @@ namespace MvcApplication2.Controllers
                                 //  hojavida = getSalud(hojavida);
                                 InsertaVacunas(iffam);
                            // }
-                        }
+                        //}
                     }
                 }
 
@@ -697,6 +690,8 @@ namespace MvcApplication2.Controllers
 
 
 
+
+            }
 
                }
 

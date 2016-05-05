@@ -3,17 +3,35 @@
 }
 
 @model MvcApplication2.Models.Docente
+<script>
+    $(document).ready(function () {
+        $("#submitButton").on("click", function () {
+            alert('Your Message');
+        });
 
+    });
+
+</script>
 <div class="row">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Personales", "PersonalesDS/" + Model.docenteId, "Docente")</li>
-                    <li>@Html.ActionLink("Documentos", "SoportesCompletosDS/" + Model.docenteId, "Docente")</li>
-                    <li>@Html.ActionLink("Vacunación", "CarnetVacunacionDocenteODS/" + Model.docenteId, "Docente")</li>
+                    <li>@Html.ActionLink("Personales", "Personales/" + Model.docenteId, "Docente")</li>
+                    <li>@Html.ActionLink("Documentos", "SoportesCompletos/" + Model.docenteId, "Docente")</li>
+                    <li>@Html.ActionLink("Vacunación", "CarnetVacunacionDocente/" + Model.docenteId, "Docente")</li>
                     <li>@Html.ActionLink("Reporte", "ReporteDocenteA/" + Model.docenteId, "Docente", new { target = "_blank" })</li>
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Cuenta</b> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Cambiar contraseña", "LoginCC/" + Model.docenteId, "Docente")</li>
+
+
+                        </ul>
+                    </li>
 
                 </ul>
             </div><!-- /.navbar-collapse -->
@@ -37,7 +55,11 @@
                     <img src="@Url.Content(Model.HojaVida.imagen_DI)" alt="..." class="img-rounded" height="200px" width="150px"><br />
 
                 </div>
+                @if (!Model.HojaVida.estado_HV)
+                {
+                    <script>alert("Debes subir todos los documentos");</script>
 
+                }
                 <div class="col-sm-8">
 
                     <div class="row">
@@ -46,7 +68,7 @@
                             <!-- Text input-->
                             <div class="form-group">
                                 @Html.HiddenFor(model => model.hojaVidaId)
-                               @Html.HiddenFor(model => model.docenteId)
+                                @Html.HiddenFor(model => model.docenteId)
                                 @Html.HiddenFor(model => model.DepartamentoSaludId)
                                 @Html.HiddenFor(model => model.clave)
 
@@ -78,12 +100,12 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tarjeta Profesional Departamental</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.certificado_TPDTS, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBoxFor(model => model.certificado_TPDTS, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.certificado_TPDTS)
                                 </div>
                                 <label class="col-sm-2 control-label">Tarjeta Profesional Nacional</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.certificado_TPN, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.TextBoxFor(model => model.certificado_TPN, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.certificado_TPN)
                                 </div>
 
@@ -163,7 +185,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">ARL</label>
                                 <div class="col-sm-10">
-                                    @Html.TextBoxFor(model => model.HojaVida.ARL, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("HojaVida.ARL", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "POSITIVA COMPAÑIA DE SEGUROS S.A.", Value = "POSITIVA COMPAÑIA DE SEGUROS S.A." }, new SelectListItem { Text = "SEGUROS DE VIDA COLPATRIA S.A.", Value = "SEGUROS DE VIDA COLPATRIA S.A." }, new SelectListItem { Text = "COMPAÑÍA DE SEGUROS BOLIVAR S.A.", Value = "COMPAÑÍA DE SEGUROS BOLIVAR S.A." }, new SelectListItem { Text = "ARL SURA", Value = "ARL SURA" }, new SelectListItem { Text = "COMPAÑÍA DE SEGUROS DE VIDA ALFA S.A.", Value = "COMPAÑÍA DE SEGUROS DE VIDA ALFA S.A." }, new SelectListItem { Text = "LIBERTY SEGUROS DE VIDA S.A.", Value = "LIBERTY SEGUROS DE VIDA S.A." }, new SelectListItem { Text = "COMPAÑIA DE SEGUROS DE VIDA COLMENA S.A.", Value = "COMPAÑIA DE SEGUROS DE VIDA COLMENA S.A." }, new SelectListItem { Text = "LA EQUIDAD SEGUROS DE VIDA", Value = "LA EQUIDAD SEGUROS DE VIDA" }, new SelectListItem { Text = "MAPFRE COLOMBIA VIDA SEGUROS S.A.", Value = "MAPFRE COLOMBIA VIDA SEGUROS S.A." }, new SelectListItem { Text = "SEGUROS DE VIDA AURORA S.A.", Value = "SEGUROS DE VIDA AURORA S.A." }, new SelectListItem { Text = "OTRA", Value = "OTRA" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.ARL)
                                 </div>
 
@@ -191,12 +213,14 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Estado civil</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.estado_civil, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("HojaVida.estado_civil", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "Soltero/a", Value = "Soltero/a" }, new SelectListItem { Text = "Casado/a", Value = "Casado/a" }, new SelectListItem { Text = "Divorciado/a", Value = "Divorciado/a" }, new SelectListItem { Text = "Viudo/a", Value = "Viudo/a" }, new SelectListItem { Text = "Unión Libre", Value = "Unión Libre" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.estado_civil)
+
+
                                 </div>
-                                <label class="col-sm-2 control-label">n.º Hijos</label>
+                                <label class="col-sm-2 control-label">n.º de hijos</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.hijos, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("HojaVida.hijos", new List<SelectListItem>() { new SelectListItem { Text = "0", Value = "0" }, new SelectListItem { Text = "1", Value = "1" }, new SelectListItem { Text = "2", Value = "2" }, new SelectListItem { Text = "3", Value = "3" }, new SelectListItem { Text = "4", Value = "4" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.hijos)
                                 </div>
                             </div>
@@ -208,13 +232,14 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">RH</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.hemoclasificacion, new { @class = "form-control", @readonly = "readonly" })
+
+                                    @Html.DropDownList("HojaVida.hemoclasificacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "AB+", Value = "AB+" }, new SelectListItem { Text = "AB-", Value = "AB-" }, new SelectListItem { Text = "A+", Value = "A+" }, new SelectListItem { Text = "A-", Value = "A-" }, new SelectListItem { Text = "B+", Value = "B+" }, new SelectListItem { Text = "B-", Value = "B-" }, new SelectListItem { Text = "O+", Value = "O+" }, new SelectListItem { Text = "O-", Value = "O-" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.hemoclasificacion)
                                 </div>
                                 <label class="col-sm-2 control-label">Género</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.genero, new { @class = "form-control", @readonly = "readonly" })
-                                @Html.ValidationMessageFor(model => model.HojaVida.genero)
+                                    @Html.DropDownList("HojaVida.genero", new List<SelectListItem>() { new SelectListItem { Text = "M", Value = "M" }, new SelectListItem { Text = "F", Value = "F" } }, new { @class = "form-control", @readonly = "readonly" })
+
                                 </div>
 
 
@@ -312,7 +337,7 @@
                                 </div>
                                 <label class="col-sm-2 control-label">Tipo vinculación</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.tipo_vinculacion, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("tipo_vinculacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "DOCENTE DE PLANTA", Value = "DOCENTE DE PLANTA" }, new SelectListItem { Text = "DOCENTE OCASIONAL", Value = "DOCENTE OCASIONAL" }, new SelectListItem { Text = "DOCENTE CATEDRÁTICO", Value = "DOCENTE CATEDRÁTICO" }, new SelectListItem { Text = "COMISION ADMINISTRATIVA", Value = "COMISION ADMINISTRATIVA" } }, new { @class = "form-control" }, @readonly = "readonly")
                                     @Html.ValidationMessageFor(model => model.tipo_vinculacion)
                                 </div>
                             </div>
@@ -327,8 +352,8 @@
 
                                 <label class="col-sm-2 control-label">Dedicación</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.dedicacion, new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(model => model.dedicacion)
+                                    @Html.DropDownList("dedicacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "TIEMPO COMPLETO", Value = "TIEMPO COMPLETO" }, new SelectListItem { Text = "MEDIO TIEMPO", Value = "MEDIO TIEMPO" }, new SelectListItem { Text = "HORAS", Value = "HORAS" } }, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.tipo_vinculacion)
                                 </div>
 
                             </div>
@@ -346,21 +371,12 @@
 
                                 <label class="col-sm-2 control-label">Categoria escalafón docente</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.categoria_escalafon_docente, new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(model => model.categoria_escalafon_docente)
+                                    @Html.DropDownList("categoria_escalafon_docente", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "Auxiliar", Value = "Auxiliar" }, new SelectListItem { Text = "Asistente", Value = "Asistente" }, new SelectListItem { Text = "Asociado", Value = "Asociado" }, new SelectListItem { Text = "Titular", Value = "Titular" } }, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.tipo_vinculacion)
                                 </div>
                             </div>
 
-                            <div class="form-group">
 
-                                <label class="col-sm-2 control-label">Título postgrado</label>
-                                <div class="col-sm-8">
-                                    @Html.TextBoxFor(model => model.certificado_DPE, new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(model => model.certificado_DPE)
-                                </div>
-
-
-                            </div>
                             <div class="form-group">
 
                                 <label class="col-sm-2 control-label">Otros Títulos </label>
@@ -375,43 +391,12 @@
                             </div>
                         </div>
                     </fodrm>
-                    @if (ViewBag.estado)
-                    {
-                        <button type="submit" class="alert-info">Actualizada</button>
-
-                    }
-
-                    else
-                    {
-                        <button type="submit" class="alert-danger">Solicitar Actualizacion</button>
-
-
-                    }
 
                 </div><!-- /.row -->
 
-            </fieldset>
-        </div>
-    </div>
 
-
-}
-
-
-
-@using (Html.BeginForm("PersonalesDS", "Docente", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.docenteId)
-
-    <div class="container">
-
-
-        <div class="row">
-
-            <fieldset>
                 <legend>Documentos</legend>
+
                 <div class="col-sm-3">
 
                 </div>
@@ -434,10 +419,18 @@
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen1 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen1 })'>
                                         <img src=@ViewBag.imagen1 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
+
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen1a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
 
@@ -447,11 +440,19 @@
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen2 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen2 })'>
                                         <img src=@ViewBag.imagen2 class="img-rounded" height="75" width="75" />
                                     </a>
 
                                 </td>
+
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen2a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+
                                 <td align="center"><strong>Si</strong></td>
 
                             </tr>
@@ -462,9 +463,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen3 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen3  })'>
                                         <img src=@ViewBag.imagen3 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen3a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
@@ -475,9 +482,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen4 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen4  })'>
                                         <img src=@ViewBag.imagen4 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen4a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
@@ -488,9 +501,15 @@
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen5 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen5 })'>
                                         <img src=@ViewBag.imagen5 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen5a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
@@ -501,9 +520,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen6 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen6 })'>
                                         <img src=@ViewBag.imagen6 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen6a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
@@ -515,9 +540,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen7 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen7 })'>
                                         <img src=@ViewBag.imagen7 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen7a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
@@ -528,9 +559,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen8 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen8 })'>
                                         <img src=@ViewBag.imagen8 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen8a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
@@ -541,9 +578,15 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen9 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen9 })'>
                                         <img src=@ViewBag.imagen9 class="img-rounded" height="75" width="75" />
                                     </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen9a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
@@ -558,6 +601,12 @@
                                         <img src=@ViewBag.imagen10 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen10a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
                             <tr>
@@ -567,13 +616,19 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("SoportesDS", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen11 })'>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen11 })'>
                                         <img src=@ViewBag.imagen11 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen11a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
-                            
+                            <tr>
                         </table>
                         <div class="form-group">
                         </div>
@@ -587,19 +642,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                        </div>
-                        <div class="form-group">
-                        </div>
 
                     </div>
                 </div>
+
+            </fieldset>
         </div>
     </div>
 
 
-
 }
-
-
 

@@ -13,6 +13,7 @@ using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Data.Entity.Validation;
+using MvcApplication2.Util;
 
 namespace MvcApplication2.Controllers
 {
@@ -294,7 +295,7 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            
+
 
             ViewBag.imagen1 = imagen;
 
@@ -424,7 +425,7 @@ namespace MvcApplication2.Controllers
 
 
         }
-        public Boolean ValidarCampos(Estudiante estudiante)
+        public Boolean validarCampos(Estudiante estudiante, bool ds)
         {
             HojaVida hv = db.HojaVidas.Find(estudiante.hojaVidaId);
             Estudiante e = db.Estudiantes.Find(estudiante.estudianteId);
@@ -439,40 +440,39 @@ namespace MvcApplication2.Controllers
                 (f.telefono_acudiente != 0))
             {
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
-                estudianteAux.HojaVida.estado_HV = true;
+                string[] documentos = null;
+                if (ds)
+                    documentos = Constantes.documentos_estudianteResidentes;
+                else
+                    documentos = Constantes.documentos_estudiante;
 
 
-                if (validaDocumentos(estudiante))
+                if (validaDocumentos(estudiante, documentos))
                 {
                     estudianteAux.HojaVida.estado_HV = true;
-                    ViewBag.estado = estudianteAux.HojaVida.estado_HV;
+
 
                 }
                 else
                 {
                     estudianteAux.HojaVida.estado_HV = false;
-                    ViewBag.estado = estudianteAux.HojaVida.estado_HV;
+
 
                 }
-
-
-                
+                ViewBag.estado = estudianteAux.HojaVida.estado_HV;
                 db.Entry(estudianteAux).State = EntityState.Modified;
-               
                 return true;
             }
             else
             {
-               
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 estudianteAux.HojaVida.estado_HV = false;
                 ViewBag.estado = estudianteAux.HojaVida.estado_HV;
                 estudianteAux.HojaVida.municipio_procedencia = ".";
                 estudianteAux.HojaVida.num_celular = 3000000000;
-
                 db.Entry(estudianteAux).State = EntityState.Modified;
 
-                 try
+                try
                 {
 
                     db.SaveChanges();
@@ -491,8 +491,8 @@ namespace MvcApplication2.Controllers
                     }
                     throw;
                 }
-                
-                
+
+
                 return false;
             }
         }
@@ -599,7 +599,6 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
             rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
 
-            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB" };
 
             string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/doc_identidad", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("docIdentidad", path1);
@@ -619,12 +618,14 @@ namespace MvcApplication2.Controllers
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV2", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("CV2", path1);
 
-            
+
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_varicela", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("ant_varicela", path1);
 
             path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_hepatitisB", +estudiante.codigo, ".jpg");
             rptH.SetParameterValue("ant_hepatitisB", path1);
+
+
 
             Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
@@ -698,7 +699,7 @@ namespace MvcApplication2.Controllers
 
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", estudiante.hojaVidaId);
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre", estudiante.programaId);
-             return View(estudiante);
+            return View(estudiante);
         }
 
         //
@@ -713,7 +714,7 @@ namespace MvcApplication2.Controllers
             }
             ViewBag.hojaVidaId = new SelectList(db.HojaVidas, "hojaVidaId", "primer_nombre", estudiante.hojaVidaId);
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre", estudiante.programaId);
-             return View(estudiante);
+            return View(estudiante);
         }
 
         //
@@ -998,7 +999,7 @@ namespace MvcApplication2.Controllers
             } return View(estudiante);
         }
 
-        public ActionResult  Personales(int id = 0)
+        public ActionResult Personales(int id = 0)
         {
             TempData["notice"] = null;
 
@@ -1009,15 +1010,16 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            ValidarCampos(estudiante);
-          
-            cargaDocumentoDos(estudiante);
+            validarCampos(estudiante,false);
+
+            cargaDocumentos(estudiante);
             return View(estudiante);
 
         }
 
         public ActionResult PersonalesResidentes(int id = 0)
         {
+
             TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
@@ -1027,6 +1029,7 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
+            validarCampos(estudiante,true);
 
             cargaDocumentoResidentes(estudiante);
             return View(estudiante);
@@ -1034,162 +1037,161 @@ namespace MvcApplication2.Controllers
         }
 
         //metodo que muestra imagen
-        public ActionResult cargaDocumentoDos(Estudiante estudiante)
+        public ActionResult cargaDocumentos(Estudiante estudiante)
         {
             {
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "influenza" };
 
 
-                  string path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
+                string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[0] + estudiante.codigo, ".jpg");
 
 
-                  if (RemoteFileExists(path1))
-                  {
-                  
+                if (Utilidades.remoteFileExists(path1))
+                {
+
                     ViewBag.imagen1 = path1;
-                      ViewBag.imagen1a = documentos[0] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen1a = Constantes.documentos_estudiante[0] + estudiante.codigo + ".jpg";
                 }
                 else
                 {
-                    ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen1 = Constantes.url_noimage;
 
                 }
 
 
 
 
-                   path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[1] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen2a = documentos[1] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen2a = Constantes.documentos_estudiante[1] + estudiante.codigo + ".jpg";
 
-              
+
                     ViewBag.imagen2 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen2 = Constantes.url_noimage;
 
                 }
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[2] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen3a = documentos[2] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen3a = Constantes.documentos_estudiante[2] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen3 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen3 = Constantes.url_noimage;
 
                 }
 
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[3] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen4a = documentos[3] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen4a = Constantes.documentos_estudiante[3] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen4 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen4 = Constantes.url_noimage;
 
                 }
 
 
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[4] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen5a = documentos[4] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen5a = Constantes.documentos_estudiante[4] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen5 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen5 = Constantes.url_noimage;
 
                 }
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[5] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen6a = documentos[5] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen6a = Constantes.documentos_estudiante[5] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen6 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen6 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen6 = Constantes.url_noimage;
 
                 }
 
 
 
-                 path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[6] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen7a = documentos[6] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen7a = Constantes.documentos_estudiante[6] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen7 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen7 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen7 = Constantes.url_noimage;
 
                 }
 
 
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[7] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen8a = documentos[7] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen8a = Constantes.documentos_estudiante[7] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen8 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen8 = Constantes.url_noimage;
 
                 }
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + estudiante.codigo, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudiante[8] + estudiante.codigo, ".jpg");
 
-                if (RemoteFileExists(path1))
+                if (Utilidades.remoteFileExists(path1))
                 {
-                    ViewBag.imagen9a = documentos[8] + estudiante.codigo + ".jpg";
+                    ViewBag.imagen9a = Constantes.documentos_estudiante[8] + estudiante.codigo + ".jpg";
 
                     ViewBag.imagen9 = path1;
 
                 }
                 else
                 {
-                    ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                    ViewBag.imagen9 = Constantes.url_noimage;
 
                 }
-            
+
 
 
 
@@ -1202,7 +1204,7 @@ namespace MvcApplication2.Controllers
 
         public ActionResult DeleteImage(int id)
         {
-               
+
             string imagen = Request.Params["imagen"];
             imagen = imagen.Replace("%", "/");
             string path1 = string.Format("{0}{1}", Server.MapPath("../../Uploads/"), imagen);
@@ -1214,525 +1216,285 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            
+
 
             ViewBag.imagen1 = imagen;
             return RedirectToAction("../Estudiante/Personales/" + estudiante.estudianteId);
-            
 
-            
+
+
         }
 
-        public ActionResult cargaDocumentoResidentes(Estudiante estudiante)
-        {
-            {
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
-
-
-                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                
-                    ViewBag.imagen1 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen2 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen3 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen4 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen5 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen6 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen6 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen7 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen7 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen8 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[8] + estudiante.codigo, ".jpg");
-
-                      if (!RemoteFileExists(path1))
-                      {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen9 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[9] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-          
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen10 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen10 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[10] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-          
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen11 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen11 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[11] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-          
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[11] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen12 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen12 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[12] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-          
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[12] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen13 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen13 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[13] + estudiante.codigo, ".jpg");
-
-                if (!RemoteFileExists(path1))
-          
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[13] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen14 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen14 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                return View(estudiante);
-
-
-            }
-        }
-
-
-
-        public ActionResult cargaDocumentoResidentesDS(Estudiante estudiante)
-        {
-            {
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
-
-
-                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen1 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen2 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen3 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen4 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen5 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen6 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen6 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[6] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen7 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen7 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[7] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen8 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen8 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[8] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen9 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen9 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[9] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen10 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen10 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[10] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen11 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen11 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[11] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[11] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen12 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen12 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[12] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[12] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen13 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen13 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-
-
-                path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[13] + estudiante.codigo, ".jpg");
-
-                if (System.IO.File.Exists(path1))
-                {
-                    path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[13] + estudiante.codigo, ".jpg");
-
-                    ViewBag.imagen14 = path1;
-
-                }
-                else
-                {
-                    ViewBag.imagen14 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
-
-                }
-
-                return View(estudiante);
-
-
-            }
-        }
-
-
-        //metodo que guarda imagen
-        //public ActionResult cargaDocumento (Estudiante estudiante){   
-        //   if (Request != null)
-        //    {
-        //        HttpPostedFileBase file = Request.Files["InputFile"];
-
-        //        if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
-        //        {
-        //            string fileName = file.FileName;
-        //            string fileContentType = file.ContentType;
-        //            byte[] fileBytes = new byte[file.ContentLength];
-        //            file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-        //            string extension = System.IO.Path.GetExtension(Request.Files["InputFile"].FileName);
-        //            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"),"cedula_"+ estudiante.codigo, ".jpg");
-        //            if (System.IO.File.Exists(path1))
-        //                System.IO.File.Delete(path1);
-        //            ViewBag.imagen = "/Uploads/cedula_" + estudiante.codigo + ".jpg";
-        //            Request.Files["InputFile"].SaveAs(path1);
-        //        }
-        //    }
-        //   return View(estudiante);
-        //}
         public ActionResult 
+
+            cargaDocumentoResidentes(Estudiante estudiante)
+        {
+            {
+
+
+                string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[0] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+
+                    ViewBag.imagen1 = path1;
+                    ViewBag.imagen1a = Constantes.documentos_estudianteResidentes[0] + estudiante.codigo + ".jpg";
+
+                }
+                else
+                {
+                    ViewBag.imagen1 = Constantes.url_noimage;
+
+                }
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[1] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[1] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen2 = path1;
+                    ViewBag.imagen2a = Constantes.documentos_estudianteResidentes[1] + estudiante.codigo + ".jpg";
+
+                }
+                else
+                {
+                    ViewBag.imagen2 = Constantes.url_noimage;
+
+                }
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[2] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[2] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen3 = path1;
+                    ViewBag.imagen3a = Constantes.documentos_estudianteResidentes[2] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen3 = Constantes.url_noimage;
+
+                }
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[3] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[3] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen4 = path1;
+                    ViewBag.imagen4a = Constantes.documentos_estudianteResidentes[3] + estudiante.codigo + ".jpg";
+
+                }
+                else
+                {
+                    ViewBag.imagen4 = Constantes.url_noimage;
+
+                }
+
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[4] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[4] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen5 = path1;
+                    ViewBag.imagen5a = Constantes.documentos_estudianteResidentes[4] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen5 = Constantes.url_noimage;
+
+                }
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[5] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[5] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen6 = path1;
+                    ViewBag.imagen6a = Constantes.documentos_estudianteResidentes[5] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen6 = Constantes.url_noimage;
+
+                }
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[6] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[6] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen7 = path1;
+                    ViewBag.imagen7a = Constantes.documentos_estudianteResidentes[6] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen7 = Constantes.url_noimage;
+
+                }
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[7] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[7] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen8 = path1;
+                    ViewBag.imagen8a = Constantes.documentos_estudianteResidentes[7] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen8 = Constantes.url_noimage;
+
+                }
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[8] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[8] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen9 = path1;
+                    ViewBag.imagen9a = Constantes.documentos_estudianteResidentes[8] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen9 = Constantes.url_noimage;
+
+                }
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[9] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[9] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen10 = path1;
+                    ViewBag.imagen10a = Constantes.documentos_estudianteResidentes[9] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen10 = Constantes.url_noimage;
+
+                }
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[10] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[10] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen11 = path1;
+                    ViewBag.imagen11a = Constantes.documentos_estudianteResidentes[10] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen11 = Constantes.url_noimage;
+
+                }
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[11] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[11] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen12 = path1;
+                    ViewBag.imagen12a = Constantes.documentos_estudianteResidentes[11] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen12 = Constantes.url_noimage;
+
+                }
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[12] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[12] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen13 = path1;
+                    ViewBag.imagen13a = Constantes.documentos_estudianteResidentes[12] + estudiante.codigo + ".jpg";
+
+
+                }
+                else
+                {
+                    ViewBag.imagen13 = Constantes.url_noimage;
+
+                }
+
+
+
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[13] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[13] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen14 = path1;
+                    ViewBag.imagen14a = Constantes.documentos_estudianteResidentes[13] + estudiante.codigo + ".jpg";
+
+
+                }
+
+                else
+                {
+                    ViewBag.imagen14 = Constantes.url_noimage;
+
+                }
+
+                return View(estudiante);
+
+
+            }
+        }
+
+
+
+       
+        public ActionResult
             guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
         {
             int numFiles = Request.Files.Count;
@@ -1742,7 +1504,6 @@ namespace MvcApplication2.Controllers
 
                 int uploadedCount = 0;
 
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "EV2", "ant_varicela", "ant_hepatitisB","influenza" };
                 for (int i = 0; i < numFiles; i++)
                 {
                     HttpPostedFileBase file = Request.Files[i];
@@ -1752,7 +1513,7 @@ namespace MvcApplication2.Controllers
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        string path1 = string.Format("{0}{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
+                        string path1 = string.Format("{0}{1}{2}", Server.MapPath("../../Uploads/"), Constantes.documentos_estudiante[i] + estudiante.codigo, ".jpg");
                         if (System.IO.File.Exists(path1))
                             System.IO.File.Delete(path1);
 
@@ -1766,51 +1527,31 @@ namespace MvcApplication2.Controllers
 
 
 
-        private bool RemoteFileExists(string url)
-        {
-            try
-            {
-                //Creating the HttpWebRequest
-                HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
-                //Setting the Request method HEAD, you can also use GET too.
-                request.Method = "HEAD";
-                //Getting the Web Response.
-                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
-                //Returns TRUE if the Status code == 200
-                response.Close();
-                return (response.StatusCode == HttpStatusCode.OK);
-            }
-            catch
-            {
-                //Any exception will returns false.
-                return false;
-            }
-        }
 
 
-        public Boolean validaDocumentos(Estudiante estudiante)//
+
+        public Boolean validaDocumentos(Estudiante estudiante, string[] documentos)//
         {
             Boolean estado = true;
             int uploadedCount = 0;
             int numFiles = Request.Files.Count;
 
-            string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "EV1", "ant_varicela", "ant_hepatitisB","influenza" };
 
-            for (int i = 0; i < documentos.Length; i++)
+            for (int i = 0; i < Constantes.documentos_estudiante.Length; i++)
             {
-                string path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[i] + estudiante.codigo, ".jpg");
-
-   
-
-                    if (!RemoteFileExists(path1))
-                    {
-                        estado = false;
-                        return estado;
-                    }
+                string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[i] + estudiante.codigo, ".jpg");
 
 
-                    uploadedCount++;
-                
+
+                if (!Utilidades.remoteFileExists(path1))
+                {
+                    estado = false;
+                    return estado;
+                }
+
+
+                uploadedCount++;
+
             }
             return estado;
 
@@ -1825,8 +1566,7 @@ namespace MvcApplication2.Controllers
 
                 int uploadedCount = 0;
 
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
-
+                string[] documentose = Constantes.documentos_estudianteResidentes;
                 for (int i = 0; i < numFiles; i++)
                 {
                     HttpPostedFileBase file = Request.Files[i];
@@ -1836,8 +1576,8 @@ namespace MvcApplication2.Controllers
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
-                        if (RemoteFileExists(path1))
+                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), Constantes.documentos_estudianteResidentes[i] + estudiante.codigo, ".jpg");
+                        if (Utilidades.remoteFileExists(path1))
                             System.IO.File.Delete(path1);
 
                         file.SaveAs(path1);
@@ -1857,7 +1597,6 @@ namespace MvcApplication2.Controllers
 
                 int uploadedCount = 0;
 
-                string[] documentos = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
 
                 for (int i = 0; i < numFiles; i++)
                 {
@@ -1868,9 +1607,9 @@ namespace MvcApplication2.Controllers
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + estudiante.codigo, ".jpg");
-                        if (RemoteFileExists(path1))
-          
+                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), Constantes.documentos_estudianteResidentes[i] + estudiante.codigo, ".jpg");
+                        if (Utilidades.remoteFileExists(path1))
+
                             System.IO.File.Delete(path1);
 
                         file.SaveAs(path1);
@@ -1906,7 +1645,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_celular = estudiante.HojaVida.num_celular;
                 oHojaVida.num_telefono = estudiante.HojaVida.num_telefono;
                 oHojaVida.Familia = estudiante.HojaVida.Familia;
-             
+
                 int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
                 string edadDocente = edad.ToString();
                 est.barrio_procedencia = edadDocente;//Reemplaza edad
@@ -1914,16 +1653,16 @@ namespace MvcApplication2.Controllers
                 db.Entry(est).State = EntityState.Modified;
                 guardaDocumentos(estudiante);
                 db.SaveChanges();
-                ValidarCampos(estudiante);
-                cargaDocumentoDos(estudiante);
+                validarCampos(estudiante,false);
+                cargaDocumentos(estudiante);
                 return RedirectToAction("../Estudiante/Personales/" + est.estudianteId);
-             
+
             }
             else
             {
 
-                ValidarCampos(estudiante);
-                cargaDocumentoDos(estudiante);
+                validarCampos(estudiante,false);
+                cargaDocumentos(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
                 return View(estudiante2);
             }
@@ -1960,15 +1699,19 @@ namespace MvcApplication2.Controllers
 
                 db.Entry(est).State = EntityState.Modified;
 
-                //cargaDocumento(estudiante);
                 guardaDocumentosResidentes(estudiante);
 
                 db.SaveChanges();
+                validarCampos(estudiante,true);
+
+                cargaDocumentoResidentes(estudiante);
+
                 return RedirectToAction("../Estudiante/PersonalesResidentes/" + est.estudianteId);
                 // return View(est);
             }
             else
             {
+                validarCampos(estudiante,true);
                 cargaDocumentoResidentes(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
 
@@ -2003,59 +1746,37 @@ namespace MvcApplication2.Controllers
 
         public ActionResult PersonalesDS(int id = 0)
         {
+
             TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
-
+            HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
             cargaImagen(estudiante);
-            if (estudiante == null)
-            {
-                return HttpNotFound();
-            }
-
-            HojaVida hv = db.HojaVidas.Find(estudiante.hojaVidaId);
-            ValidarCampos(estudiante);
-
-          
-            Boolean estadoV = ValidarVacunas(estudiante);
-            ViewBag.estadoV = estadoV;
 
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
+            validarCampos(estudiante,false);
 
-
-
-            cargaDocumentoDos(estudiante);
+            cargaDocumentos(estudiante);
             return View(estudiante);
-
         }
 
         public ActionResult PersonalesDpto(int id = 0)
         {
-            TempData["notice"] = null;
+
+              TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
-
+            HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
             cargaImagen(estudiante);
-            if (estudiante == null)
-            {
-                return HttpNotFound();
-            }
-
-
-            Boolean estado = ValidarCampos(estudiante);
-            ViewBag.estado = estado;
-            Boolean estadoV = ValidarVacunas(estudiante);
-            ViewBag.estadoV = estadoV;
 
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
+            validarCampos(estudiante,false);
 
-
-
-            cargaDocumentoDos(estudiante);
+            cargaDocumentos(estudiante);
             return View(estudiante);
 
         }
@@ -2063,31 +1784,22 @@ namespace MvcApplication2.Controllers
 
         public ActionResult PersonalesResidentesDS(int id = 0)
         {
+
+
+
             TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
-
+            HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
             cargaImagen(estudiante);
-            if (estudiante == null)
-            {
-                return HttpNotFound();
-            }
-
-
-            Boolean estado = ValidarCampos(estudiante);
-            ViewBag.estado = estado;
-            Boolean estadoV = ValidarVacunas(estudiante);
-            ViewBag.estadoV = estadoV;
 
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
+            validarCampos(estudiante, true);
 
-
-
-            cargaDocumentoResidentesDS(estudiante);
+            cargaDocumentos(estudiante);
             return View(estudiante);
-
         }
 
 
@@ -2101,13 +1813,13 @@ namespace MvcApplication2.Controllers
         public ActionResult SolicitarActualizacion(Estudiante estudiante)
         {
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
-
-            if(!estudiante.HojaVida.correo.Equals(""))
+            @ViewBag.actualizar = "si";
+            if (estudiante.HojaVida.correo != null && !estudiante.HojaVida.correo.Equals(""))
             {
                 var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-                var toAddress = new MailAddress("ricardoerira@gmail.com", "To Name");
+                var toAddress = new MailAddress(estudiante.HojaVida.correo, "To Name");
                 const string fromPassword = "descargar";
-                const string subject = "Solicitud actualizacion hoja de vida";
+                const string subject = "Solicitud de actualizacion, Hoja de vida";
                 const string body = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://salud.ucaldas.edu.co\">http://salud.ucaldas.edu.co/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Num de Documento de Identidad&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
                 //const string bodys = "<h3>Cordial saludo</h3><h3 style=\"text-align: justify;\">La Facultad de Ciencias para la Salud a través de su Oficina Docencia Servicio le solicita actualizar su hoja de vida; para ello disponemos de la nueva plataforma web la cual podrá acceder a través del siguiente enlace.</h3><h3>&nbsp;<a href=\"http://localhost:34649/Estudiante/Login\">http://localhost:34649/</a></h3><h3>Los datos de ingreso son:&nbsp;</h3><h3><strong>Usuario</strong>: Código de estudiante</h3><h3><strong>Contrase&ntilde;a</strong>: Código de estudiante&nbsp;</h3><p>&nbsp;</p><p>&nbsp;</p><p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"160\" height=\"160\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Facultad de Ciencias para la Salud </strong></a> - Sede Versalles Carrera 25  48-57 / Tel +57 878 30 60 Ext. 31255 / E-mail docencia.servicio@ucaldas.edu.co</p> ";
 
@@ -2126,6 +1838,7 @@ namespace MvcApplication2.Controllers
                         Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
                     };
                     var message = new MailMessage(fromAddress, toAddress);
+                    message.To.Add("servidor.facsalud@ucaldas.edu.co");
 
                     message.IsBodyHtml = true;
                     message.Subject = subject;
@@ -2149,7 +1862,7 @@ namespace MvcApplication2.Controllers
 
             }
             // var fromAddress = new MailAddress("docenciaservicioucaldas@hotmail.com", "Decanatura – Oficina Docencia Servicio");
-         
+
 
             return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
 
@@ -2165,8 +1878,8 @@ namespace MvcApplication2.Controllers
             guardaDocumentos(estudiante);
 
 
-            Boolean estado = ValidarCampos(estudiante);
-          
+            Boolean estado = validarCampos(estudiante,false);
+
             //return View(estudiante);
             return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
 
@@ -2177,13 +1890,14 @@ namespace MvcApplication2.Controllers
         public ActionResult PersonalesDpto(Estudiante estudiante)
         {
 
+
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
             guardaDocumentos(estudiante);
 
 
-            Boolean estado = ValidarCampos(estudiante);
-            ViewBag.estado = estado;
+            Boolean estado = validarCampos(estudiante, false);
+
             //return View(estudiante);
             return RedirectToAction("../Estudiante/PersonalesDpto/" + estudiante.estudianteId);
 
@@ -2196,13 +1910,14 @@ namespace MvcApplication2.Controllers
 
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
-            guardaDocumentosResidentesDS(estudiante);
+            guardaDocumentos(estudiante);
 
 
-            Boolean estado = ValidarCampos(estudiante);
-            ViewBag.estado = estado;
+            Boolean estado = validarCampos(estudiante, true);
+
             //return View(estudiante);
-            return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + estudiante.estudianteId);
+            return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
+
 
         }
 
@@ -2215,7 +1930,7 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            cargaDocumentoDos(estudiante);
+            cargaDocumentos(estudiante);
             return View(estudiante);
         }
 
@@ -2228,7 +1943,7 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            cargaDocumentoDos(estudiante);
+            cargaDocumentos(estudiante);
             return View(estudiante);
         }
 
@@ -2525,7 +2240,7 @@ namespace MvcApplication2.Controllers
                     file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
                     string extension = System.IO.Path.GetExtension(Request.Files["InputFile"].FileName);
                     string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/"), "cedula_", extension);
-                    if (RemoteFileExists(path1))
+                    if (Utilidades.remoteFileExists(path1))
                         System.IO.File.Delete(path1);
 
                     Request.Files["InputFile"].SaveAs(path1);

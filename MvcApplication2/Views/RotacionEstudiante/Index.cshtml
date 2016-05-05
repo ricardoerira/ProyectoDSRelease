@@ -4,6 +4,8 @@
     ViewBag.Title = "Index";
 }
 
+
+
 <div class="row">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -34,11 +36,6 @@
     </nav>
 </div>
 
-<div class="ens">
-    <p>
-        @Html.ActionLink("Regresar", "../Rotacion/SeleccionRotacion")
-    </p>
-</div>
 
 <div class="span7">
     <div class="widget stacked widget-table action-table">
@@ -50,19 +47,22 @@
 
         <div class="widget-content">
 
-            @if (ViewBag.alert!=null)
+            @if (ViewBag.alert != null)
             {
                 <script>alert("Debes seleccionar al menos un item");</script>
 
             }
-         @using (Html.BeginForm())
-         { 
-             
+
+            @using (Html.BeginForm())
+            {
+
                 <div class="form-group">
                     <div class="col-md-12 text-left">
 
                         <input type="submit" name="submitbutton1" class="btn btn-primary" value="Editar Docentes" />
                         <input type="submit" name="submitbutton2" class="btn btn-primary" value="Editar Horarios e IPS" />
+                        <input type="submit" name="submitbutton3" class="btn btn-primary" value="Seleccionar Todos" />
+
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
                             <th>
                                 Docente
                             </th>
-       
+
                             <th>
                                 Estudiante
                             </th>
@@ -98,17 +98,20 @@
                             <th>
                                 IPS/ESE
                             </th>
-                          
+
                         </tr>
                     </thead>
                     <tbody>
-
+                     
+                    
                         @for (int i = 0; i < Model.Count; i++)
                         {
+
 
                             <tr>
                                 <td class="text-center">
                                     @Html.CheckBoxFor(x => Model[i].estadoSeleccionado, new { @checked = "checked" })
+
                                 </td>
 
 
@@ -148,16 +151,21 @@
                                     @Html.DisplayFor(modelItem => Model[i].IPS_ESE.nombre)
                                 </td>
 
-                     
+
 
                             </tr>
                         }
+          
 
                     </tbody>
                 </table>
 
             }
         </div> <!-- /widget-content -->
+     
 
     </div> <!-- /widget -->
+
+
+
 </div>

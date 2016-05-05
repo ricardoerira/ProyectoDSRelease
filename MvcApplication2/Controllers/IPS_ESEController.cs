@@ -11,6 +11,8 @@ using System.IO;
 using System.Net.Mail;
 using System.Net;
 using WebMatrix.WebData;
+using System.Text.RegularExpressions;
+using System.Web.Security;
 
 namespace MvcApplication2.Controllers
 {
@@ -275,8 +277,7 @@ namespace MvcApplication2.Controllers
         }
         public ActionResult SeleccionRotacionCarta()
         {
-
-            var municipios = db.IPS_ESE.Include(h => h.Municipio);
+            var municipios = db.IPS_ESE.Include(h => h.Municipio).Include(r=>r.Rotaciones);
             List<IPS_ESE> lista = municipios.ToList();
             lista = lista.OrderBy(x => x.nombre)
            .ToList();
@@ -284,7 +285,7 @@ namespace MvcApplication2.Controllers
 
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
 
-            ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
+            ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r=>r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
 
 
             return View();
@@ -292,7 +293,7 @@ namespace MvcApplication2.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SeleccionRotacionCarta(IPS_ESE s, FormCollection value)
+        public ActionResult SeleccionRotacionCarta(Rotacion s, FormCollection value)
         {
 
 
@@ -302,23 +303,10 @@ namespace MvcApplication2.Controllers
             int departamentoId = Int32.Parse(value["DepartamentoSaludId"]);
             DepartamentoSalud ds = db.DepartamentoSaluds.Find(departamentoId);
             Programa pr = db.Programas.Find(programaId);
-            int mesId = Int32.Parse(value["mesId"]);
-            int añoId = Int32.Parse(value["añoId"]);
-          
-            var date = DateTime.MinValue;
-            DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
-            DateTime date2;
-            if (mesId == 12)
-            {
-                date2 = new DateTime(añoId, 1,
-                                     DateTime.DaysInMonth(añoId, 1));
-            }
-            else
-            {
-                date2 = new DateTime(añoId, mesId + 1,
-                                     DateTime.DaysInMonth(añoId, mesId + 1));
+            DateTime date=s.fecha_inicio;
 
-            }
+            DateTime date2=s.fecha_terminacion;
+           
 
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
@@ -333,15 +321,15 @@ namespace MvcApplication2.Controllers
            List<RotacionDocente> rotacionDocentes = new List<RotacionDocente>();
             foreach (var item in re)
             {
-                //if (item.Estudiante.HojaVida.estado_HV)
-              //  {
+                if (item.Estudiante.HojaVida.estado_HV)
+                  {
                     rotacionDocentes.AddRange(db.RotacionDocentes.Where(r=>r.rotacionEstudianteId==item.rotacionEstudianteId).ToList());
           
                     estudiantes.Add(item.Estudiante);
                     hojas2.Add(item.Estudiante.HojaVida);
                     rotaciones.Add(item.Rotacion);
                     acti.Add(item.Rotacion.ActividadAcademica);
-                //}
+                  }
             }
 
             rptH.Database.Tables[0].SetDataSource(re);
@@ -349,20 +337,19 @@ namespace MvcApplication2.Controllers
             rptH.Database.Tables[2].SetDataSource(estudiantes);
             rptH.Database.Tables[3].SetDataSource(hojas2);
             rptH.Database.Tables[4].SetDataSource(acti);
-            rptH.Database.Tables[5].SetDataSource(rotacionDocentes);
+            rptH.Database.Tables[5].SetDataSource(rotaciones);
 
-
-            rptH.Database.Tables[6].SetDataSource(rotaciones);
-
+            rptH.Database.Tables[6].SetDataSource(rotacionDocentes);
+         
 
 
             rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + pr.nombre + " Departamento " + ds.nombre + " que realizaran su rotación en su institución y los profesores con su horario.");
-            rptH.SetParameterValue("fecha", "");
+            rptH.SetParameterValue("fecha",  DateTime.Now.ToString("dd MMMM yyyy") + ".");
             rptH.SetParameterValue("dr", ips.representante);
             rptH.SetParameterValue("cargo", ips.cargo);
             rptH.SetParameterValue("nombreIPS", ips.nombre);
 
-
+           
 
 
 
@@ -373,7 +360,7 @@ namespace MvcApplication2.Controllers
                 rptH.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat, path1);
                 if (Request.Form["submitbutton1"] != null)
                 {
-                    EnviarEstudiantes(estudiantes, docentes, ips.correo);
+                    EnviarEstudiantes(estudiantes, rotacionDocentes, ips.correo,ds.correo);
 
 
                 }
@@ -403,21 +390,29 @@ namespace MvcApplication2.Controllers
 
         }
 
-        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<Docente> docentes, string correo)
+        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<RotacionDocente> docentes, string correo,string correodpto)
         {
-            string body = "<h2>Coordial Saludo.</h2><h2 style=\"text-align: justify;\">Se envía carta de presentación con sus respectivas hojas de vida</h2>";
-            body += "<h2>Estudiantes</h2>";
+            string body = "<h1 style=\"color: #5e9ca0;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h1><h4>Cordial Saludo.</h4><h4>Se env&iacute;a carta de presentaci&oacute;n con sus respectivas hojas de vida.</h4><p>&nbsp;</p><h3 style=\"color: #2e6c80;\">Estudiantes:</h3><table class=\"editorDemoTable\"><thead><tr><td>C&eacute;dula</td><td>Nombre</td><td>C&oacute;digo</td><td></td></tr></thead><tbody><tr>";
             foreach (Estudiante estudiante in estudiantes)
             {
-                body += "&nbsp;<a href=\"http://salud.ucaldas.edu.co/Proyecto/Estudiante/ReporteEstudianteA/" + estudiante.estudianteId + "\">" + estudiante.num_documento + "</a>";
+                body += "<tr> <td>" + estudiante.num_documento + "</td><td>" + estudiante.HojaVida.primer_nombre + " " + estudiante.HojaVida.primer_apellido + "</td> <td>" + estudiante.codigo + "</td><td> <a href=\"http://salud.ucaldas.edu.co/Proyecto/Estudiante/ReporteEstudianteA/"+estudiante.estudianteId+"\">Ver Hoja Vida</a> </td></tr> ";
             }
-            body += "<h2>Docentes</h2>";
-
-            foreach (Docente docente in docentes.Distinct())
+            body += "</thead></tbody></table>";
+            body += "<p>&nbsp;</p><h3 style=\"color: #2e6c80;\">Docentes:</h3><table class=\"editorDemoTable\"><thead><tr><td>C&eacute;dula</td><td>Nombre</td><td></td></tr></thead><tbody>";
+            List<Docente> docentesAux = new List<Docente>();
+            foreach (RotacionDocente docenteaux in docentes.Distinct())
             {
-                body += "&nbsp;<a href=\"http://salud.ucaldas.edu.co/Proyecto/Docente/ReporteDocenteA/" + docente.docenteId + "\">" + docente.num_documento + "</a>";
+                Docente docente = db.Docentes.Find(docenteaux.docenteId);
+                docentesAux.Add(docente);
             }
-            body += "<p><img src=\"http://st-listas.20minutos.es/images/2012-01/316846/3342344_640px.jpg?1326385884\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
+            foreach (Docente docente in docentesAux.Distinct())
+            {
+                body += "<tr> <td>" + docente.num_documento + "</td><td>" + docente.HojaVida.primer_nombre + "</td> <td> <a href=\"http://salud.ucaldas.edu.co/Proyecto/Docente/ReporteDocenteA/" + docente.docenteId + "\">Ver Hoja Vida</a> </td></tr> ";
+            }
+            body += "</tbody></table>";
+            body += "<br><br><br>Cordial saludo.";
+
+            body += "<p><img src=\"https://ci6.googleusercontent.com/proxy/FL7efXE8rOXxE9fg--htniHt2dU5_zUelHPV_ZgolYIoiqbitLuy6UTr-A56XfSCPeLLVSg4rVV1LUzivDRc7OrbZhxftNYOzxpCWRPk_Gf4zUuypCmb3-9aU1q_=s0-d-e1-ft#https://udecaldas.files.wordpress.com/2015/12/firma-institucional_n.jpg\" alt=\"\"  /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
 
             //body += "<p><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Universidad_De_Caldas_-_Logo.jpg/180px-Universidad_De_Caldas_-_Logo.jpg\" alt=\"\" width=\"180\" height=\"180\" /></p><p>&nbsp;</p><p>Copyright &copy; <a href=\"http://www.ucaldas.edu.co/portal\"><strong>Universidad de Caldas</strong></a> - Sede Principal Calle 65 No 26 - 10 / Tel +57 6 8781500 Fax 8781501 / Apartado a&eacute;reo 275 / L&iacute;nea gratuita : 01-8000-512120 E-mail ucaldas@ucaldas.edu.co</p>";
 
@@ -428,9 +423,11 @@ namespace MvcApplication2.Controllers
 
 
             var fromAddress = new MailAddress("info@salud.ucaldas.edu.co", "Decanatura – Oficina Docencia Servicio");
-            var toAddress = new MailAddress("ricardoerirac@gmail.com", "To Name");
+
+
+            var toAddress = new MailAddress("docencia.servicio@ucaldas.edu.co", "To Name");
             const string fromPassword = "descargar";
-            const string subject = "Carta de presentación";
+            const string subject = "Carta de presentación. U de Caldas, Docencia servicio";
 
 
             try
@@ -448,6 +445,17 @@ namespace MvcApplication2.Controllers
                 };
                 var message = new MailMessage(fromAddress, toAddress);
                 message.To.Add("servidor.facsalud@ucaldas.edu.co");
+                message.To.Add("docencia.servicio@ucaldas.edu.co");
+               
+                
+                string[] correos = Regex.Split(correo, ",");
+                foreach (var element in correos)
+                {
+                    message.To.Add(element.Trim());
+
+                }
+                message.To.Add(correodpto);
+
                 message.IsBodyHtml = true;
                 message.Subject = subject;
                 message.Body = body;

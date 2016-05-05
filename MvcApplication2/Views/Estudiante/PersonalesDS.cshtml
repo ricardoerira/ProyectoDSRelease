@@ -29,7 +29,6 @@
         </div><!-- /.container-fluid -->
     </nav>
 </div>
-
 @using (Html.BeginForm("SolicitarActualizacion", "Estudiante", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -46,7 +45,16 @@
                     <img src="@Url.Content(Model.HojaVida.imagen_DI)" alt="..." class="img-rounded" height="200px" width="150px"><br />
 
                 </div>
+                @if (!Model.HojaVida.estado_HV)
+                {
+                    <script>alert("Debes subir todos los documentos");</script>
 
+                }
+                @if (@ViewBag.actualizar!=null)
+                {
+                    <script>alert("Correo Enviado");</script>
+
+                }
                 <div class="col-sm-8">
 
                     <div class="row">
@@ -106,10 +114,11 @@
                                     @Html.TextBoxFor(model => model.HojaVida.correo, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.correo)
                                 </div>
-                                <label class="col-sm-2 control-label">Género</label>
+
+                                <label class="col-sm-2 control-label">Genero</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.genero, new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(model => model.HojaVida.genero)
+                                    @Html.DropDownList("HojaVida.genero", new List<SelectListItem>() { new SelectListItem { Text = "M", Value = "M" }, new SelectListItem { Text = "F", Value = "F" } }, new { @class = "form-control" })
+
                                 </div>
                             </div>
 
@@ -128,8 +137,8 @@
 
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Lugar nacimiento</label>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">Lugar de nacimiento</label>
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(model => model.HojaVida.municipio_procedencia, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.municipio_procedencia)
@@ -149,7 +158,7 @@
 
 
 
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-sm-2 control-label">Dirección Manizales</label>
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(model => model.HojaVida.direccion_manizales, new { @class = "form-control", @readonly = "readonly" })
@@ -157,7 +166,7 @@
                                 </div>
                                 <label class="col-sm-2 control-label">RH</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.hemoclasificacion, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.DropDownList("HojaVida.hemoclasificacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "AB+", Value = "AB+" }, new SelectListItem { Text = "AB-", Value = "AB-" }, new SelectListItem { Text = "A+", Value = "A+" }, new SelectListItem { Text = "A-", Value = "A-" }, new SelectListItem { Text = "B+", Value = "B+" }, new SelectListItem { Text = "B-", Value = "B-" }, new SelectListItem { Text = "O+", Value = "O+" }, new SelectListItem { Text = "O-", Value = "O-" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.hemoclasificacion)
                                 </div>
 
@@ -165,13 +174,13 @@
 
 
 
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-sm-2 control-label">Teléfono procedencia</label>
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(model => model.HojaVida.num_telefono, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.num_telefono)
                                 </div>
-                                <label class="col-sm-2 control-label">Celular</label>
+                                <label class="col-sm-2 control-label ">Celular</label>
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(model => model.HojaVida.num_celular, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.num_celular)
@@ -181,21 +190,23 @@
 
 
 
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-sm-2 control-label">Estado civil</label>
-                                <div class="col-sm-4">                               
-                                    @Html.TextBoxFor(model => model.HojaVida.estado_civil, new { @class = "form-control", @readonly = "readonly" })
-                                @Html.ValidationMessageFor(model => model.HojaVida.estado_civil)
+                                <div class="col-sm-4">
+                                    @Html.DropDownList("HojaVida.estado_civil", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "Soltero/a", Value = "Soltero/a" }, new SelectListItem { Text = "Casado/a", Value = "Casado/a" }, new SelectListItem { Text = "Divorciado/a", Value = "Divorciado/a" }, new SelectListItem { Text = "Viudo/a", Value = "Viudo/a" }, new SelectListItem { Text = "Unión Libre", Value = "Unión Libre" } }, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.HojaVida.estado_civil)
 
 
 
                                 </div>
                                 <label class="col-sm-2 control-label">n.º Hijos</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.HojaVida.hijos, new { @class = "form-control", @readonly = "readonly" })
-                                    @Html.ValidationMessageFor(model => model.HojaVida.hijos)
+                                    @Html.DropDownList("HojaVida.hijos", new List<SelectListItem>() { new SelectListItem { Text = "0", Value = "0" }, new SelectListItem { Text = "1", Value = "1" }, new SelectListItem { Text = "2", Value = "2" }, new SelectListItem { Text = "3", Value = "3" }, new SelectListItem { Text = "4", Value = "4" } }, new { @class = "form-control", @readonly = "readonly" })
                                 </div>
                             </div>
+
+
+
 
 
                             <div class="form-group">
@@ -204,29 +215,29 @@
 
                                 @if (ViewBag.estado)
                                 {
-                                    <button type="submit" class="alert-info">Datos Actualizados</button>
+                                    <button type="submit" class="alert-info" disabled="true">Datos Actualizados</button>
 
                                 }
 
                                 else
                                 {
-                                    <button type="submit" class="alert-danger">Solicitar Actualizacion</button>
+                                    <button type="submit" class="alert-danger" >Solicitar Actualizacion</button>
 
 
                                 }
 
                             </div>
-                                @*<div class="form-group">
-                                    <label class="col-sm-2 control-label">Vacunas </label>
-
-                                    @if (ViewBag.estadoV)
-                                    {
-                                        <button type="submit" class="alert-info">Vacunas Actualizadas</button>
-
-                                    }
 
 
-                                </div>*@
+
+
+
+
+
+
+
+
+
 
 
 
@@ -240,7 +251,7 @@
 
                                     @Html.HiddenFor(model => model.estudianteId)
                                     @Html.HiddenFor(model => model.hojaVidaId)
-                                 
+
                                     @Html.HiddenFor(model => model.programaId)
                                     @Html.HiddenFor(model => model.clave)
                                     @Html.HiddenFor(model => model.modalidad)
@@ -250,7 +261,13 @@
                                     @Html.HiddenFor(model => model.estado_academico)
 
 
+                                </div>
+                            </div>
 
+
+
+                            <div class="form-group">
+                                <div class="col-sm-4">
 
 
                                 </div>
@@ -258,12 +275,9 @@
 
 
 
-
-
                     </div>
 
-                </div><!-- /.row -->
-
+                </div><!-- /.row --> <!-- /. <div class="col-sm-8"info familia>row -->
 
                 <legend>Datos de contacto en caso de emergencia:</legend>
 
@@ -278,7 +292,7 @@
 
 
 
-                            <div class="form-group">
+                            <div class="form-group required">
                                 <label class="col-sm-2 control-label">Nombre</label>
 
                                 <div class="col-sm-4">
@@ -312,7 +326,7 @@
                             </div>
 
 
-                            <div class="form-group">
+                            <div class="form-group required">
 
                                 <label class="col-sm-2 control-label">Dirección</label>
 
@@ -334,6 +348,282 @@
                     </div><!-- /. <div class="row""info familia>row -->
 
                 </div><!-- /. <div class="col-sm-8"info familia>row -->
+
+
+
+                <legend>Cargar documentos (jpg,png)</legend>
+
+                <div class="col-sm-3">
+
+                </div>
+
+
+                <div class="col-sm-8">
+                    <div class="row">
+
+
+
+
+
+
+
+
+
+
+                        <div class="form-group">
+
+
+                            <table class="tableDocumentos table-condensed table-striped">
+
+                                <tr>
+                                    <th>Tipo documento</th>
+                                    <th></th>
+                                    <th>Archivo</th>
+                                    <th></th>
+                                    <th>Obligatorio</th>
+                                </tr>
+
+                                <tr>
+                                    <td class="tdDocumentos">Documento de identidad</td>
+
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                    </td>
+                                    <td>
+
+
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen1 })'>
+                                            <img src=@ViewBag.imagen1 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen1a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+
+
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="tdDocumentos">Carné Liberty Seguros</td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen2 })'>
+                                            <img src=@ViewBag.imagen2 class="img-rounded" height="75" width="75" />
+                                        </a>
+
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen2a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+
+                                </tr>
+                                <tr>
+                                    <td class="tdDocumentos">Carné estudiantil</td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen3 })'>
+                                            <img src=@ViewBag.imagen3 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen3a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+                                <tr>
+
+                                    <td class="tdDocumentos">Certificado EPS</td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen4 })'>
+                                            <img src=@ViewBag.imagen4 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen4a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="tdDocumentos">Carné vacunación 1</td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen5 })'>
+                                            <img src=@ViewBag.imagen5 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen5a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdDocumentos">Carné vacunación 2</td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen6 })'>
+                                            <img src=@ViewBag.imagen6 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen6a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>No</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdDocumentos">Anticuerpos contra varicela </td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen7 })'>
+                                            <img src=@ViewBag.imagen7 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen7a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen8 })'>
+                                            <img src=@ViewBag.imagen8 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen8a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+
+
+
+
+                                <tr>
+                                    <td class="tdDocumentos">Influenza </td>
+                                    <td>
+                                        <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                    </td>
+                                    <td>
+                                        <a href='@Url.Action("Soporte", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen9 })'>
+                                            <img src=@ViewBag.imagen9 class="img-rounded" height="75" width="75" />
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                        @Html.ActionLink(" ", "DeleteImage", new { id = @Model.estudianteId, imagen = @ViewBag.imagen9a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                    </td>
+                                    <td align="center"><strong>Si</strong></td>
+                                </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            </table>
+
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div><!-- /. <div class="row""info familia>row -->
+
+                </div><!-- /. <div class="col-sm-8"info familia>row -->
+
+
+
+
+
             </fieldset>
         </div>
     </div>
@@ -343,185 +633,11 @@
 
 
 
-@using (Html.BeginForm("PersonalesDS", "Estudiante", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.estudianteId)
-    @Html.HiddenFor(model => model.hojaVidaId)
-
-
-    <div class="container">
-
-
-        <div class="row">
-
-            <fieldset>
-                <legend>Cargar documentos (jpg,png)</legend>
-                <div class="col-sm-3">
-
-                </div>
-
-                <div class="col-sm-8">
-                    <div class="row">
-                        <fdorm class="form-horizontal" role="form">
-
-
-
-                            <div class="form-group">
-
-                                <br>
-                                <table class="tableDocumentos table-condensed table-striped">
-
-                                    <tr>
-                                        <th>Tipo documento</th>
-                                        <th></th>
-                                        <th>Archivo</th>
-                                        <th>Obligatorio</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="tdDocumentos">Documento de identidad</td>
-
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen1 })'>
-                                                <img src=@ViewBag.imagen1 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>Si</strong></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="tdDocumentos">Carné Liberty Seguros</td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen2 })'>
-                                                <img src=@ViewBag.imagen2 class="img-rounded" height="75" width="75" />
-                                            </a>
-
-                                        </td>
-                                        <td align="center"><strong>Si</strong></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td class="tdDocumentos">Carné estudiantil</td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen3 })'>
-                                                <img src=@ViewBag.imagen3 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>Si</strong></td>
-                                    </tr>
-                                    <tr>
-
-                                        <td class="tdDocumentos">Carné EPS</td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen4 })'>
-                                                <img src=@ViewBag.imagen4 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>Si</strong></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="tdDocumentos">Carné vacunación 1</td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen5 })'>
-                                                <img src=@ViewBag.imagen5 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>Si</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tdDocumentos">Carné vacunación 2</td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen6 })'>
-                                                <img src=@ViewBag.imagen6 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>No</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tdDocumentos">Anticuerpos contra varicela </td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen7 })'>
-                                                <img src=@ViewBag.imagen7 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>No</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
-                                        <td>
-                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
-
-                                        </td>
-                                        <td>
-                                            <a href='@Url.Action("SoporteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen8 })'>
-                                                <img src=@ViewBag.imagen8 class="img-rounded" height="75" width="75" />
-                                            </a>
-                                        </td>
-                                        <td align="center"><strong>No</strong></td>
-                                    </tr>
-
-
-                                </table>
-
-                            </div>
-
-
-
-
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-10">
-                                    <div class="pull-right">
-                                        @if (!User.IsInRole("Departamento"))
-                                        {
-                                            @Html.ActionLink("Regresar ", "Buscar", new { }, new { @class = "btn btn-default" })
-                                            <button type="submit" class="btn btn-primary">Guardar</button>
-                                        }
-
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </fdorm>
-
-                    </div><!-- /.row -->
-                </div>
-        </div><!-- /.row -->
-    </div>
 
 
 
 
 
-}
 
 
 

@@ -46,3 +46,35 @@ select count(*) from RotacionEstudiantes
 
 
 select * from RotacionEstudiantes where rotacionid =98
+
+
+
+
+select *
+FROM RotacionEstudiantes
+LEFT OUTER JOIN (
+   SELECT MIN(rotacionestudianteId) as rotacionestudianteId,estudianteId, rotacionid 
+   FROM RotacionEstudiantes
+   GROUP BY estudianteId, rotacionid 
+) as KeepRows ON
+   RotacionEstudiantes.rotacionestudianteId = KeepRows.rotacionestudianteId
+WHERE
+   KeepRows.rotacionestudianteId IS NULL
+
+
+
+
+select *
+FROM Docentes
+LEFT OUTER JOIN (
+   SELECT MIN(docenteid) as docenteid, num_documento 
+   FROM Docentes
+   GROUP BY num_documento 
+) as KeepRows ON
+   Docentes.docenteid = KeepRows.docenteid
+WHERE
+   KeepRows.docenteid IS NULL
+
+
+
+
