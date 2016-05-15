@@ -137,7 +137,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:56</publishTime>
     </File>
     <File Include="bin/MvcApplication2.dll">
-      <publishTime>05/01/2016 23:06:57</publishTime>
+      <publishTime>05/13/2016 12:24:11</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>12/12/2015 17:21:58</publishTime>
@@ -2270,7 +2270,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Estudiante/Index.cshtml">
-      <publishTime>12/12/2015 17:21:44</publishTime>
+      <publishTime>05/11/2016 19:14:36</publishTime>
     </File>
     <File Include="Views/Estudiante/Login.cshtml">
       <publishTime>02/27/2016 16:40:54</publishTime>
@@ -2600,7 +2600,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>04/28/2016 20:50:23</publishTime>
     </File>
     <File Include="Views/RotacionEstudiante/Index.cshtml">
-      <publishTime>03/21/2016 09:48:59</publishTime>
+      <publishTime>05/03/2016 22:38:27</publishTime>
     </File>
     <File Include="Views/Servicio/Create.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>

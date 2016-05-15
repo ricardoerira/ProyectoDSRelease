@@ -459,6 +459,8 @@ namespace MvcApplication2.Controllers
 
 
                 }
+                db.SaveChanges();
+
                 ViewBag.estado = estudianteAux.HojaVida.estado_HV;
                 db.Entry(estudianteAux).State = EntityState.Modified;
                 return true;
@@ -500,7 +502,11 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-            var estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa);
+            List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).ToList();
+            foreach(Estudiante estudiante  in estudiantes)
+            {
+                validarCampos(estudiante, false);
+            }
             return View(estudiantes.ToList());
         }
         public ActionResult RotacionEstudiante(string searchString, int id = 0)
@@ -1537,7 +1543,7 @@ namespace MvcApplication2.Controllers
             int numFiles = Request.Files.Count;
 
 
-            for (int i = 0; i < Constantes.documentos_estudiante.Length; i++)
+            for (int i = 0; i < Constantes.documentos_estudiante.Length-1; i++)
             {
                 string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[i] + estudiante.codigo, ".jpg");
 
