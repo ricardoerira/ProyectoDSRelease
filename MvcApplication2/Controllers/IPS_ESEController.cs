@@ -282,11 +282,8 @@ namespace MvcApplication2.Controllers
             lista = lista.OrderBy(x => x.nombre)
            .ToList();
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
-
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
-
             ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r=>r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
-
 
             return View();
         }
