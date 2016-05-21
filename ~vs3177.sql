@@ -1,0 +1,6 @@
+﻿insert into rotacionestudiantedetalles (rotacionEstudianteId,IPS_ESEId,horario,servicio,fecha_inicio,fecha_terminacion)
+select 
+RotacionEstudiante.rotacionestudianteid, RotacionEstudiante.IPS_ESEId,RotacionEstudiante.horario,Rotacion.servicio,Rotacion.fecha_inicio,
+Rotacion.fecha_terminacion
+from Rotacions Rotacion,RotacionEstudiantes RotacionEstudiante
+where  RotacionEstudiante.rotacionId=Rotacion.rotacionId

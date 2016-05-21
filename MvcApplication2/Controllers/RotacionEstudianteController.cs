@@ -155,6 +155,48 @@ namespace MvcApplication2.Controllers
             return View(rotacionestudiante);
         }
 
+         public ActionResult EditDetalle(int id = 0)
+         {
+            RotacionEstudiante rotacionestudiante = db.RotacionEstudiantes.Find(id);
+            if (rotacionestudiante == null)
+            {
+                return HttpNotFound();
+            }
+            List<RotacionEstudianteDetalle> rotacionDetalles = db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == id).ToList();
+            ViewBag.rotacionEstudianteId = id;
+            List<IPS_ESE> ips = db.IPS_ESE.ToList();
+            ViewBag.IPS_ESEId = new SelectList(ips, "IPS_ESEId", "nombre", rotacionestudiante.IPS_ESEId);
+            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "grupo", rotacionestudiante.rotacionId);
+
+            return View(rotacionDetalles);
+
+         }
+          [HttpPost]
+        [ValidateAntiForgeryToken]
+         public ActionResult EditDetalle(RotacionEstudianteDetalle rotacionEstudianteDetalle, FormCollection value, int id)
+        {
+
+
+            List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionEstudianteDetalle.RotacionEstudiante.Rotacion.rotacionId).Include(r => r.Rotacion).ToList();
+            foreach (RotacionEstudiante item in rotacionestudiantes)
+            {
+                if (item.estadoSeleccionado)
+                {
+                    rotacionEstudianteDetalle.rotacionEstudianteId = item.rotacionEstudianteId;
+                    rotacionEstudianteDetalle.horario = value["horario"];
+                    rotacionEstudianteDetalle.servicio = value["servicio"];
+                    db.RotacionEstudianteDetalle.Add(rotacionEstudianteDetalle);
+                    db.SaveChanges();
+                }
+
+            }
+
+
+            return RedirectToAction("EditDetalle/" + rotacionEstudianteDetalle.rotacionEstudianteId);
+
+              
+          
+          }
 
         public ActionResult EditDocente(int id)
         {
