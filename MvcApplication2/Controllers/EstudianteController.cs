@@ -604,34 +604,18 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("nombre_acudiente", estudiante.HojaVida.Familia.primer_nombre_acudiente + " " + estudiante.HojaVida.Familia.primer_apellido_acudiente + " " + estudiante.HojaVida.Familia.segundo_apellido_acudiente);
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
             rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
+            
+            for (int i = 0; i < Constantes.documentos_estudiante.Length; i++)
+            {
+                string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/" + Constantes.documentos_estudiante[i], +estudiante.codigo, ".jpg");
+                rptH.SetParameterValue(Constantes.documentos_estudiante[i], path1);
 
 
-            string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/doc_identidad", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("docIdentidad", path1);
 
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_LS", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_LS", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_estudiantil", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_estudiantil", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_EPS", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_EPS", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV1", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("EV1", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV2", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("CV2", path1);
+            }
 
 
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_varicela", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("ant_varicela", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_hepatitisB", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("ant_hepatitisB", path1);
-
-
+           
 
             Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 

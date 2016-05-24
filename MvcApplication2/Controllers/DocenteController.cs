@@ -106,9 +106,23 @@ namespace MvcApplication2.Controllers
             rptH2.SetParameterValue("ARL", docente.HojaVida.ARL + "");
 
 
+            for (int i = 0; i < Constantes.documentos_docente.Length; i++)
+            {
+                string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/" + Constantes.documentos_docente[i], docente.num_documento, ".jpg");
+                rptH2.SetParameterValue(Constantes.documentos_docente[i], path1);
 
+            }
+            Stream stream=null;
+            try
+            {
+                 stream = rptH2.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
 
-            Stream stream = rptH2.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("");
+
+            }
 
             return File(stream, "application/pdf");
 
@@ -565,7 +579,7 @@ namespace MvcApplication2.Controllers
                 docente.num_libreta_militar = "NO APLICA";
             }
             validarCampos(docente);
-         
+
             cargaDocumentos(docente);
             return View(docente);
 
@@ -575,18 +589,17 @@ namespace MvcApplication2.Controllers
 
         public ActionResult cargaDocumentos(Docente docente)
         {
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
-            string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[0] + docente.num_documento, ".jpg");
+            string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[0] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[0] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[0] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen1 = path1;
-                ViewBag.imagen1a = documentos[0] + docente.num_documento + ".jpg";
+                ViewBag.imagen1a = Constantes.documentos_docente[0] + docente.num_documento + ".jpg";
 
 
 
@@ -600,15 +613,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[1] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[1] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[1] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen2 = path1;
-                ViewBag.imagen2a = documentos[1] + docente.num_documento + ".jpg";
+                ViewBag.imagen2a = Constantes.documentos_docente[1] + docente.num_documento + ".jpg";
 
             }
             else
@@ -618,15 +631,15 @@ namespace MvcApplication2.Controllers
             }
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[2] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[2] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[2] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen3 = path1;
-                ViewBag.imagen3a = documentos[2] + docente.num_documento + ".jpg";
+                ViewBag.imagen3a = Constantes.documentos_docente[2] + docente.num_documento + ".jpg";
 
             }
             else
@@ -637,15 +650,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[3] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[3] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[3] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen4 = path1;
-                ViewBag.imagen4a = documentos[3] + docente.num_documento + ".jpg";
+                ViewBag.imagen4a = Constantes.documentos_docente[3] + docente.num_documento + ".jpg";
 
             }
             else
@@ -657,15 +670,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[4] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[4] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[4] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen5 = path1;
-                ViewBag.imagen5a = documentos[4] + docente.num_documento + ".jpg";
+                ViewBag.imagen5a = Constantes.documentos_docente[4] + docente.num_documento + ".jpg";
 
             }
             else
@@ -676,15 +689,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[5] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[5] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[5] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[5] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen6 = path1;
-                ViewBag.imagen6a = documentos[5] + docente.num_documento + ".jpg";
+                ViewBag.imagen6a = Constantes.documentos_docente[5] + docente.num_documento + ".jpg";
 
             }
             else
@@ -695,15 +708,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[6] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[6] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[6] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[6] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen7 = path1;
-                ViewBag.imagen7a = documentos[6] + docente.num_documento + ".jpg";
+                ViewBag.imagen7a = Constantes.documentos_docente[6] + docente.num_documento + ".jpg";
 
             }
             else
@@ -714,15 +727,15 @@ namespace MvcApplication2.Controllers
 
 
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[7] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[7] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[7] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[7] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen8 = path1;
-                ViewBag.imagen8a = documentos[7] + docente.num_documento + ".jpg";
+                ViewBag.imagen8a = Constantes.documentos_docente[7] + docente.num_documento + ".jpg";
 
             }
             else
@@ -731,15 +744,15 @@ namespace MvcApplication2.Controllers
 
             }
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[8] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[8] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[8] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[8] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen9 = path1;
-                ViewBag.imagen9a = documentos[8] + docente.num_documento + ".jpg";
+                ViewBag.imagen9a = Constantes.documentos_docente[8] + docente.num_documento + ".jpg";
 
             }
             else
@@ -748,15 +761,15 @@ namespace MvcApplication2.Controllers
 
             }
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[9] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[9] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[9] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[9] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen10 = path1;
-                ViewBag.imagen10a = documentos[9] + docente.num_documento + ".jpg";
+                ViewBag.imagen10a = Constantes.documentos_docente[9] + docente.num_documento + ".jpg";
 
             }
             else
@@ -765,15 +778,31 @@ namespace MvcApplication2.Controllers
 
             }
 
-            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[10] + docente.num_documento, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[10] + docente.num_documento, ".jpg");
 
             if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[10] + docente.num_documento, ".jpg");
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[10] + docente.num_documento, ".jpg");
 
                 ViewBag.imagen11 = path1;
-                ViewBag.imagen11a = documentos[10] + docente.num_documento + ".jpg";
+                ViewBag.imagen11a = Constantes.documentos_docente[10] + docente.num_documento + ".jpg";
+
+            }
+            else
+            {
+                ViewBag.imagen11 = Constantes.url_noimage;
+
+            }
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[11] + docente.num_documento, ".jpg");
+
+            if (Utilidades.remoteFileExists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[11] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen11 = path1;
+                ViewBag.imagen11a = Constantes.documentos_docente[11] + docente.num_documento + ".jpg";
 
             }
             else
@@ -783,7 +812,22 @@ namespace MvcApplication2.Controllers
             }
 
 
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[12] + docente.num_documento, ".jpg");
 
+            if (Utilidades.remoteFileExists(path1))
+            {
+
+                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", Constantes.documentos_docente[12] + docente.num_documento, ".jpg");
+
+                ViewBag.imagen11 = path1;
+                ViewBag.imagen11a = Constantes.documentos_docente[12] + docente.num_documento + ".jpg";
+
+            }
+            else
+            {
+                ViewBag.imagen11 = Constantes.url_noimage;
+
+            }
 
 
             return View(docente);
@@ -830,8 +874,6 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
-
 
 
             ViewBag.imagen1 = imagen;
@@ -852,7 +894,6 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
 
 
@@ -998,7 +1039,7 @@ namespace MvcApplication2.Controllers
             }
             return RedirectToAction("../Docente/PersonalesDS/" + docente.docenteId);
         }
-           
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1162,8 +1203,8 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_celular = docente.HojaVida.num_celular;
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
-               
-           
+
+
 
                 docente1.tipo_vinculacion = docente.tipo_vinculacion;
                 docente1.categoria_escalafon_docente = docente.categoria_escalafon_docente;
@@ -1188,19 +1229,19 @@ namespace MvcApplication2.Controllers
 
                 docente.HojaVida = null;
                 db.Entry(docente1).State = EntityState.Modified;
-               
-               
+
+
                 db.SaveChanges();
                 guardaDocumentos(docente);
 
                 validarCampos(docente1);
 
-                      
+
                 cargaDocumentos(docente1);
 
 
                 return RedirectToAction("../Docente/Personales/" + docente1.docenteId);
-            
+
             }
             else
             {
@@ -1222,7 +1263,7 @@ namespace MvcApplication2.Controllers
 
 
                 int uploadedCount = 0;
-                string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
+
                 for (int i = 0; i < numFiles; i++)
                 {
                     HttpPostedFileBase file = Request.Files[i];
@@ -1232,7 +1273,7 @@ namespace MvcApplication2.Controllers
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
                         file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + docente.num_documento, ".jpg");
+                        string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), Constantes.documentos_docente[i] + docente.num_documento, ".jpg");
                         if (Utilidades.remoteFileExists(path1))
                             System.IO.File.Delete(path1);
 
@@ -1258,7 +1299,7 @@ namespace MvcApplication2.Controllers
                 (hv.estado_civil != "Sin Asignar") && (f.primer_nombre_acudiente != null) &&
                 (f.primer_apellido_acudiente != null) && (f.direccion_acudiente != null) &&
                 (f.celular_acudiente != 0) && (d.tipo_vinculacion != "Sin Asignar") &&
-                (d.dedicacion != null) && (d.categoria_escalafon_docente != "Sin Asignar") )
+                (d.dedicacion != null) && (d.categoria_escalafon_docente != "Sin Asignar"))
             {
                 Docente estudianteAux = db.Docentes.Find(d.docenteId);
 
@@ -1281,7 +1322,7 @@ namespace MvcApplication2.Controllers
             }
             else
             {
-                Estudiante estudianteAux = db.Estudiantes.Find(d.docenteId);
+                Docente estudianteAux = db.Docentes.Find(d.docenteId);
                 estudianteAux.HojaVida.estado_HV = false;
                 ViewBag.estado = estudianteAux.HojaVida.estado_HV;
                 estudianteAux.HojaVida.municipio_procedencia = ".";
@@ -1312,17 +1353,16 @@ namespace MvcApplication2.Controllers
                 return false;
             }
         }
-           public Boolean validaDocumentos(Docente docente)//
+        public Boolean validaDocumentos(Docente docente)//
         {
             Boolean estado = true;
             int uploadedCount = 0;
             int numFiles = Request.Files.Count;
 
-            string[] documentos = { "doc_identidad", "acta_grado", "dip_prof", "acta_grado_post", "dip_espe", "tpd", "tpn", "cv1", "cv2", "ant_varicela", "ant_hp" };
 
-            for (int i = 0; i < documentos.Length; i++)
+            for (int i = 0; i < Constantes.documentos_docente.Length; i++)
             {
-                string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[i] + docente.num_documento, ".jpg");
+                string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_docente[i] + docente.num_documento, ".jpg");
 
 
 
@@ -1339,7 +1379,7 @@ namespace MvcApplication2.Controllers
             return estado;
 
         }
-    
+
         public ActionResult EstadoHVdepto(string num_documento, string departamentoSaludId, string estado_HV)
         {
             int did = 0;
@@ -1434,4 +1474,3 @@ namespace MvcApplication2.Controllers
     }
 }
 
-     
