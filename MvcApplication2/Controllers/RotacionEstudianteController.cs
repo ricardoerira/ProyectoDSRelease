@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MvcApplication2.Models;
+using MoreLinq;
 
 namespace MvcApplication2.Controllers
 {
@@ -71,7 +72,7 @@ namespace MvcApplication2.Controllers
                 }
                 else if (Request.Form["submitButton2"] != null)
                 {
-                    return RedirectToAction("Edit/" + rotacionestudiantes.ElementAt(0).rotacionEstudianteId);
+                    return RedirectToAction("EditDetalle/" + rotacionestudiantes.ElementAt(0).rotacionEstudianteId);
                 }
               
             }
@@ -162,16 +163,73 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            List<RotacionEstudianteDetalle> rotacionDetalles = db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == id).ToList();
+            ViewBag.rotacionid = rotacionestudiante.rotacionId;
+            List<RotacionEstudianteDetalle> rotacionDetalles = new List<RotacionEstudianteDetalle>();
+
+            List<RotacionEstudiante> rotacionEstudianteAux = db.RotacionEstudiantes.Where(r => r.rotacionId == rotacionestudiante.rotacionId).Where(r => r.estadoSeleccionado).ToList();
+            foreach (RotacionEstudiante rotacionEstudiante in rotacionEstudianteAux)
+            {
+                rotacionDetalles.AddRange(db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == rotacionEstudiante.rotacionEstudianteId).ToList());
+            }
+           
+
             ViewBag.rotacionEstudianteId = id;
             List<IPS_ESE> ips = db.IPS_ESE.ToList();
             ViewBag.IPS_ESEId = new SelectList(ips, "IPS_ESEId", "nombre", rotacionestudiante.IPS_ESEId);
-            ViewBag.rotacionId = new SelectList(db.Rotacions, "rotacionId", "grupo", rotacionestudiante.rotacionId);
+            if (rotacionDetalles.Count() == 0)
+            {
+                RotacionEstudianteDetalle rotacionDetalle = new RotacionEstudianteDetalle();
+                rotacionDetalle.horario = "";
+                rotacionDetalle.IPS_ESEId=1;
+                rotacionDetalle.servicio="";
+                rotacionDetalle.rotacionEstudianteId=id;
+                rotacionDetalle.RotacionEstudiante = rotacionestudiante;
+                rotacionDetalle.rotacionEstudianteDetalleId=22222;
+                rotacionDetalle.fecha_inicio = DateTime.Now.Date;
+                rotacionDetalle.fecha_terminacion = DateTime.Now.Date;
+                rotacionDetalles.Add(rotacionDetalle);
 
-            return View(rotacionDetalles);
+            }
+            return View(rotacionDetalles.DistinctBy(r => r.IPS_ESEId));
 
          }
-          [HttpPost]
+         public ActionResult EditDocente(int id)
+         {
+
+             RotacionEstudiante rotacionestudiante = db.RotacionEstudiantes.Find(id);
+             List<RotacionDocente> rotacionDocentes = new List<RotacionDocente>();
+             List<RotacionEstudiante> rotacionEstudianteAux = db.RotacionEstudiantes.Where(r => r.rotacionId == rotacionestudiante.rotacionId).Where(r => r.estadoSeleccionado).ToList();
+             foreach(RotacionEstudiante rotacionEstudiante in rotacionEstudianteAux)
+             {
+                 rotacionDocentes.AddRange(db.RotacionDocentes.Where(r=>r.rotacionEstudianteId==rotacionEstudiante.rotacionEstudianteId).ToList());
+             }
+             List<Docente> docentes = db.Docentes.Include(r => r.HojaVida).ToList();
+             docentes = docentes.OrderBy(x => x.HojaVida.primer_nombre)
+           .ToList();
+             if (rotacionestudiante == null)
+             {
+                 return HttpNotFound();
+             }
+             ViewBag.rotacionEstudianteId = rotacionestudiante.rotacionEstudianteId;
+             ViewBag.rotacionid = rotacionestudiante.rotacionId;
+
+             ViewBag.docenteId = new SelectList(docentes, "docenteId", "HojaVida.primer_nombre", docentes.ElementAt(0).docenteId);
+             if (rotacionDocentes.Count() == 0)
+             {
+                 RotacionDocente rotacionDocente = new RotacionDocente();
+                 rotacionDocente.rotacionEstudianteId = rotacionestudiante.rotacionEstudianteId;
+                 rotacionDocente.docenteId = 590;
+                 rotacionDocente.nombre = "Sin asignar";
+                 rotacionDocente.RotacionDocenteId = 22222;
+                 rotacionDocente.Rotacion = rotacionestudiante;
+                 rotacionDocentes.Add(rotacionDocente);
+             }
+
+             return View(rotacionDocentes);
+         }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
          public ActionResult EditDetalle(RotacionEstudianteDetalle rotacionEstudianteDetalle, FormCollection value, int id)
         {
@@ -182,10 +240,22 @@ namespace MvcApplication2.Controllers
             {
                 if (item.estadoSeleccionado)
                 {
-                    rotacionEstudianteDetalle.rotacionEstudianteId = item.rotacionEstudianteId;
-                    rotacionEstudianteDetalle.horario = value["horario"];
-                    rotacionEstudianteDetalle.servicio = value["servicio"];
-                    db.RotacionEstudianteDetalle.Add(rotacionEstudianteDetalle);
+                   
+                   RotacionEstudianteDetalle rotacionEstudianteDet = new RotacionEstudianteDetalle();
+                   rotacionEstudianteDet.fecha_inicio = rotacionEstudianteDetalle.fecha_inicio;
+                   rotacionEstudianteDet.fecha_terminacion = rotacionEstudianteDetalle.fecha_terminacion;
+                    rotacionEstudianteDet.rotacionEstudianteId = item.rotacionEstudianteId;
+                   rotacionEstudianteDet.horario = value["horario"];
+                   rotacionEstudianteDet.servicio = value["servicio"];
+                   rotacionEstudianteDet.IPS_ESEId = rotacionEstudianteDetalle.IPS_ESEId;
+                   db.RotacionEstudianteDetalle.Add(rotacionEstudianteDet);
+                   List<RotacionDocente> rotacionDocentes = db.RotacionDocentes.Where(r => r.rotacionEstudianteId == rotacionEstudianteDetalle.rotacionEstudianteId).ToList();
+                   string docentes = "";
+                    foreach(RotacionDocente rotacionDocente in rotacionDocentes)
+                    {
+                        docentes = docentes  + rotacionDocente.Docente.HojaVida.primer_nombre + " \n";
+                    }
+                    rotacionEstudianteDet.docentes = docentes;
                     db.SaveChanges();
                 }
 
@@ -198,46 +268,17 @@ namespace MvcApplication2.Controllers
           
           }
 
-        public ActionResult EditDocente(int id)
-        {
-
-            RotacionEstudiante rotacionestudiante = db.RotacionEstudiantes.Find(id);
-            List<RotacionDocente> rotacionDocentes = db.RotacionDocentes.Where(r => r.rotacionEstudianteId == rotacionestudiante.rotacionEstudianteId).ToList();
-            List<Docente> docentes = db.Docentes.Include(r => r.HojaVida).ToList();
-            docentes = docentes.OrderBy(x => x.HojaVida.primer_nombre)
-          .ToList();
-            if (rotacionestudiante == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.rotacionEstudianteId = rotacionestudiante.rotacionEstudianteId;
-            ViewBag.rotacionid = rotacionestudiante.rotacionId;
-            
-            ViewBag.docenteId = new SelectList(docentes, "docenteId", "HojaVida.primer_nombre", docentes.ElementAt(0).docenteId);
-            if(rotacionDocentes.Count()==0)
-            {
-                RotacionDocente rotacionDocente= new RotacionDocente();
-                rotacionDocente.rotacionEstudianteId=rotacionestudiante.rotacionEstudianteId;
-                rotacionDocente.docenteId=590;
-                rotacionDocente.nombre="Sin asignar";
-                rotacionDocente.RotacionDocenteId=22222;
-                rotacionDocente.Rotacion =rotacionestudiante;
-                rotacionDocentes.Add(rotacionDocente);
-            }
-               
-            return View(rotacionDocentes.ToList());
-        }
+       
     
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditDocente(RotacionDocente rotacionDocente, FormCollection value, int id)
         {
 
-                List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDocente.Rotacion.rotacionId).Include(r => r.Rotacion).ToList();
+                List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDocente.Rotacion.rotacionId).Include(r => r.Rotacion).Where(r=>r.estadoSeleccionado==true).ToList();
                 foreach (RotacionEstudiante item in rotacionestudiantes)
                 {
-                    if (item.estadoSeleccionado)
-                    {
+                   
                         rotacionDocente.rotacionEstudianteId = item.rotacionEstudianteId;
                         rotacionDocente.Rotacion= null;
                         int docenteId = Int32.Parse(value["docenteId"]);
@@ -246,11 +287,12 @@ namespace MvcApplication2.Controllers
                         
                         Docente docente = db.Docentes.Find(docenteId);
                         rotacionDocente.nombre = docente.HojaVida.primer_nombre;
-                       
 
+                        List<RotacionEstudianteDetalle> rotacionestudiantedetalle = db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == item.rotacionEstudianteId).ToList();
+                      
                         db.RotacionDocentes.Add(rotacionDocente);
                         db.SaveChanges();
-                    }
+                        actualizaDocentesDetalles(item.rotacionEstudianteId);
 
                 }
 
@@ -308,12 +350,11 @@ namespace MvcApplication2.Controllers
             {
                 return HttpNotFound();
             }
-            List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDocente.Rotacion.rotacionId).Include(r => r.Rotacion).ToList();
+            List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDocente.Rotacion.rotacionId).Where(r=>r.estadoSeleccionado==true).Include(r => r.Rotacion).ToList();
 
             foreach (RotacionEstudiante item in rotacionestudiantes)
             {
-                if (item.estadoSeleccionado)
-                {
+               
                     List<RotacionDocente> rd = db.RotacionDocentes.Where(r => r.rotacionEstudianteId == item.rotacionEstudianteId).Where(r => r.docenteId == rotacionDocente.docenteId).ToList();
                  if(rd.Count>0)
                  {
@@ -321,13 +362,63 @@ namespace MvcApplication2.Controllers
                      db.RotacionDocentes.Remove(rotacionDocenteAux);
                      db.SaveChanges();
                  }
-                    
 
-                }
+
+
+                 actualizaDocentesDetalles(item.rotacionEstudianteId);
+                
             }
                       
           
             return RedirectToAction("EditDocente/" + rotacionDocente.rotacionEstudianteId);
+
+        }
+
+        public void actualizaDocentesDetalles(int rotacionEstudianteId)
+        {
+            string docentes = "";
+              foreach(RotacionDocente rotacionDocente in db.RotacionDocentes.Where(r=>r.rotacionEstudianteId==rotacionEstudianteId))
+                {
+
+                    docentes = docentes + rotacionDocente.nombre + " \n";
+                }
+               
+            List<RotacionEstudianteDetalle> rotacionestudiantedetalle = db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == rotacionEstudianteId).ToList();
+            foreach (RotacionEstudianteDetalle rotacionestdetalle in rotacionestudiantedetalle)
+            {
+
+                rotacionestdetalle.docentes = docentes.TrimStart();
+                db.Entry(rotacionestdetalle).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+        public ActionResult DeleteDetalle(int id = 0)
+        {
+            RotacionEstudianteDetalle rotacionDetalle = db.RotacionEstudianteDetalle.Find(id);
+            if (rotacionDetalle == null)
+            {
+                return HttpNotFound();
+            }
+            List<RotacionEstudiante> rotacionestudiantes = db.RotacionEstudiantes.Where(r => r.Rotacion.rotacionId == rotacionDetalle.RotacionEstudiante.Rotacion.rotacionId).Include(r => r.Rotacion).ToList();
+
+            foreach (RotacionEstudiante item in rotacionestudiantes)
+            {
+                if (item.estadoSeleccionado)
+                {
+                    List<RotacionEstudianteDetalle> rd = db.RotacionEstudianteDetalle.Where(r => r.rotacionEstudianteId == item.rotacionEstudianteId).Where(r => r.horario == rotacionDetalle.horario).Where(r=>r.IPS_ESEId==rotacionDetalle.IPS_ESEId).ToList();
+                    if (rd.Count > 0)
+                    {
+                        RotacionEstudianteDetalle rotacionDocenteAux = rd.ElementAt(0);
+                        db.RotacionEstudianteDetalle.Remove(rotacionDocenteAux);
+                        db.SaveChanges();
+                    }
+
+
+                }
+            }
+
+
+            return RedirectToAction("EditDetalle/" + rotacionDetalle.rotacionEstudianteId);
 
         }
 

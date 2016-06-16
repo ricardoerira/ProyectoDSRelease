@@ -121,10 +121,20 @@
                                     @Html.DisplayFor(modelItem => Model[i].horario)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => Model[i].Rotacion.fecha_inicio)
+                                    @foreach (var itemDetalle in Model[i].rotacionEstudianteDetalles)
+                                    {
+                                        @Html.DisplayFor(modelItem => itemDetalle.fecha_inicio)
+                                        <br>
+    <br>
+                                    }
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => Model[i].Rotacion.fecha_terminacion)
+                                    @foreach (var itemDetalle in Model[i].rotacionEstudianteDetalles)
+                                    {
+                                        @Html.DisplayFor(modelItem => itemDetalle.fecha_terminacion)
+                                        <br>
+    <br>
+                                    }
                                 </td>
                                 <td>
 
@@ -147,7 +157,14 @@
                                     @Html.DisplayFor(modelItem => Model[i].Estudiante.HojaVida.estado_HV)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => Model[i].IPS_ESE.nombre)
+
+                                    @foreach (var itemDetalle in Model[i].rotacionEstudianteDetalles)
+                                    {
+                                        @Html.DisplayFor(modelItem => itemDetalle.IPS_ESE.nombre)
+    <br>    <br>
+                                    <br>
+                                    }
+                             
                                 </td>
 
 

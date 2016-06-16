@@ -18,6 +18,8 @@ namespace MvcApplication2.Models
 
         public string servicio { get; set; }
 
+        public string docentes { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
 

@@ -46,30 +46,6 @@
         @Html.HiddenFor(model => model.ElementAt(0).RotacionEstudiante.Rotacion.rotacionId)
 
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
@@ -113,7 +89,7 @@
                                    
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-gsroup">
                                     <label class="col-md-3 control-label" for="email">Fecha Fin</label>
                                     <div class="col-md-9">
                                         @Html.EditorFor(model => model.ElementAt(0).fecha_terminacion)
@@ -172,9 +148,11 @@
 
         @foreach (var item in Model)
         {
+            if( !item.fecha_terminacion.Equals(DateTime.Now.Date))
+            { 
             <tr>
                 <td>
-                  
+              
                     @Html.DisplayFor(modelItem => item.IPS_ESE.nombre)
                 </td>
                 <td>
@@ -196,16 +174,13 @@
 
                 <td>
 
-                    @Html.ActionLink("Borrar", "Delete", new { id = item.rotacionEstudianteDetalleId })
+                    @Html.ActionLink("Borrar", "DeleteDetalle", new { id = item.rotacionEstudianteDetalleId })
                 </td>
 
-                <td>
-
-                    @Html.ActionLink("Editar", "EditDetalle", new { id = item.rotacionEstudianteDetalleId })
-                </td>
+               
             </tr>
         }
-
+        }
     </table>
 
     </div>

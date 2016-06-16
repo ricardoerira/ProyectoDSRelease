@@ -13,6 +13,7 @@ using System.Net;
 using WebMatrix.WebData;
 using System.Text.RegularExpressions;
 using System.Web.Security;
+using MoreLinq;
 
 namespace MvcApplication2.Controllers
 {
@@ -277,16 +278,17 @@ namespace MvcApplication2.Controllers
         }
         public ActionResult SeleccionRotacionCarta()
         {
-            var municipios = db.IPS_ESE.Include(h => h.Municipio).Include(r=>r.Rotaciones);
+            var municipios = db.IPS_ESE.Include(h => h.Municipio).Include(r => r.Rotaciones);
             List<IPS_ESE> lista = municipios.ToList();
             lista = lista.OrderBy(x => x.nombre)
            .ToList();
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
-            ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r=>r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
+            ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r => r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
 
             return View();
         }
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -300,64 +302,69 @@ namespace MvcApplication2.Controllers
             int departamentoId = Int32.Parse(value["DepartamentoSaludId"]);
             DepartamentoSalud ds = db.DepartamentoSaluds.Find(departamentoId);
             Programa pr = db.Programas.Find(programaId);
-            DateTime date=s.fecha_inicio;
+            DateTime date = s.fecha_inicio;
 
-            DateTime date2=s.fecha_terminacion;
-           
+            DateTime date2 = s.fecha_terminacion;
+
 
             ReportDocument rptH = new ReportDocument();
             string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporte.rpt");
             rptH.Load(strRptPath);
-            List<RotacionEstudiante> re = db.RotacionEstudiantes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.Estudiante.programaId == programaId).Where(r => r.Rotacion.fecha_inicio >= date).Where(r => r.Rotacion.fecha_terminacion <= date2).Where(r => r.Rotacion.ActividadAcademica.DepartamentoSaludId == departamentoId).ToList();
+            List<RotacionEstudianteDetalle> rotacionDetalles = db.RotacionEstudianteDetalle.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.RotacionEstudiante.Estudiante.programaId == programaId).Where(r => r.fecha_inicio >= date).Where(r => r.fecha_terminacion <= date2).Where(r => r.RotacionEstudiante.Rotacion.ActividadAcademica.DepartamentoSaludId == departamentoId).ToList();
             List<Docente> docentes = new List<Docente>();
             List<Estudiante> estudiantes = new List<Estudiante>();
             List<Rotacion> rotaciones = new List<Rotacion>();
             List<ActividadAcademica> acti = new List<ActividadAcademica>();
             List<HojaVida> hojas = new List<HojaVida>();
+
             List<HojaVida> hojas2 = new List<HojaVida>();
-           List<RotacionDocente> rotacionDocentes = new List<RotacionDocente>();
-            foreach (var item in re)
+            List<RotacionDocente> rotacionDocentes = new List<RotacionDocente>();
+            List<RotacionEstudiante> rotacionEstudiantes = new List<RotacionEstudiante>();
+
+
+            foreach (var item in rotacionDetalles.ToList())
             {
-                if (item.Estudiante.HojaVida.estado_HV)
-                  {
-                    rotacionDocentes.AddRange(db.RotacionDocentes.Where(r=>r.rotacionEstudianteId==item.rotacionEstudianteId).ToList());
-          
-                    estudiantes.Add(item.Estudiante);
-                    hojas2.Add(item.Estudiante.HojaVida);
-                    rotaciones.Add(item.Rotacion);
-                    acti.Add(item.Rotacion.ActividadAcademica);
-                  }
+
+                //if (item.RotacionEstudiante.Estudiante.HojaVida.estado_HV)
+                //{
+
+                rotacionDocentes.AddRange(db.RotacionDocentes.Where(r => r.rotacionEstudianteId == item.rotacionEstudianteId).ToList().Distinct());
+                rotacionEstudiantes.AddRange(db.RotacionEstudiantes.Where(r => r.rotacionEstudianteId == item.rotacionEstudianteId).ToList());
+                estudiantes.Add(item.RotacionEstudiante.Estudiante);
+                hojas2.Add(item.RotacionEstudiante.Estudiante.HojaVida);
+                rotaciones.Add(item.RotacionEstudiante.Rotacion);
+                acti.Add(item.RotacionEstudiante.Rotacion.ActividadAcademica);
+                //}
             }
+            rptH.Database.Tables[0].SetDataSource(rotacionEstudiantes.Distinct());
+      
+            rptH.Database.Tables[1].SetDataSource(estudiantes.Distinct());
+            rptH.Database.Tables[2].SetDataSource(hojas2.Distinct());
+            rptH.Database.Tables[3].SetDataSource(acti.Distinct());
+            rptH.Database.Tables[4].SetDataSource(rotaciones.Distinct());
+            rptH.Database.Tables[5].SetDataSource(rotacionDocentes.Distinct());
+            rptH.Database.Tables[6].SetDataSource(rotacionDetalles.Distinct());
 
-            rptH.Database.Tables[0].SetDataSource(re);
-            rptH.Database.Tables[1].SetDataSource(docentes);
-            rptH.Database.Tables[2].SetDataSource(estudiantes);
-            rptH.Database.Tables[3].SetDataSource(hojas2);
-            rptH.Database.Tables[4].SetDataSource(acti);
-            rptH.Database.Tables[5].SetDataSource(rotaciones);
-
-            rptH.Database.Tables[6].SetDataSource(rotacionDocentes);
-         
 
 
             rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + pr.nombre + " Departamento " + ds.nombre + " que realizaran su rotación en su institución y los profesores con su horario.");
-            rptH.SetParameterValue("fecha",  DateTime.Now.ToString("dd MMMM yyyy") + ".");
+            rptH.SetParameterValue("fecha", DateTime.Now.ToString("dd MMMM yyyy") + ".");
             rptH.SetParameterValue("dr", ips.representante);
             rptH.SetParameterValue("cargo", ips.cargo);
             rptH.SetParameterValue("nombreIPS", ips.nombre);
 
-           
 
 
 
-            if (re.Count > 0)
+
+            if (rotacionDetalles.Count > 0)
             {
                 string path1 = string.Format("{0}{1}{2}", Server.MapPath("~/Images/"), "cartaPresentacion", ".pdf");
 
                 rptH.ExportToDisk(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat, path1);
                 if (Request.Form["submitbutton1"] != null)
                 {
-                    EnviarEstudiantes(estudiantes, rotacionDocentes, ips.correo,ds.correo);
+                    EnviarEstudiantes(estudiantes, rotacionDocentes, ips.correo, ds.correo);
 
 
                 }
@@ -387,12 +394,12 @@ namespace MvcApplication2.Controllers
 
         }
 
-        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<RotacionDocente> docentes, string correo,string correodpto)
+        public void EnviarEstudiantes(List<Estudiante> estudiantes, List<RotacionDocente> docentes, string correo, string correodpto)
         {
             string body = "<h1 style=\"color: #5e9ca0;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</h1><h4>Cordial Saludo.</h4><h4>Se env&iacute;a carta de presentaci&oacute;n con sus respectivas hojas de vida.</h4><p>&nbsp;</p><h3 style=\"color: #2e6c80;\">Estudiantes:</h3><table class=\"editorDemoTable\"><thead><tr><td>C&eacute;dula</td><td>Nombre</td><td>C&oacute;digo</td><td></td></tr></thead><tbody><tr>";
             foreach (Estudiante estudiante in estudiantes)
             {
-                body += "<tr> <td>" + estudiante.num_documento + "</td><td>" + estudiante.HojaVida.primer_nombre + " " + estudiante.HojaVida.primer_apellido + "</td> <td>" + estudiante.codigo + "</td><td> <a href=\"http://salud.ucaldas.edu.co/Proyecto/Estudiante/ReporteEstudianteA/"+estudiante.estudianteId+"\">Ver Hoja Vida</a> </td></tr> ";
+                body += "<tr> <td>" + estudiante.num_documento + "</td><td>" + estudiante.HojaVida.primer_nombre + " " + estudiante.HojaVida.primer_apellido + "</td> <td>" + estudiante.codigo + "</td><td> <a href=\"http://salud.ucaldas.edu.co/Proyecto/Estudiante/ReporteEstudianteA/" + estudiante.estudianteId + "\">Ver Hoja Vida</a> </td></tr> ";
             }
             body += "</thead></tbody></table>";
             body += "<p>&nbsp;</p><h3 style=\"color: #2e6c80;\">Docentes:</h3><table class=\"editorDemoTable\"><thead><tr><td>C&eacute;dula</td><td>Nombre</td><td></td></tr></thead><tbody>";
@@ -443,8 +450,8 @@ namespace MvcApplication2.Controllers
                 var message = new MailMessage(fromAddress, toAddress);
                 message.To.Add("servidor.facsalud@ucaldas.edu.co");
                 message.To.Add("docencia.servicio@ucaldas.edu.co");
-               
-                
+
+
                 string[] correos = Regex.Split(correo, ",");
                 foreach (var element in correos)
                 {

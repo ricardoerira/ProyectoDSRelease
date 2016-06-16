@@ -70,6 +70,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -241,9 +245,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201605170330217_asdad.cs" />
-    <Compile Include="Migrations\201605170330217_asdad.Designer.cs">
-      <DependentUpon>201605170330217_asdad.cs</DependentUpon>
+    <Compile Include="Migrations\201606150450227_aa.cs" />
+    <Compile Include="Migrations\201606150450227_aa.Designer.cs">
+      <DependentUpon>201606150450227_aa.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -1164,8 +1168,8 @@
     <WCFMetadataStorage Include="Service References\ServiceReference2\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201605170330217_asdad.resx">
-      <DependentUpon>201605170330217_asdad.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201606150450227_aa.resx">
+      <DependentUpon>201606150450227_aa.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="reporte2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
