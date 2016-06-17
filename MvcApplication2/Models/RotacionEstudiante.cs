@@ -41,6 +41,7 @@ namespace MvcApplication2.Models
 
 
         public virtual ICollection<RotacionDocente> rotacionesDocente { get; set; }
+        public virtual ICollection<RotacionEstudianteDetalle> rotacionEstudianteDetalles { get; set; }
 
 
     }
