@@ -1,0 +1,171 @@
+﻿@model IEnumerable<MvcApplication2.Models.Curso>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+   
+     
+
+
+
+
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaContraprestacion/", "Curso")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Portafolio de servicios<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Ver listado", "Index/", "Curso")</li>
+                            <li>@Html.ActionLink("Crear", "Create/", "Curso")</li>
+                            
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Inducción<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Ver listado", "Index/", "Induccion")</li>
+                            <li>@Html.ActionLink("Crear", "Create/", "Induccion")</li>
+                            
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Inventario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Ver listado", "Index/", "Equipo")</li>
+                            <li>@Html.ActionLink("Crear", "Equipo/", "Equipo")</li>
+                            
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Informes<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Portafolio de servicios </a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" @Html.ActionLink("Período académico", "SeleccionRotacionContraPrestacionPeriodoCurso/", "IPS_ESE")</a></li>
+                                    <li><a tabindex="-1" @Html.ActionLink("Mes y año", "SeleccionRotacionContraPrestacionC/", "IPS_ESE")</a></li>
+
+                                </ul>
+                            </li>
+                            <li>@Html.ActionLink("Inducciones", "SeleccionRotacionContraPrestacionI/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Inventario", "SeleccionRotacionContraPrestacionE/", "IPS_ESE")</li>
+
+
+
+                        </ul>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+
+
+
+<div class="ens">
+    <p>
+        @Html.ActionLink("Crear Nuevo", "Create/")
+    </p>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+
+        <div class="ens">
+            <p class=" help-block">
+                <table></table>Portafolio de servicios - Buscar por nombre:
+            </p>
+        </div>
+
+        <div class="col-md-4">
+            @Html.TextBox("SearchString", ViewBag.SearchFilter as string, new { @class = "form-control", onclick = "keystroke()", id = "search" })
+
+        </div>
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-primary" value="Buscar" />
+        </div>
+
+    }
+
+    <div class="span7">
+        <div class="widget stacked widget-table action-table">
+
+            <div class="widget-header">
+                <h4><i class="glyphicon-align-center glyphicon glyphicon-list"></i></h4>
+                <h3>Tabla Portafolio de servicios</h3>
+            </div> <!-- /widget-header -->
+
+            <div class="widget-content">
+
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Nombre</th>
+                            <th class="text-center">Asignados</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>IPS/ESE</th>
+
+                            <th class="td-actions text-center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.tipo)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.nombre)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.asignados)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.fechaInicio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.fechaFin)
+                                </td>
+
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IPS_ESE.nombre)
+                                </td>
+                                <td class="text-center" >
+                                    @Html.ActionLink(" ", "Details", new { id = item.CursoId }, new { @class = "btn btn-sm btn-default btn-icon-only glyphicon glyphicon-ok", title = "Ver detalle" })
+                                    @Html.ActionLink(" ", "Delete", new { id = item.CursoId }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-remove", title = "Eliminar" })
+                                    @Html.ActionLink(" ", "Edit", new { id = item.CursoId }, new { @class = "btn btn-sm btn-success btn-icon-only glyphicon glyphicon-pencil", title = "Editar " })
+
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+
+            </div> <!-- /widget-content -->
+
+        </div> <!-- /widget -->
+    </div>

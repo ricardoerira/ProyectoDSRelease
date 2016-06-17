@@ -1846,6 +1846,7 @@ namespace MvcApplication2.Controllers
                     var message = new MailMessage(fromAddress, toAddress);
                     message.To.Add("servidor.facsalud@ucaldas.edu.co");
 
+
                     message.IsBodyHtml = true;
                     message.Subject = subject;
                     message.Body = body;

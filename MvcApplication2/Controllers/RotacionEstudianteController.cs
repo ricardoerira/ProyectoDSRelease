@@ -225,7 +225,7 @@ namespace MvcApplication2.Controllers
                  rotacionDocentes.Add(rotacionDocente);
              }
 
-             return View(rotacionDocentes);
+             return View(rotacionDocentes.DistinctBy(r=>r.nombre));
          }
 
 

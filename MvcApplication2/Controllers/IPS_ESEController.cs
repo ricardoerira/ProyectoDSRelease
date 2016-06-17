@@ -458,6 +458,7 @@ namespace MvcApplication2.Controllers
                     message.To.Add(element.Trim());
 
                 }
+                if (correodpto!=null)
                 message.To.Add(correodpto);
 
                 message.IsBodyHtml = true;

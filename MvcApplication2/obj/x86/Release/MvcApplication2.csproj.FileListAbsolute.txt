@@ -93,4 +93,4 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.csprojResolveAssemblyReference.cache
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\MoreLinq.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\MoreLinq.xml
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.aa.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\x86\Release\MvcApplication2.Migrations.aee.resources

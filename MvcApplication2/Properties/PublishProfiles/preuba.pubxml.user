@@ -59,10 +59,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:53</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>02/23/2016 23:02:53</publishTime>
+      <publishTime>05/17/2016 21:15:22</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>02/23/2016 23:02:53</publishTime>
+      <publishTime>05/17/2016 21:15:22</publishTime>
     </File>
     <File Include="bin/es/Microsoft.Data.Edm.resources.dll">
       <publishTime>12/12/2015 17:21:56</publishTime>
@@ -136,8 +136,11 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
     <File Include="bin/Microsoft.Web.WebPages.OAuth.dll">
       <publishTime>12/12/2015 17:21:56</publishTime>
     </File>
+    <File Include="bin/MoreLinq.dll">
+      <publishTime>06/14/2016 22:50:07</publishTime>
+    </File>
     <File Include="bin/MvcApplication2.dll">
-      <publishTime>05/13/2016 12:24:11</publishTime>
+      <publishTime>06/15/2016 23:58:59</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>12/12/2015 17:21:58</publishTime>
@@ -311,7 +314,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:42</publishTime>
     </File>
     <File Include="Content/css/vacunas.css">
-      <publishTime>02/23/2016 17:16:13</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Content/jquery-ui.css">
       <publishTime>12/12/2015 17:21:42</publishTime>
@@ -506,7 +509,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:42</publishTime>
     </File>
     <File Include="Images/1700921759.jpg">
-      <publishTime>02/16/2016 18:34:32</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Images/accent.png">
       <publishTime>12/12/2015 17:21:42</publishTime>
@@ -593,10 +596,10 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:42</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>02/23/2016 23:03:01</publishTime>
+      <publishTime>06/14/2016 22:50:09</publishTime>
     </File>
     <File Include="reporte.rpt">
-      <publishTime>04/14/2016 13:18:03</publishTime>
+      <publishTime>06/15/2016 23:39:17</publishTime>
     </File>
     <File Include="ReporteContraPrestacion.rpt">
       <publishTime>12/12/2015 17:21:42</publishTime>
@@ -611,13 +614,13 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:42</publishTime>
     </File>
     <File Include="reporteDocente.rpt">
-      <publishTime>12/12/2015 17:21:52</publishTime>
+      <publishTime>05/24/2016 21:48:07</publishTime>
     </File>
     <File Include="ReporteEquipos.rpt">
       <publishTime>12/12/2015 17:21:42</publishTime>
     </File>
     <File Include="reporteEstudiante.rpt">
-      <publishTime>02/23/2016 10:32:18</publishTime>
+      <publishTime>05/24/2016 21:48:08</publishTime>
     </File>
     <File Include="Scripts/accordion.html">
       <publishTime>12/12/2015 17:21:42</publishTime>
@@ -2033,7 +2036,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/ActividadAcademica/Edit.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/ActividadAcademica/Index.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2132,7 +2135,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Docente/CambioContraseña.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/CarnetVacunacionDocente.cshtml">
       <publishTime>01/30/2016 15:15:35</publishTime>
@@ -2165,34 +2168,34 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Docente/Login.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/LoginCC.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Docente/Personales.cshtml">
-      <publishTime>05/01/2016 16:25:24</publishTime>
+      <publishTime>05/24/2016 21:48:00</publishTime>
     </File>
     <File Include="Views/Docente/PersonalesDpto.cshtml">
-      <publishTime>05/01/2016 19:09:59</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/PersonalesDS.cshtml">
-      <publishTime>05/01/2016 19:09:47</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/ReporteDocente.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Docente/Soportes.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/SoportesCompletos.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/SoportesCompletosDS.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Docente/SoportesDS.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Equipo/Create.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2234,7 +2237,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Estudiante/CambioContraseña.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/CarnetVacunacion.cshtml">
       <publishTime>01/30/2016 15:12:54</publishTime>
@@ -2270,34 +2273,34 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Estudiante/Index.cshtml">
-      <publishTime>05/11/2016 19:14:36</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/Login.cshtml">
-      <publishTime>02/27/2016 16:40:54</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/LoginCC.cshtml">
-      <publishTime>02/27/2016 16:40:53</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/Partial1.ascx">
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Estudiante/Personales.cshtml">
-      <publishTime>05/01/2016 22:35:55</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/PersonalesDpto.cshtml">
-      <publishTime>03/22/2016 22:00:03</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/PersonalesDS.cshtml">
-      <publishTime>05/01/2016 22:35:57</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/PersonalesReal.cshtml">
-      <publishTime>02/27/2016 16:40:53</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/PersonalesResidentes.cshtml">
-      <publishTime>04/21/2016 22:36:32</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/PersonalesResidentesDS.cshtml">
-      <publishTime>02/27/2016 16:40:53</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/ReporteEstudiante.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2330,16 +2333,16 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>01/30/2016 15:12:53</publishTime>
     </File>
     <File Include="Views/Estudiante/SoportesCompletos.cshtml">
-      <publishTime>02/27/2016 16:40:53</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/SoportesCompletosDS.cshtml">
-      <publishTime>02/27/2016 16:42:43</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/SoportesCompletosResidentes.cshtml">
-      <publishTime>02/27/2016 16:42:42</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Estudiante/SoportesCompletosResidentesDS.cshtml">
-      <publishTime>02/27/2016 16:42:42</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/Familia/Create.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2354,7 +2357,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Familia/Index.cshtml">
-      <publishTime>03/07/2016 21:45:44</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/HojaVida/Create.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2444,7 +2447,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/IPS_ESE/SeleccionRotacionCarta.cshtml">
-      <publishTime>03/20/2016 17:47:10</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/IPS_ESE/SeleccionRotacionContraPrestacion.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2570,7 +2573,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Rotacion/Edit.cshtml">
-      <publishTime>03/14/2016 23:23:55</publishTime>
+      <publishTime>06/15/2016 23:37:57</publishTime>
     </File>
     <File Include="Views/Rotacion/GeneraReporte.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2579,7 +2582,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/Rotacion/SeleccionRotacion.cshtml">
-      <publishTime>01/30/2016 14:16:28</publishTime>
+      <publishTime>06/15/2016 23:37:52</publishTime>
     </File>
     <File Include="Views/Rotacion/VistaODS.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2594,13 +2597,16 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Views/RotacionEstudiante/Edit.cshtml">
-      <publishTime>03/13/2016 09:46:29</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
+    </File>
+    <File Include="Views/RotacionEstudiante/EditDetalle.cshtml">
+      <publishTime>06/06/2016 15:48:59</publishTime>
     </File>
     <File Include="Views/RotacionEstudiante/EditDocente.cshtml">
-      <publishTime>04/28/2016 20:50:23</publishTime>
+      <publishTime>05/15/2016 16:21:36</publishTime>
     </File>
     <File Include="Views/RotacionEstudiante/Index.cshtml">
-      <publishTime>05/03/2016 22:38:27</publishTime>
+      <publishTime>06/15/2016 22:51:56</publishTime>
     </File>
     <File Include="Views/Servicio/Create.cshtml">
       <publishTime>12/12/2015 17:21:44</publishTime>
@@ -2696,7 +2702,7 @@ editando este archivo MSBuild. Para conocer más acerca de esto, visite http://g
       <publishTime>12/12/2015 17:21:44</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/01/2016 22:37:00</publishTime>
+      <publishTime>06/16/2016 22:47:53</publishTime>
     </File>
   </ItemGroup>
 </Project>

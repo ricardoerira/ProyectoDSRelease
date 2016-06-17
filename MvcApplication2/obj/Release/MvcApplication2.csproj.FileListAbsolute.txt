@@ -354,5 +354,5 @@ C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\EntityFramework.SqlServer.xml
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\MoreLinq.dll
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\bin\MoreLinq.xml
-C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\Release\MvcApplication2.Migrations.aa.resources
+C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\Release\MvcApplication2.Migrations.aee.resources
 C:\Users\Lili\Desktop\ProyectoGIT\ProyectoGIT\ProyectoDSRelease\MvcApplication2\obj\Release\MvcApplication2.csproj.GenerateResource.Cache

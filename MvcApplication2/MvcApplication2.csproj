@@ -245,9 +245,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201606150450227_aa.cs" />
-    <Compile Include="Migrations\201606150450227_aa.Designer.cs">
-      <DependentUpon>201606150450227_aa.cs</DependentUpon>
+    <Compile Include="Migrations\201606160445346_aee.cs" />
+    <Compile Include="Migrations\201606160445346_aee.Designer.cs">
+      <DependentUpon>201606160445346_aee.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -1168,8 +1168,8 @@
     <WCFMetadataStorage Include="Service References\ServiceReference2\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201606150450227_aa.resx">
-      <DependentUpon>201606150450227_aa.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201606160445346_aee.resx">
+      <DependentUpon>201606160445346_aee.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="reporte2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
