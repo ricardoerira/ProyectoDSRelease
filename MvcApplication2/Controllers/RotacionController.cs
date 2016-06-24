@@ -24,21 +24,28 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-          
+
             var rotacions = db.Rotacions.Include(r => r.ActividadAcademica).Include(r => r.IPS_ESE);
             return View(rotacions.ToList());
         }
 
         public ActionResult SeleccionRotacion()
         {
+            List<Rotacion> listest=new List<Rotacion>();
             if (User.Identity.IsAuthenticated)
             {
-                //var rotaciones= db.Rotacions.Where(r => r.ActividadAcademica.DepartamentoSalud.user.Equals(User.Identity.Name));
-                var rotaciones = db.Rotacions.Where(r => r.ActividadAcademica.DepartamentoSalud.user.Equals(User.Identity.Name));
-                List<Rotacion> listest = rotaciones.ToList();
-                return View(listest);
+
+                listest = db.Rotacions.Where(r => r.ActividadAcademica.DepartamentoSalud.user.Equals(User.Identity.Name)).ToList();
 
             }
+            if (listest.Count == 0)
+            {
+                listest = db.Rotacions.ToList();
+            }
+
+
+
+
             return View(db.Rotacions.ToList());
         }
         public ActionResult SeleccionRotacionCarta()
