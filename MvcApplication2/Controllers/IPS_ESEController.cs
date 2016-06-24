@@ -284,8 +284,17 @@ namespace MvcApplication2.Controllers
            .ToList();
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
-            ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r => r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
+            if (!User.Identity.Name.Equals(""))
+            {
+                ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r => r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
 
+            }
+            else
+            {
+                ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds, "DepartamentoSaludId", "nombre");
+
+            }
+     
             return View();
         }
        

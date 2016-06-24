@@ -17,11 +17,11 @@
         <div class="container-fluid">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>                    
+                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
                     <li>@Html.ActionLink("Personales", "Personales/" + Model.docenteId, "Docente")</li>
                     <li>@Html.ActionLink("Documentos", "SoportesCompletos/" + Model.docenteId, "Docente")</li>
                     <li>@Html.ActionLink("Vacunación", "CarnetVacunacionDocente/" + Model.docenteId, "Docente")</li>
-                   <li>@Html.ActionLink("Reporte", "ReporteDocenteA/" + Model.docenteId, "Docente", new { target = "_blank" })</li>
+                    <li>@Html.ActionLink("Reporte", "ReporteDocenteA/" + Model.docenteId, "Docente", new { target = "_blank" })</li>
 
 
                     <li class="dropdown">
@@ -100,7 +100,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Tarjeta Profesional Departamental</label>
                                 <div class="col-sm-4">
-                                    @Html.TextBoxFor(model => model.certificado_TPDTS, new { @class = "form-control"})
+                                    @Html.TextBoxFor(model => model.certificado_TPDTS, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.certificado_TPDTS)
                                 </div>
                                 <label class="col-sm-2 control-label">Tarjeta Profesional Nacional</label>
@@ -144,9 +144,9 @@
 
                                 <label class="col-sm-2 control-label">n.º libreta militar</label>
                                 <div class="col-sm-4">
-                                @Html.TextBoxFor(model => model.num_libreta_militar, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.num_libreta_militar)  
-                                    
+                                    @Html.TextBoxFor(model => model.num_libreta_militar, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.num_libreta_militar)
+
                                 </div>
 
 
@@ -232,14 +232,14 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">RH</label>
                                 <div class="col-sm-4">
-                                    
+
                                     @Html.DropDownList("HojaVida.hemoclasificacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "AB+", Value = "AB+" }, new SelectListItem { Text = "AB-", Value = "AB-" }, new SelectListItem { Text = "A+", Value = "A+" }, new SelectListItem { Text = "A-", Value = "A-" }, new SelectListItem { Text = "B+", Value = "B+" }, new SelectListItem { Text = "B-", Value = "B-" }, new SelectListItem { Text = "O+", Value = "O+" }, new SelectListItem { Text = "O-", Value = "O-" } }, new { @class = "form-control" })
                                     @Html.ValidationMessageFor(model => model.HojaVida.hemoclasificacion)
                                 </div>
                                 <label class="col-sm-2 control-label">Género</label>
                                 <div class="col-sm-4">
                                     @Html.DropDownList("HojaVida.genero", new List<SelectListItem>() { new SelectListItem { Text = "M", Value = "M" }, new SelectListItem { Text = "F", Value = "F" } }, new { @class = "form-control" })
-                                    
+
                                 </div>
 
 
@@ -341,7 +341,7 @@
                                     @Html.ValidationMessageFor(model => model.tipo_vinculacion)
                                 </div>
                             </div>
-                            
+
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">Título pregrado</label>
@@ -359,10 +359,10 @@
                             </div>
 
 
-                            
+
 
                             <div class="form-group">
-                                
+
                                 <label class="col-sm-2 control-label">Máximo nivel de formación</label>
                                 <div class="col-sm-4">
                                     @Html.TextBoxFor(model => model.maximo_nivel_formacion, new { @class = "form-control", @readonly = "readonly" })
@@ -376,7 +376,7 @@
                                 </div>
                             </div>
 
-                           
+
                             <div class="form-group">
 
                                 <label class="col-sm-2 control-label">Otros Títulos </label>
@@ -532,7 +532,7 @@
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
-                            
+
                             <tr>
                                 <td class="tdDocumentos">Tarjeta profesional Nacional</td>
                                 <td>
@@ -552,8 +552,9 @@
                                 </td>
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
+
                             <tr>
-                                <td class="tdDocumentos">Carné vacunación 1</td>
+                                <td class="tdDocumentos">Certificado de afiliación EPS</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -572,7 +573,7 @@
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Carné vacunación 2</td>
+                                <td class="tdDocumentos">Carné ARL</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -588,10 +589,10 @@
 
 
                                 </td>
-                                <td align="center"><strong>No</strong></td>
+                                <td align="center"><strong>Si</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Anticuerpos contra varicela </td>
+                                <td class="tdDocumentos">Carné vacunación 1</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -607,10 +608,10 @@
 
 
                                 </td>
-                                <td align="center"><strong>No</strong></td>
+                                <td align="center"><strong>Si</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
+                                <td class="tdDocumentos">Carné vacunación 2</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -629,7 +630,64 @@
                                 <td align="center"><strong>No</strong></td>
                             </tr>
                             <tr>
-                                 </table>
+                                <td class="tdDocumentos">Anticuerpos contra varicela </td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen12 })'>
+                                        <img src=@ViewBag.image12 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen12a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen13 })'>
+                                        <img src=@ViewBag.imagen13 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen13a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="tdDocumentos">Influenza </td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen14 })'>
+                                        <img src=@ViewBag.imagen14 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen14a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+                            <tr>
+                        </table>
                         <div class="form-group">
                         </div>
                         <div class="form-group">
@@ -652,4 +710,3 @@
 
 
 }
-

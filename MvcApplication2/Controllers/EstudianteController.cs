@@ -503,7 +503,7 @@ namespace MvcApplication2.Controllers
         public ActionResult Index()
         {
             List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).ToList();
-            foreach(Estudiante estudiante  in estudiantes)
+            foreach (Estudiante estudiante in estudiantes)
             {
                 validarCampos(estudiante, false);
             }
@@ -605,31 +605,15 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
             rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
 
-
-            string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/doc_identidad", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("docIdentidad", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_LS", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_LS", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_estudiantil", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_estudiantil", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/carne_EPS", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("carne_EPS", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV1", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("EV1", path1);
-
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/EV2", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("CV2", path1);
+            for (int i = 0; i < Constantes.documentos_estudiante.Length; i++)
+            {
+                string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/" + Constantes.documentos_estudiante[i], +estudiante.codigo, ".jpg");
+                rptH.SetParameterValue(Constantes.documentos_estudiante[i], path1);
 
 
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_varicela", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("ant_varicela", path1);
 
-            path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/ant_hepatitisB", +estudiante.codigo, ".jpg");
-            rptH.SetParameterValue("ant_hepatitisB", path1);
+            }
+
 
 
 
@@ -1016,7 +1000,7 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            validarCampos(estudiante,false);
+            validarCampos(estudiante, false);
 
             cargaDocumentos(estudiante);
             return View(estudiante);
@@ -1035,7 +1019,7 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            validarCampos(estudiante,true);
+            validarCampos(estudiante, true);
 
             cargaDocumentoResidentes(estudiante);
             return View(estudiante);
@@ -1231,7 +1215,7 @@ namespace MvcApplication2.Controllers
 
         }
 
-        public ActionResult 
+        public ActionResult
 
             cargaDocumentoResidentes(Estudiante estudiante)
         {
@@ -1499,7 +1483,7 @@ namespace MvcApplication2.Controllers
 
 
 
-       
+
         public ActionResult
             guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
         {
@@ -1543,7 +1527,7 @@ namespace MvcApplication2.Controllers
             int numFiles = Request.Files.Count;
 
 
-            for (int i = 0; i < Constantes.documentos_estudiante.Length-1; i++)
+            for (int i = 0; i < Constantes.documentos_estudiante.Length - 1; i++)
             {
                 string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, documentos[i] + estudiante.codigo, ".jpg");
 
@@ -1659,7 +1643,7 @@ namespace MvcApplication2.Controllers
                 db.Entry(est).State = EntityState.Modified;
                 guardaDocumentos(estudiante);
                 db.SaveChanges();
-                validarCampos(estudiante,false);
+                validarCampos(estudiante, false);
                 cargaDocumentos(estudiante);
                 return RedirectToAction("../Estudiante/Personales/" + est.estudianteId);
 
@@ -1667,7 +1651,7 @@ namespace MvcApplication2.Controllers
             else
             {
 
-                validarCampos(estudiante,false);
+                validarCampos(estudiante, false);
                 cargaDocumentos(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
                 return View(estudiante2);
@@ -1708,7 +1692,7 @@ namespace MvcApplication2.Controllers
                 guardaDocumentosResidentes(estudiante);
 
                 db.SaveChanges();
-                validarCampos(estudiante,true);
+                validarCampos(estudiante, true);
 
                 cargaDocumentoResidentes(estudiante);
 
@@ -1717,7 +1701,7 @@ namespace MvcApplication2.Controllers
             }
             else
             {
-                validarCampos(estudiante,true);
+                validarCampos(estudiante, true);
                 cargaDocumentoResidentes(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
 
@@ -1762,7 +1746,7 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            validarCampos(estudiante,false);
+            validarCampos(estudiante, false);
 
             cargaDocumentos(estudiante);
             return View(estudiante);
@@ -1771,7 +1755,7 @@ namespace MvcApplication2.Controllers
         public ActionResult PersonalesDpto(int id = 0)
         {
 
-              TempData["notice"] = null;
+            TempData["notice"] = null;
 
             Estudiante estudiante = db.Estudiantes.Find(id);
             HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
@@ -1780,7 +1764,7 @@ namespace MvcApplication2.Controllers
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
             string edadDocente = edad.ToString();
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
-            validarCampos(estudiante,false);
+            validarCampos(estudiante, false);
 
             cargaDocumentos(estudiante);
             return View(estudiante);
@@ -1885,7 +1869,7 @@ namespace MvcApplication2.Controllers
             guardaDocumentos(estudiante);
 
 
-            Boolean estado = validarCampos(estudiante,false);
+            Boolean estado = validarCampos(estudiante, false);
 
             //return View(estudiante);
             return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
