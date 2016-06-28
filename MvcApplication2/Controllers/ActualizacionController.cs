@@ -394,26 +394,28 @@ namespace MvcApplication2.Controllers
                             List<Rotacion> lista = datos.ToList();
                             if (lista.Count() == 0)
                             {
-                                Rotacion rotacion = new Rotacion();
-                                rotacion.year_academico = item2.ANO;
-                                rotacion.periodo_academico = item2.PERIODO;
+                                if (item2.ANO > 2015)
+                                {
+                                    Rotacion rotacion = new Rotacion();
+                                    rotacion.year_academico = item2.ANO;
+                                    rotacion.periodo_academico = item2.PERIODO;
 
 
-                                rotacion.grupo = item2.GRUPO;
+                                    rotacion.grupo = item2.GRUPO;
 
-                                rotacion.horario = "";
-                                rotacion.numero_estudiantes = item2.INSCRITOS;
-                                DateTime myDate = DateTime.ParseExact(item2.FECHA_INICIO, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                rotacion.fecha_inicio = myDate;
+                                    rotacion.horario = "";
+                                    rotacion.numero_estudiantes = item2.INSCRITOS;
+                                    DateTime myDate = DateTime.ParseExact(item2.FECHA_INICIO, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    rotacion.fecha_inicio = myDate;
 
-                                DateTime myDate2 = DateTime.ParseExact(item2.FECHA_FINAL, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                                rotacion.fecha_terminacion = myDate2;
-                                rotacion.actividadacademicaId = item.actividadacademicaId;
-                                rotacion.IPS_ESEId = 1;
-                                rotacion.grupo = item2.GRUPO;
-                                db.Rotacions.Add(rotacion);
-                                db.SaveChanges();
-
+                                    DateTime myDate2 = DateTime.ParseExact(item2.FECHA_FINAL, "dd/MM/yyyy H:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                                    rotacion.fecha_terminacion = myDate2;
+                                    rotacion.actividadacademicaId = item.actividadacademicaId;
+                                    rotacion.IPS_ESEId = 1;
+                                    rotacion.grupo = item2.GRUPO;
+                                    db.Rotacions.Add(rotacion);
+                                    db.SaveChanges();
+                                }
                             }
 
                         
