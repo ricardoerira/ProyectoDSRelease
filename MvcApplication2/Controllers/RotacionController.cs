@@ -238,7 +238,7 @@ namespace MvcApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Rotacion rotacionE = db.Rotacions.Find(rotacion.rotacionId);
+                Rotacion rotacionE = db.Rotacions.Find(rotacion.rotacionId);
                 //rotacionE.fecha_inicio = rotacion.fecha_inicio;
                 //rotacionE.fecha_terminacion = rotacion.fecha_terminacion;
                 rotacionE.observaciones = rotacion.observaciones;
