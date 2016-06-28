@@ -24,19 +24,44 @@ namespace MvcApplication2.Controllers
 
         public ActionResult Index()
         {
-            importaMaterias();
-            importaGruposMateria();
+            //importaMaterias();
+            //importaGruposMateria();
 
-            importaDocentes();
-            importaEstudiantes();
-            importaEstudiantesRotacion();
+            //importaDocentes();
+            //importaEstudiantes();
+            //importaEstudiantesRotacion();
             // actualizaImagenDocentes();
+            importaEstudiantesRotacionDetalle();
 
 
 
             return View();
         }
+        public void importaEstudiantesRotacionDetalle()
+        {
+            List<RotacionEstudiante> rotacionEstudiantes = db.RotacionEstudiantes.ToList();
+            foreach (RotacionEstudiante rotacionEstudiante in rotacionEstudiantes)
+            {
+                RotacionEstudianteDetalle rotacionEstudianteDetalle = new RotacionEstudianteDetalle();
+                rotacionEstudianteDetalle.rotacionEstudianteId = rotacionEstudiante.rotacionEstudianteId;
 
+                rotacionEstudianteDetalle.IPS_ESEId = rotacionEstudiante.IPS_ESEId;
+                rotacionEstudianteDetalle.docentes = db.RotacionDocentes.Where(r => r.rotacionEstudianteId == rotacionEstudiante.rotacionEstudianteId).ToList().ElementAt(0).nombre;
+                rotacionEstudianteDetalle.fecha_inicio = rotacionEstudiante.Rotacion.fecha_inicio;
+                rotacionEstudianteDetalle.fecha_terminacion = rotacionEstudiante.Rotacion.fecha_terminacion;
+                List<RotacionEstudianteDetalle> rotacionEstudianteDetalleAux = db.RotacionEstudianteDetalle.Where(r => r.fecha_inicio == rotacionEstudianteDetalle.fecha_inicio).Where(r => r.fecha_terminacion == rotacionEstudianteDetalle.fecha_terminacion)
+                    .Where(r => r.IPS_ESEId == rotacionEstudianteDetalle.IPS_ESEId)
+                    .Where(r => r.docentes == rotacionEstudianteDetalle.docentes)
+                    .Where(r => r.rotacionEstudianteId==rotacionEstudianteDetalle.rotacionEstudianteId).ToList(); 
+
+                if(rotacionEstudianteDetalleAux.Count==0)
+                {
+                    db.RotacionEstudianteDetalle.Add(rotacionEstudianteDetalle);
+                    db.SaveChanges();
+                }
+            }
+
+        }
         public void enviaSolicituudTodosEstudiantes()
         {
             List<Estudiante> estudiantes = db.Estudiantes.Include(e => e.HojaVida).Include(e => e.Programa).ToList();
