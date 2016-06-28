@@ -46,7 +46,7 @@ namespace MvcApplication2.Controllers
 
 
 
-            return View(db.Rotacions.ToList());
+            return View(listest);
         }
         public ActionResult SeleccionRotacionCarta()
         {
