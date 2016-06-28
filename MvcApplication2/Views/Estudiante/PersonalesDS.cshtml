@@ -31,6 +31,16 @@
 </div>
 @using (Html.BeginForm("SolicitarActualizacion", "Estudiante", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+
+
+    
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.estudianteId)
+}
+
+@using (Html.BeginForm("PersonalesDS", "Estudiante", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
     <div class="container">
@@ -237,7 +247,7 @@
 
 
 
-
+            
 
 
 
@@ -627,11 +637,10 @@
             </fieldset>
         </div>
     </div>
+
+
+
 }
-
-
-
-
 
 
 
