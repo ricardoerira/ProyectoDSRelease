@@ -1245,9 +1245,10 @@ namespace MvcApplication2.Controllers
                 }
 
                 docente.HojaVida = null;
+                
                 db.Entry(docente1).State = EntityState.Modified;
 
-
+                
                 db.SaveChanges();
                 guardaDocumentos(docente);
 
