@@ -16,7 +16,7 @@ namespace MvcApplication2.Util
         public static string[] documentos_estudiante = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS","EV1", "EV2", "ant_varicela", "ant_hepatitisB", "influenza" };
 
 
-        public static string[] documentos_estudianteResidentes = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado" };
+        public static string[] documentos_estudianteResidentes = { "doc_identidad", "carne_LS", "carne_estudiantil", "carne_EPS", "carne_ARL", "EV1", "EV2", "ant_varicela", "ant_hepatitisB", "dip_pre", "tp", "acta_grado", "rcp_basico", "rcp_avanzado","influenza" };
 
     }
 }

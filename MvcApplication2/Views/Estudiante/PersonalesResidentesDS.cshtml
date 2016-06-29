@@ -215,25 +215,7 @@
 
                                 }
 
-                            </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Vacunas </label>
-
-                                    @if (ViewBag.estadoV)
-                                    {
-                                        <button type="submit" class="alert-info">Vacunas Actualizadas</button>
-
-                                    }
-
-                                    else
-                                    {
-                                        <button type="submit" class="alert-danger">Solicitar Actualizacion</button>
-
-
-                                    }
-
-
-                                </div>
+                            
 
 
 
@@ -401,7 +383,7 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="tdDocumentos">Carné Liberty Seguros</td>
+                                        <td class="tdDocumentos">Póliza de responsabilidad civil</td>
                                         <td>
                                             <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                         </td>
@@ -578,6 +560,21 @@
                                         </td>
                                         <td align="center"><strong>No</strong></td>
                                     </tr>
+
+                                    <tr>
+                                        <td class="tdDocumentos">Influenza</td>
+                                        <td>
+                                            <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                        </td>
+                                        <td>
+                                            <a href='@Url.Action("SoporteResidenteDS", "Estudiante", new { id = @Model.estudianteId, imagen = @ViewBag.imagen15 })'>
+                                                <img src=@ViewBag.imagen15 class="img-rounded" height="75" width="75" />
+                                            </a>
+                                        </td>
+                                        <td align="center"><strong>No</strong></td>
+                                    </tr>
+
                                 </table>
 
                             </div>

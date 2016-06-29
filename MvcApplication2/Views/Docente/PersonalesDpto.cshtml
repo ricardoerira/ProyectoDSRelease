@@ -337,7 +337,7 @@
                                 </div>
                                 <label class="col-sm-2 control-label">Tipo vinculación</label>
                                 <div class="col-sm-4">
-                                    @Html.DropDownList("tipo_vinculacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "DOCENTE DE PLANTA", Value = "DOCENTE DE PLANTA" }, new SelectListItem { Text = "DOCENTE OCASIONAL", Value = "DOCENTE OCASIONAL" }, new SelectListItem { Text = "DOCENTE CATEDRÁTICO", Value = "DOCENTE CATEDRÁTICO" }, new SelectListItem { Text = "COMISION ADMINISTRATIVA", Value = "COMISION ADMINISTRATIVA" } }, new { @class = "form-control" }, @readonly = "readonly")
+                                    @Html.DropDownList("tipo_vinculacion", new List<SelectListItem>() { new SelectListItem { Text = "Sin Asignar", Value = "Sin Asignar" }, new SelectListItem { Text = "DOCENTE DE PLANTA", Value = "DOCENTE DE PLANTA" }, new SelectListItem { Text = "DOCENTE OCASIONAL", Value = "DOCENTE OCASIONAL" }, new SelectListItem { Text = "DOCENTE CATEDRÁTICO", Value = "DOCENTE CATEDRÁTICO" }, new SelectListItem { Text = "COMISION ADMINISTRATIVA", Value = "COMISION ADMINISTRATIVA" } }, new { @class = "form-control", @readonly = "readonly" })
                                     @Html.ValidationMessageFor(model => model.tipo_vinculacion)
                                 </div>
                             </div>

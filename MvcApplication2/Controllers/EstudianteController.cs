@@ -1475,6 +1475,24 @@ namespace MvcApplication2.Controllers
 
                 }
 
+                path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[14] + estudiante.codigo, ".jpg");
+
+                if (Utilidades.remoteFileExists(path1))
+                {
+                    path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_estudianteResidentes[14] + estudiante.codigo, ".jpg");
+
+                    ViewBag.imagen15 = path1;
+                    ViewBag.imagen15a = Constantes.documentos_estudianteResidentes[14] + estudiante.codigo + ".jpg";
+
+
+                }
+
+                else
+                {
+                    ViewBag.imagen15 = Constantes.url_noimage;
+
+                }
+
                 return View(estudiante);
 
 
@@ -1788,7 +1806,7 @@ namespace MvcApplication2.Controllers
             estudiante.barrio_procedencia = edadDocente;//Reemplaza edad
             validarCampos(estudiante, true);
 
-            cargaDocumentos(estudiante);
+            cargaDocumentoResidentes(estudiante);
             return View(estudiante);
         }
 
@@ -1901,7 +1919,7 @@ namespace MvcApplication2.Controllers
 
             estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
-            guardaDocumentos(estudiante);
+            guardaDocumentosResidentes(estudiante);
 
 
             Boolean estado = validarCampos(estudiante, true);
