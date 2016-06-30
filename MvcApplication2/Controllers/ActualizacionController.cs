@@ -29,7 +29,7 @@ namespace MvcApplication2.Controllers
 
             //importaDocentes();
             //importaEstudiantes();
-            //importaEstudiantesRotacion();
+            importaEstudiantesRotacion();
             // actualizaImagenDocentes();
             importaEstudiantesRotacionDetalle();
 

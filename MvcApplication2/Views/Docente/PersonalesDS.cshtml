@@ -553,7 +553,7 @@
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Carné vacunación 1</td>
+                                <td class="tdDocumentos">Certificado de afiliación EPS</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -572,7 +572,7 @@
                                 <td align="center"><strong>Si</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Carné vacunación 2</td>
+                                <td class="tdDocumentos">Carné ARL</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -591,7 +591,7 @@
                                 <td align="center"><strong>No</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Anticuerpos contra varicela </td>
+                                <td class="tdDocumentos">Carné vacunación 1</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -610,7 +610,7 @@
                                 <td align="center"><strong>No</strong></td>
                             </tr>
                             <tr>
-                                <td class="tdDocumentos">Anticuerpos contra hepatitis B </td>
+                                <td class="tdDocumentos">Carné vacunación 2</td>
                                 <td>
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
 
@@ -628,6 +628,67 @@
                                 </td>
                                 <td align="center"><strong>No</strong></td>
                             </tr>
+
+                            <tr>
+                                <td class="tdDocumentos">Anticuerpos contra varicela</td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen12 })'>
+                                        <img src=@ViewBag.imagen12 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen12a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+
+                            <tr>
+                                <td class="tdDocumentos">Anticuerpos contra hepatitis B</td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen13 })'>
+                                        <img src=@ViewBag.imagen13 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen13a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+
+                            <tr>
+                                <td class="tdDocumentos">Influenza</td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
+
+                                </td>
+                                <td>
+                                    <a href='@Url.Action("Soportes", "Docente", new { id = @Model.docenteId, imagen = @ViewBag.imagen14 })'>
+                                        <img src=@ViewBag.imagen14 class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.docenteId, imagen = @ViewBag.imagen14a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+
+
+                                </td>
+                                <td align="center"><strong>No</strong></td>
+                            </tr>
+
                             <tr>
                         </table>
                         <div class="form-group">
