@@ -111,8 +111,11 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Nombre</label>
                         <div class="col-sm-8">
-                            @Html.TextBoxFor(model => model.nombre, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.nombre)
+                            @*@Html.TextBoxFor(model => model.nombre, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.nombre)*@
+
+                            @Html.DropDownList("nombre", new SelectList(string.Empty, "Value", "Text"), "Nombre", new { @class = "form-control" })
+
 
                         </div>
                     </div>
@@ -161,7 +164,7 @@
                             @Html.TextAreaFor(model => model.lugar, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.lugar)
                         </div>
-                        <label class="col-sm-2 control-label">Observaciones</label>
+                        <label class="col-sm-2 control-label">Objetivos</label>
                         <div class="col-sm-4">
                             @Html.TextAreaFor(model => model.observaciones, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.observaciones)
