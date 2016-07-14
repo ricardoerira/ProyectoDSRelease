@@ -310,6 +310,7 @@ namespace MvcApplication2.Controllers
         {
 
             ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
+            Rotacion rotacion = db.Rotacions.Find(1291);
             string jsonInscritosGrupo = ser.getInscritosGrupo("G9F0279", "01", "2016", "2");
             if (jsonInscritosGrupo != null && !jsonInscritosGrupo.Equals(""))
             {
