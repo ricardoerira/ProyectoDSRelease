@@ -29,10 +29,10 @@ namespace MvcApplication2.Controllers
 
             //importaDocentes();
             //importaEstudiantes();
-            importaEstudiantesRotacion();
+          //  importaEstudiantesRotacion();
             // actualizaImagenDocentes();
-            importaEstudiantesRotacionDetalle();
-
+            //importaEstudiantesRotacionDetalle();
+            importaEstudiantesRotacionTest();
 
 
             return View();
@@ -306,6 +306,51 @@ namespace MvcApplication2.Controllers
             }
         }
 
+        public void importaEstudiantesRotacionTest()
+        {
+            ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
+            string jsonInscritosGrupo = ser.getInscritosGrupo("G9F0279", "01", "2016", "2");
+            if (jsonInscritosGrupo != null && !jsonInscritosGrupo.Equals(""))
+            {
+                MvcApplication2.Models.GruposInscritos.ESObject0 gruposInscritos = new System.Web.Script.Serialization.JavaScriptSerializer().Deserialize<MvcApplication2.Models.GruposInscritos.ESObject0>(jsonInscritosGrupo);
+
+                for (int i = 0; i < gruposInscritos.inscritosGrupo.Count; i++)
+                {
+                    var item3 = gruposInscritos.inscritosGrupo.ElementAt(i);
+
+                    string[] cedulas = item3.CEDULA_PROFESOR.Split(';');
+
+                    long codigo = Int64.Parse(item3.CODIGO);
+                    var datos = db.RotacionEstudiantes.Where(r => r.Estudiante.codigo == codigo).Where(r => r.rotacionId == rotacion.rotacionId);
+                    List<RotacionEstudiante> lista = datos.ToList();
+                    if (lista.Count() == 0)
+                    {
+                        Estudiante estudiante2 = null;
+
+                        var estudiantes = db.Estudiantes.Where(r => r.codigo == codigo).ToList();
+                        if (estudiantes.Count == 0)
+                        {
+                            continue;
+
+                        }
+                        estudiante2 = (Estudiante)estudiantes.ElementAt(0);
+                        RotacionEstudiante rotacionEstudiante = new RotacionEstudiante();
+                        rotacionEstudiante.estudianteId = estudiante2.estudianteId;
+                        rotacionEstudiante.rotacionId = 186;
+                        rotacionEstudiante.IPS_ESEId = 1;
+                        db.RotacionEstudiantes.Add(rotacionEstudiante);
+                        db.SaveChanges();
+                        var rotacionEstudianteId = db.RotacionEstudiantes.Max(p => p.rotacionEstudianteId);
+                        InsertarRotacionDocente(cedulas, rotacionEstudianteId);
+
+
+
+
+
+                    }
+                }
+            }
+        }
 
 
         public void importaEstudiantesRotacion()
