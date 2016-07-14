@@ -29,10 +29,10 @@ namespace MvcApplication2.Controllers
 
             //importaDocentes();
             //importaEstudiantes();
-          //  importaEstudiantesRotacion();
+            importaEstudiantesRotacion();
             // actualizaImagenDocentes();
-            //importaEstudiantesRotacionDetalle();
-            importaEstudiantesRotacionTest();
+         //   importaEstudiantesRotacionDetalle();
+        //    importaEstudiantesRotacionTest();
 
 
             return View();
@@ -310,7 +310,7 @@ namespace MvcApplication2.Controllers
         {
 
             ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
-            Rotacion rotacion = db.Rotacions.Find(1291);
+       
             string jsonInscritosGrupo = ser.getInscritosGrupo("G9F0279", "01", "2016", "2");
             if (jsonInscritosGrupo != null && !jsonInscritosGrupo.Equals(""))
             {
@@ -323,7 +323,7 @@ namespace MvcApplication2.Controllers
                     string[] cedulas = item3.CEDULA_PROFESOR.Split(';');
 
                     long codigo = Int64.Parse(item3.CODIGO);
-                    var datos = db.RotacionEstudiantes.Where(r => r.Estudiante.codigo == codigo).Where(r => r.rotacionId == rotacion.rotacionId);
+                    var datos = db.RotacionEstudiantes.Where(r => r.Estudiante.codigo == codigo).Where(r => r.rotacionId == 1291);
                     List<RotacionEstudiante> lista = datos.ToList();
                     if (lista.Count() == 0)
                     {
