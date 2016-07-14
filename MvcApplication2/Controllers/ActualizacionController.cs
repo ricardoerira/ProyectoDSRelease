@@ -308,6 +308,7 @@ namespace MvcApplication2.Controllers
 
         public void importaEstudiantesRotacionTest()
         {
+
             ServiceReference2.WSFacultadSaludSoapClient ser = new ServiceReference2.WSFacultadSaludSoapClient();
             string jsonInscritosGrupo = ser.getInscritosGrupo("G9F0279", "01", "2016", "2");
             if (jsonInscritosGrupo != null && !jsonInscritosGrupo.Equals(""))
