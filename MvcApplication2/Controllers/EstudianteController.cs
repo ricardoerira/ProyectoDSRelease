@@ -622,6 +622,78 @@ namespace MvcApplication2.Controllers
             return File(stream, "application/pdf");
 
         }
+
+
+        public ActionResult ReporteEstudianteAR(int id = 0)
+        {
+
+
+
+
+            Estudiante estudiante = db.Estudiantes.Find(id);
+
+            ReportDocument rptH = new ReportDocument();
+            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/reporteEstudianteR.rpt");
+            rptH.Load(strRptPath);
+            DateTime dt = DateTime.Now.Date.AddMonths(-20);
+            var vacunas = db.Vacunas.Where(r => r.hojaVidaId == estudiante.hojaVidaId).Where(r => r.fecha_vacunacion > dt);
+            List<Vacuna> listav = vacunas.ToList();
+
+            rptH.Database.Tables[0].SetDataSource(listav);
+
+            rptH.SetParameterValue("programa", estudiante.Programa.nombre);
+            rptH.SetParameterValue("modalidad", estudiante.modalidad + "");
+            rptH.SetParameterValue("semestre", estudiante.semestre + "");
+            rptH.SetParameterValue("estadom", estudiante.estado_academico + "");
+            rptH.SetParameterValue("tipodoc", estudiante.tipo_documento);
+            rptH.SetParameterValue("numdoc", estudiante.num_documento);
+            rptH.SetParameterValue("codigo", estudiante.codigo);
+            rptH.SetParameterValue("genero", estudiante.HojaVida.genero + "");
+            rptH.SetParameterValue("nombre", estudiante.HojaVida.primer_nombre + " " + estudiante.HojaVida.segundo_nombre);
+            rptH.SetParameterValue("apellidos", estudiante.HojaVida.primer_apellido + " " + estudiante.HojaVida.segundo_apellido);
+            rptH.SetParameterValue("fecha_nacimiento", estudiante.HojaVida.fecha_nacimiento + "");
+            rptH.SetParameterValue("hemoclasificacion", estudiante.HojaVida.hemoclasificacion + "");
+            rptH.SetParameterValue("dpto_procedencia", estudiante.HojaVida.departamento_procedencia + "");
+            rptH.SetParameterValue("mun_procedencia", estudiante.HojaVida.municipio_procedencia + "");
+            rptH.SetParameterValue("barrio_procedencia", estudiante.barrio_procedencia + "");
+            rptH.SetParameterValue("dir_procedencia", estudiante.direccion_procedencia + "");
+            rptH.SetParameterValue("dir_local", estudiante.HojaVida.direccion_manizales + "");
+            rptH.SetParameterValue("image", estudiante.HojaVida.imagen_DI + "");
+            rptH.SetParameterValue("edad", estudiante.barrio_procedencia + "");
+            rptH.SetParameterValue("tel_proc", estudiante.HojaVida.num_telefono + "");
+            rptH.SetParameterValue("tel_local", "");
+            rptH.SetParameterValue("estado_civil", estudiante.HojaVida.estado_civil + "");
+            rptH.SetParameterValue("num_hijos", estudiante.HojaVida.hijos + "");
+            rptH.SetParameterValue("mail", estudiante.HojaVida.correo + "");
+            rptH.SetParameterValue("num_cel", estudiante.HojaVida.num_celular + "");
+            rptH.SetParameterValue("nombre_padre", estudiante.HojaVida.Familia.primer_nombre_padre + " " + estudiante.HojaVida.Familia.primer_apellido_padre + " " + estudiante.HojaVida.Familia.segundo_apellido_padre);
+            rptH.SetParameterValue("direccion_padre", estudiante.HojaVida.Familia.direccion_padre + "");
+            rptH.SetParameterValue("tel_padre", estudiante.HojaVida.Familia.telefono_padre + "");
+            rptH.SetParameterValue("nombre_madre", estudiante.HojaVida.Familia.primer_nombre_madre + " " + estudiante.HojaVida.Familia.primer_apellido_madre + " " + estudiante.HojaVida.Familia.segundo_apellido_madre);
+            rptH.SetParameterValue("direccion_madre", estudiante.HojaVida.Familia.direccion_madre + "");
+            rptH.SetParameterValue("tel_madre", estudiante.HojaVida.Familia.telefono_madre + "");
+            rptH.SetParameterValue("nombre_acudiente", estudiante.HojaVida.Familia.primer_nombre_acudiente + " " + estudiante.HojaVida.Familia.primer_apellido_acudiente + " " + estudiante.HojaVida.Familia.segundo_apellido_acudiente);
+            rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
+            rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
+
+            for (int i = 0; i < Constantes.documentos_estudianteResidentes.Length; i++)
+            {
+                string path1 = string.Format("{0}{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads/" + Constantes.documentos_estudianteResidentes[i], +estudiante.codigo, ".jpg");
+                rptH.SetParameterValue(Constantes.documentos_estudianteResidentes[i], path1);
+
+
+
+            }
+
+
+
+
+            Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+            return File(stream, "application/pdf");
+
+        }
+
         public ActionResult RotacionEstudiante2(string searchString, int id = 0)
         {
 
