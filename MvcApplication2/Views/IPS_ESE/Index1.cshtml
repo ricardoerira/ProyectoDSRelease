@@ -1,0 +1,147 @@
+﻿@model IEnumerable<MvcApplication2.Models.IPS_ESE>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaIPS_ESE/", "IPS_ESE")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Contraprestación<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Portafolio de servicios", "SeleccionRotacionContraPrestacionC/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Inducciones", "SeleccionRotacionContraPrestacioni/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Inventario", "SeleccionRotacionContraPrestacionE/", "IPS_ESE")</li>
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Editar", "EditEPS1/", "IPS_ESE")</li>
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Documentos<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Polizas</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="~/Poliza Accidentes Febrero 9 2016.pdf" target="_blank">Accidentes</a></li>
+                                    <li><a tabindex="-1" href="~/Poliza Responsabilidad Civil- Abril 6 de 2016.pdf" target="_blank">Responsabilidad civil</a></li>
+                                    <li><a tabindex="-1" href="~/Poliza Responsabilidad Civil- Abril 6 de 2016.pdf" target="_blank">ARL</a></li>
+
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Normatividad</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="~/Decreto_2376_de_Julio_01_de_2010.pdf" target="_blank">Decreto 2376 de 2010</a></li>
+                                    <li><a tabindex="-1" href="~/DECRETO-055-14-DE-ENERO-DE-2015.pdf" target="_blank">Decreto 055 de 2015</a></li>
+
+
+                                </ul>
+                            </li>
+
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Legales</a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" href="" target="_blank">Reglamento medicina</a></li>
+                                    <li><a tabindex="-1" href="" target="_blank">Reglamento enfermería</a></li>
+
+
+                                </ul>
+                            </li>
+
+
+
+                        </ul>
+                    </li>
+
+
+
+
+
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+<p>
+    @Html.ActionLink("Nueva IPS/ESE", "RegistroEPS")
+</p>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+
+            <th class="text-center">NOMBRE INSTITUCIÓN</th> 
+            <th class="text-center">REPRESENTANTE LEGAL</th>
+            <th class="text-center">CARGO</th>
+            <th class="text-center">CORREO</th>
+            <th class="text-center">REPRESENTANTE CODA</th>
+            <th class="text-center">CARGO</th>
+            <th class="text-center">OBJETO CONVENIO</th>
+            <th class="text-center">MUNICIPIO</th>
+            
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.representante_legal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cargo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.correo)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.representanteDS)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cargo_representanteDS)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.objeto_convenio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Municipio.nombre)
+                </td>
+                <td>
+
+                    @Html.ActionLink(" ", "Details", new { id = item.IPS_ESEId }, new { @class = "btn btn-sm btn-default btn-icon-only glyphicon glyphicon-ok", title = "Ver detalle" })
+                    @Html.ActionLink(" ", "Delete", new { id = item.IPS_ESEId }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-remove", title = "Eliminar" })
+                    @Html.ActionLink(" ", "EditEPS", new { id = item.IPS_ESEId }, new { @class = "btn btn-sm btn-success btn-icon-only glyphicon glyphicon-pencil", title = "Editar " })
+                </td>
+            </tr>
+        }
+
+</table>

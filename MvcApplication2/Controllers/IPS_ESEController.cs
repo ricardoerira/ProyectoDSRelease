@@ -14,6 +14,7 @@ using WebMatrix.WebData;
 using System.Text.RegularExpressions;
 using System.Web.Security;
 using MoreLinq;
+using MvcApplication2.Util;
 
 namespace MvcApplication2.Controllers
 {
@@ -25,6 +26,13 @@ namespace MvcApplication2.Controllers
         // GET: /IPS_ESE/
 
         public ActionResult Index()
+        {
+
+            var ips_ese = db.IPS_ESE.Include(i => i.Municipio);
+            return View(ips_ese.ToList());
+        }
+
+        public ActionResult Index1()
         {
 
             var ips_ese = db.IPS_ESE.Include(i => i.Municipio);
@@ -113,94 +121,82 @@ namespace MvcApplication2.Controllers
             return View(ips_ese);
         }
 
-
+        
 
         public ActionResult cargaDocumentos(IPS_ESE ips_ese)
         {
-            string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
 
 
-            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[0] + ips_ese.IPS_ESEId, ".jpg");
-            if (System.IO.File.Exists(path1))
+            string path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[0] + ips_ese.IPS_ESEId, ".jpg");
+
+            if (Utilidades.remoteFileExists(path1))
             {
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[0] + ips_ese.IPS_ESEId, ".jpg");
 
                 ViewBag.imagen1 = path1;
-
+                ViewBag.imagen1a = Constantes.documentos_ips[0] + ips_ese.IPS_ESEId+ ".jpg";
             }
             else
             {
-                ViewBag.imagen1 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen1 = Constantes.url_noimage;
 
             }
 
 
-            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[1] + ips_ese.IPS_ESEId, ".jpg");
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[1] + ips_ese.IPS_ESEId, ".jpg");
 
-            if (System.IO.File.Exists(path1))
+            if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[1] + ips_ese.IPS_ESEId, ".jpg");
                 ViewBag.imagen2 = path1;
+                ViewBag.imagen2a = Constantes.documentos_ips[1] + ips_ese.IPS_ESEId + ".jpg";
             }
             else
             {
-                ViewBag.imagen2 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen2 = Constantes.url_noimage;
 
             }
 
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[2] + ips_ese.IPS_ESEId, ".jpg");
 
-            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[2] + ips_ese.IPS_ESEId, ".jpg");
-
-            if (System.IO.File.Exists(path1))
+            if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[2] + ips_ese.IPS_ESEId, ".jpg");
                 ViewBag.imagen3 = path1;
-
+                ViewBag.imagen3a = Constantes.documentos_ips[2] + ips_ese.IPS_ESEId + ".jpg";
             }
             else
             {
-                ViewBag.imagen3 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen3 = Constantes.url_noimage;
 
             }
 
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[3] + ips_ese.IPS_ESEId, ".jpg");
 
-
-            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[3] + ips_ese.IPS_ESEId, ".jpg");
-
-            if (System.IO.File.Exists(path1))
+            if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[3] + ips_ese.IPS_ESEId, ".jpg");
                 ViewBag.imagen4 = path1;
-
+                ViewBag.imagen4a = Constantes.documentos_ips[3] + ips_ese.IPS_ESEId + ".jpg";
             }
             else
             {
-                ViewBag.imagen4 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen4 = Constantes.url_noimage;
 
             }
 
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[4] + ips_ese.IPS_ESEId, ".jpg");
 
-
-
-            path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[4] + ips_ese.IPS_ESEId, ".jpg");
-
-            if (System.IO.File.Exists(path1))
+            if (Utilidades.remoteFileExists(path1))
             {
 
-                path1 = string.Format("{0}/{1}{2}", "http://salud.ucaldas.edu.co/Proyecto/Uploads", documentos[4] + ips_ese.IPS_ESEId, ".jpg");
                 ViewBag.imagen5 = path1;
-
+                ViewBag.imagen5a = Constantes.documentos_ips[4] + ips_ese.IPS_ESEId + ".jpg";
             }
             else
             {
-                ViewBag.imagen5 = "http://www.logan.es/wp-content/themes/logan/images/dummy-image.jpg";
+                ViewBag.imagen5 = Constantes.url_noimage;
 
             }
-
-
 
             //path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[5] + docente.num_documento, ".jpg");
 
@@ -1098,6 +1094,8 @@ namespace MvcApplication2.Controllers
         }
 
 
+
+
         //
         // GET: /IPS_ESE/Edit/5---------------------
 
@@ -1162,6 +1160,91 @@ namespace MvcApplication2.Controllers
             //return RedirectToAction("./Rotacion/VistaODS");
         }
 
+
+        public ActionResult EditEPS1(int id = 0)
+        {
+            IPS_ESE ips_ese = null;
+
+            if (!User.Identity.Name.Equals(""))
+            {
+                var ips = db.IPS_ESE.Where(r => r.user.Equals(User.Identity.Name));
+                
+                try
+                {
+                    List<IPS_ESE> temp = ips.ToList();
+                    ips_ese = temp.ElementAt(0);
+
+                    cargaDocumentos(ips_ese);
+                    ViewBag.municipioId = new SelectList(db.Municipios, "municipioId", "nombre", ips_ese.municipioId);
+                    
+
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            }
+            else
+            {
+                return HttpNotFound();
+
+            }
+
+            return View(ips_ese);
+            
+        }
+
+        //
+        // POST: /IPS_ESE/Edit/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditEPS1(IPS_ESE ips_ese)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(ips_ese).State = EntityState.Modified;
+
+
+                int numFiles = Request.Files.Count;
+                if (Request != null)
+                {
+
+
+                    int uploadedCount = 0;
+                    string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
+                    for (int i = 0; i < numFiles; i++)
+                    {
+                        HttpPostedFileBase file = Request.Files[i];
+                        if (file.ContentLength > 0)
+                        {
+                            string fileName = file.FileName;
+                            string fileContentType = file.ContentType;
+                            byte[] fileBytes = new byte[file.ContentLength];
+                            file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
+                            if (System.IO.File.Exists(path1))
+                                System.IO.File.Delete(path1);
+
+                            file.SaveAs(path1);
+                            uploadedCount++;
+                        }
+                    }
+                }
+
+
+                db.SaveChanges();
+                //return RedirectToAction("../Rotacion/VistaODS");
+                return RedirectToAction("EditEPS1/" + ips_ese.IPS_ESEId);
+                //return RedirectToAction("RegistroEPS");
+            }
+            ViewBag.municipioId = new SelectList(db.Municipios, "municipioId", "nombre", ips_ese.municipioId);
+            return RedirectToAction("EditEPS1/" + ips_ese.IPS_ESEId);
+            //return RedirectToAction("./Rotacion/VistaODS");
+        }
+
+
         //
         // GET: /IPS_ESE/Delete/5
 
@@ -1173,6 +1256,50 @@ namespace MvcApplication2.Controllers
                 return HttpNotFound();
             }
             return View(ips_ese);
+        }
+
+        public ActionResult DeleteImage1(int id)
+        {
+
+            string imagen = Request.Params["imagen"];
+            imagen = imagen.Replace("%", "/");
+            string path1 = string.Format("{0}{1}", Server.MapPath("../../Uploads/"), imagen);
+            if (System.IO.File.Exists(path1))
+                System.IO.File.Delete(path1);
+
+            IPS_ESE ips_ese = db.IPS_ESE.Find(id);
+            if (ips_ese == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            ViewBag.imagen1 = imagen;
+            return RedirectToAction("../IPS_ESE/EditEPS1/" + ips_ese.IPS_ESEId);
+
+
+
+        }
+
+        public ActionResult DeleteImage(int id)
+        {
+
+            string imagen = Request.Params["imagen"];
+            imagen = imagen.Replace("%", "/");
+            string path1 = string.Format("{0}{1}", Server.MapPath("../../Uploads/"), imagen);
+            if (System.IO.File.Exists(path1))
+                System.IO.File.Delete(path1);
+
+            IPS_ESE ips_ese = db.IPS_ESE.Find(id);
+            if (ips_ese == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            ViewBag.imagen1 = imagen;
+            return RedirectToAction("../IPS_ESE/EditEPS/" + ips_ese.IPS_ESEId);
+
         }
 
         //
