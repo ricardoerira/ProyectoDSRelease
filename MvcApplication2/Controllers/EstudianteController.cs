@@ -437,7 +437,7 @@ namespace MvcApplication2.Controllers
                 (hv.num_celular != 0) &&
                 (hv.estado_civil != "Sin Asignar") && (f.primer_nombre_acudiente != null) &&
                 (f.primer_apellido_acudiente != null) && (f.direccion_acudiente != null) &&
-                (f.telefono_acudiente != 0))
+                (f.telefono_acudiente != 0) && (hv.fecha_influenza >= DateTime.Now) && (hv.fecha_seguro >= DateTime.Now))
             {
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 string[] documentos = null;
@@ -1831,6 +1831,8 @@ namespace MvcApplication2.Controllers
 
             Estudiante estudiante = db.Estudiantes.Find(id);
             HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
+            
+            
             cargaImagen(estudiante);
 
             int edad = DateTime.Today.AddTicks(-estudiante.HojaVida.fecha_nacimiento.Ticks).Year - 1;
@@ -1954,15 +1956,38 @@ namespace MvcApplication2.Controllers
         public ActionResult PersonalesDS(Estudiante estudiante)
         {
 
-            estudiante = db.Estudiantes.Find(estudiante.estudianteId);
 
-            guardaDocumentos(estudiante);
+            if (ModelState.IsValid)
+            {
 
+                HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
+                Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
+                oHojaVida.hemoclasificacion = estudiante.HojaVida.hemoclasificacion;
+                oHojaVida.hijos = estudiante.HojaVida.hijos;
+                oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
+                oHojaVida.fecha_seguro = estudiante.HojaVida.fecha_seguro;
+                oHojaVida.fecha_influenza = estudiante.HojaVida.fecha_influenza;
 
-            Boolean estado = validarCampos(estudiante, false);
+                
+                
+                estudiante.HojaVida = null;
+                db.Entry(est).State = EntityState.Modified;
+                guardaDocumentos(estudiante);
+                db.SaveChanges();
+                validarCampos(estudiante, false);
+                cargaDocumentos(estudiante);
+                return RedirectToAction("../Estudiante/PersonalesDS/" + est.estudianteId);
 
-            //return View(estudiante);
-            return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
+            }
+            else
+            {
+
+                validarCampos(estudiante, false);
+                cargaDocumentos(estudiante);
+                Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
+                return View(estudiante2);
+            }
+
 
         }
 
@@ -1989,15 +2014,36 @@ namespace MvcApplication2.Controllers
         public ActionResult PersonalesResidentesDS(Estudiante estudiante)
         {
 
-            estudiante = db.Estudiantes.Find(estudiante.estudianteId);
+            if (ModelState.IsValid)
+            {
 
-            guardaDocumentosResidentes(estudiante);
+                HojaVida oHojaVida = db.HojaVidas.Find(estudiante.hojaVidaId);
+                Estudiante est = db.Estudiantes.Find(estudiante.estudianteId);
+                oHojaVida.hemoclasificacion = estudiante.HojaVida.hemoclasificacion;
+                oHojaVida.hijos = estudiante.HojaVida.hijos;
+                oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
+                oHojaVida.fecha_seguro = estudiante.HojaVida.fecha_seguro;
+                oHojaVida.fecha_influenza = estudiante.HojaVida.fecha_influenza;
 
 
-            Boolean estado = validarCampos(estudiante, true);
 
-            //return View(estudiante);
-            return RedirectToAction("../Estudiante/PersonalesDS/" + estudiante.estudianteId);
+                estudiante.HojaVida = null;
+                db.Entry(est).State = EntityState.Modified;
+                guardaDocumentos(estudiante);
+                db.SaveChanges();
+                validarCampos(estudiante, false);
+                cargaDocumentos(estudiante);
+                return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + est.estudianteId);
+
+            }
+            else
+            {
+
+                validarCampos(estudiante, false);
+                cargaDocumentos(estudiante);
+                Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
+                return View(estudiante2);
+            }
 
 
         }

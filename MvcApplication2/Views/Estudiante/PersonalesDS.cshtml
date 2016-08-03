@@ -55,9 +55,20 @@
                     <img src="@Url.Content(Model.HojaVida.imagen_DI)" alt="..." class="img-rounded" height="200px" width="150px"><br />
 
                 </div>
+                <script>var mensaje = "";</script>
+                @if (Model.HojaVida.fecha_seguro < DateTime.Today)
+                {
+                    <script>var mensaje = mensaje+"Debes actualizar tu carné del seguro.";</script>
+                }
+                @if (Model.HojaVida.fecha_influenza < DateTime.Today)
+                {
+                    <script>var mensaje = mensaje + "Debes aplicarte nuevamente la vacuna de influenza.";</script>
+                }
+                                
+                
                 @if (!Model.HojaVida.estado_HV)
                 {
-                    <script>alert("Debes subir todos los documentos");</script>
+                    <script>alert(mensaje+" Debes subir todos los documentos");</script>
 
                 }
                 @if (@ViewBag.actualizar!=null)
@@ -359,6 +370,44 @@
 
                 </div><!-- /. <div class="col-sm-8"info familia>row -->
 
+
+                <legend>Vencimiento de documentos:</legend>
+
+                <div class="col-sm-3">
+
+                </div>
+
+
+                <div class="col-sm-8">
+                    <div class="row">
+                        <fdorm class="form-horizontal" role="form">
+
+
+
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">Fecha vencimiento Seguro</label>
+
+                                <div class="col-sm-4">                                  
+                                    
+                                    @Html.EditorFor(model => model.HojaVida.fecha_seguro)
+                                    @*@Html.ValidationMessageFor(model => model.HojaVida.fecha_seguro)*@
+                                </div>
+
+                                <label class="col-sm-2 control-label">fecha Vencimiento Influenza</label>
+
+                                <div class="col-sm-4">
+
+
+                                    @Html.EditorFor(model => model.HojaVida.fecha_influenza)
+                                    @*@Html.ValidationMessageFor(model => model.HojaVida.fecha_seguro)*@
+                                </div>
+                            </div>
+
+                        </fdorm>
+
+                    </div><!-- /. <div class="row""info familia>row -->
+
+                </div><!-- /. <div class="col-sm-8"info familia>row -->
 
 
                 <legend>Cargar documentos (jpg,png)</legend>

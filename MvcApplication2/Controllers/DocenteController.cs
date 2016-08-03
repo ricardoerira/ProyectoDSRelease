@@ -104,6 +104,7 @@ namespace MvcApplication2.Controllers
             rptH2.SetParameterValue("edad", docente.diploma_profesional + "");
             rptH2.SetParameterValue("EPS", docente.HojaVida.entidad_salud + "");
             rptH2.SetParameterValue("ARL", docente.HojaVida.ARL + "");
+            rptH2.SetParameterValue("otro_titulo", docente.otro_titulo + "");
 
 
             for (int i = 0; i < Constantes.documentos_docente.Length; i++)

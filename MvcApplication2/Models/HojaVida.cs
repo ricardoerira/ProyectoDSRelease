@@ -55,6 +55,14 @@ namespace MvcApplication2.Models
         public string certificado_ARL { get; set; }        
         public int familiaId { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime fecha_seguro { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime fecha_influenza { get; set; }
+
         public virtual ICollection<Vacuna> Vacunas { get; set; }
 
         public virtual ICollection<Docente> Docente { get; set; }
@@ -91,8 +99,7 @@ namespace MvcApplication2.Models
 
         public string NUM_DOC { get; set; }
         public string NOM_CARRERA { get; set; }
-
-        
+                
         public class ESObject0
         {
             public List<Estudiante2> estudiantesMatriculados { get; set; }
