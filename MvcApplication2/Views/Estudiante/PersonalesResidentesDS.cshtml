@@ -57,14 +57,15 @@
 
                 </div>
                 <script>var mensaje = "";</script>
-                @if (Model.HojaVida.fecha_seguro < DateTime.Today)
+                @if (Model.HojaVida.fecha_rcp < DateTime.Today)
                 {
-                    <script>var mensaje = mensaje + "Debes actualizar tu carné del seguro.";</script>
+                    <script>var mensaje = mensaje + "Debes actualizar el RCP.";</script>
                 }
                 @if (Model.HojaVida.fecha_influenza < DateTime.Today)
                 {
                     <script>var mensaje = mensaje + "Debes aplicarte nuevamente la vacuna de influenza.";</script>
                 }
+                
 
 
                 @if (!Model.HojaVida.estado_HV)
@@ -386,11 +387,11 @@
 
 
                             <div class="form-group required">
-                                <label class="col-sm-2 control-label">Fecha vencimiento Seguro</label>
+                                <label class="col-sm-2 control-label">Fecha RCP</label>
 
                                 <div class="col-sm-4">
 
-                                    @Html.EditorFor(model => model.HojaVida.fecha_seguro)
+                                    @Html.EditorFor(model => model.HojaVida.fecha_rcp)
                                     @*@Html.ValidationMessageFor(model => model.HojaVida.fecha_seguro)*@
                                 </div>
 
@@ -787,21 +788,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                     </div><!-- /. <div class="row""info familia>row -->

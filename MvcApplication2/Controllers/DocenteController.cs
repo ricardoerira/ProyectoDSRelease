@@ -1076,9 +1076,8 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_celular = docente.HojaVida.num_celular;
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
-
-
-
+                oHojaVida.fecha_influenza = docente.HojaVida.fecha_influenza;
+                docente1.num_libreta_militar = docente.num_libreta_militar;
                 docente1.tipo_vinculacion = docente.tipo_vinculacion;
                 docente1.categoria_escalafon_docente = docente.categoria_escalafon_docente;
                 docente1.certificado_TPDTS = docente.certificado_TPDTS;
@@ -1113,7 +1112,7 @@ namespace MvcApplication2.Controllers
                 cargaDocumentos(docente1);
 
 
-                return RedirectToAction("../Docente/Personales/" + docente1.docenteId);
+                return RedirectToAction("../Docente/PersonalesDS/" + docente1.docenteId);
 
             }
             else
@@ -1127,6 +1126,7 @@ namespace MvcApplication2.Controllers
             }
 
         }
+
 
 
         [HttpPost]
@@ -1322,7 +1322,7 @@ namespace MvcApplication2.Controllers
                 Docente estudianteAux = db.Docentes.Find(d.docenteId);
 
 
-                if (validaDocumentos(d))
+                if (validaDocumentos(d)&&(d.HojaVida.fecha_influenza>=DateTime.Now))
                 {
                     estudianteAux.HojaVida.estado_HV = true;
 

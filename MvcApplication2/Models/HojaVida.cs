@@ -63,6 +63,14 @@ namespace MvcApplication2.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime fecha_influenza { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime fecha_poliza { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime fecha_rcp { get; set; }
+
         public virtual ICollection<Vacuna> Vacunas { get; set; }
 
         public virtual ICollection<Docente> Docente { get; set; }

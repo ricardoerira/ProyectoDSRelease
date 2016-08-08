@@ -58,6 +58,7 @@ namespace MvcApplication2.Controllers
         {
             if (ModelState.IsValid)
             {
+                string ext = ".jpg";
                 if (ips_ese.pass.Equals(ips_ese.passC))
                 {
                     db.IPS_ESE.Add(ips_ese);
@@ -76,11 +77,16 @@ namespace MvcApplication2.Controllers
 
 
                         int uploadedCount = 0;
-                        string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
+                        string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion", "convenio" };
                         int numFiles = Request.Files.Count;
 
                         for (int i = 0; i < numFiles; i++)
                         {
+                            if (i == 5)
+                            {
+                                ext = ".pdf";
+                            }
+
 
                             HttpPostedFileBase file = Request.Files[i];
                             if (file.ContentLength > 0)
@@ -89,7 +95,7 @@ namespace MvcApplication2.Controllers
                                 string fileContentType = file.ContentType;
                                 byte[] fileBytes = new byte[file.ContentLength];
                                 file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
+                                string path1 = string.Format("{0}/{1}{2}", Server.MapPath("~/Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ext);
                                 //string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
                                 if (System.IO.File.Exists(path1))
                                     System.IO.File.Delete(path1);
@@ -195,6 +201,20 @@ namespace MvcApplication2.Controllers
             else
             {
                 ViewBag.imagen5 = Constantes.url_noimage;
+
+            }
+
+            path1 = string.Format("{0}/{1}{2}", Constantes.url_folder, Constantes.documentos_ips[5] + ips_ese.IPS_ESEId, ".pdf");
+
+            if (Utilidades.remoteFileExists(path1))
+            {
+
+                ViewBag.imagen6 = path1;
+                ViewBag.imagen6a = Constantes.documentos_ips[5] + ips_ese.IPS_ESEId + ".pdf";
+            }
+            else
+            {
+                ViewBag.imagen6 = Constantes.url_noimage;
 
             }
 
@@ -355,7 +375,7 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + pr.nombre + " Departamento " + ds.nombre + " que realizaran su rotación en su institución y los profesores con su horario.");
             rptH.SetParameterValue("fecha", DateTime.Now.ToString("dd MMMM yyyy") + ".");
             rptH.SetParameterValue("dr", ips.representante);
-            rptH.SetParameterValue("cargo", ips.cargo);
+            rptH.SetParameterValue("cargo", ips.cargo_representanteDS);
             rptH.SetParameterValue("nombreIPS", ips.nombre);
 
 
@@ -1121,7 +1141,7 @@ namespace MvcApplication2.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(ips_ese).State = EntityState.Modified;
-
+                string ext = ".jpg";
 
                 int numFiles = Request.Files.Count;
                 if (Request != null)
@@ -1129,9 +1149,13 @@ namespace MvcApplication2.Controllers
 
 
                     int uploadedCount = 0;
-                    string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
+                    string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion", "convenio" };
                     for (int i = 0; i < numFiles; i++)
                     {
+                        if (i == 5)
+                        {
+                            ext = ".pdf";
+                        }
                         HttpPostedFileBase file = Request.Files[i];
                         if (file.ContentLength > 0)
                         {
@@ -1139,7 +1163,7 @@ namespace MvcApplication2.Controllers
                             string fileContentType = file.ContentType;
                             byte[] fileBytes = new byte[file.ContentLength];
                             file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
+                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ext);
                             if (System.IO.File.Exists(path1))
                                 System.IO.File.Delete(path1);
 
@@ -1205,7 +1229,7 @@ namespace MvcApplication2.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(ips_ese).State = EntityState.Modified;
-
+                string ext = ".jpg";
 
                 int numFiles = Request.Files.Count;
                 if (Request != null)
@@ -1213,9 +1237,13 @@ namespace MvcApplication2.Controllers
 
 
                     int uploadedCount = 0;
-                    string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion" };
+                    string[] documentos = { "resolucion", "cedularl", "actap", "rut", "habilitacion","convenio"};
                     for (int i = 0; i < numFiles; i++)
                     {
+                        if (i == 5) 
+                        {
+                            ext = ".pdf";
+                        }
                         HttpPostedFileBase file = Request.Files[i];
                         if (file.ContentLength > 0)
                         {
@@ -1223,7 +1251,7 @@ namespace MvcApplication2.Controllers
                             string fileContentType = file.ContentType;
                             byte[] fileBytes = new byte[file.ContentLength];
                             file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ".jpg");
+                            string path1 = string.Format("{0}/{1}{2}", Server.MapPath("../../Uploads/"), documentos[i] + ips_ese.IPS_ESEId, ext);
                             if (System.IO.File.Exists(path1))
                                 System.IO.File.Delete(path1);
 

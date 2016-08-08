@@ -338,7 +338,7 @@
                                 </td>
                                 <td>
 
-                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
                                 </td>
 
                             </tr>
@@ -349,14 +349,14 @@
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1 })'>
+                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen2 })'>
                                         <img src=@ViewBag.imagen2 class="img-rounded" height="75" width="75" />
                                     </a>
 
                                 </td>
                                 <td>
 
-                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen2a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen2a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
                                 </td>
 
                             </tr>
@@ -367,13 +367,13 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1 })'>
+                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen3 })'>
                                         <img src=@ViewBag.imagen3 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
                                 <td>
 
-                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen3a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen3a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
                                 </td>
 
                             </tr>
@@ -384,13 +384,13 @@
                                     <input type="file" name="InputFile" accept="image/x-png, image/gif, image/jpeg">
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1 })'>
+                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen4 })'>
                                         <img src=@ViewBag.imagen4 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
                                 <td>
 
-                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen4a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen4a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
                                 </td>
                             </tr>
                             <tr>
@@ -400,16 +400,32 @@
 
                                 </td>
                                 <td>
-                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen1 })'>
+                                    <a href='@Url.Action("", "", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen5 })'>
                                         <img src=@ViewBag.imagen5 class="img-rounded" height="75" width="75" />
                                     </a>
                                 </td>
                                 <td>
 
-                                    @Html.ActionLink(" ", "DeleteImage", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen5a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen5a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
                                 </td>
                             </tr>
 
+                            <tr>
+                                <td class="tdDocumentos">Copia de Convenio</td>
+                                <td>
+                                    <input type="file" name="InputFile" accept="application/pdf">
+
+                                </td>
+                                <td>
+                                    <a href='@ViewBag.imagen6'>
+                                        <img src="https://userscontent2.emaze.com/images/5ca03a98-9b4d-41d8-adbc-e6c7df43e4f7/3a39c14cb98b45318cb111b9e2c37ec3.png" class="img-rounded" height="75" width="75" />
+                                    </a>
+                                </td>
+                                <td>
+
+                                    @Html.ActionLink(" ", "DeleteImage1", new { id = @Model.IPS_ESEId, imagen = @ViewBag.imagen6a }, new { @class = "btn btn-sm btn-danger btn-icon-only glyphicon glyphicon-floppy-remove", title = "Eliminar Documento" })
+                                </td>
+                            </tr>
 
                         </table>
                         <div class="form-group">

@@ -437,7 +437,7 @@ namespace MvcApplication2.Controllers
                 (hv.num_celular != 0) &&
                 (hv.estado_civil != "Sin Asignar") && (f.primer_nombre_acudiente != null) &&
                 (f.primer_apellido_acudiente != null) && (f.direccion_acudiente != null) &&
-                (f.telefono_acudiente != 0) && (hv.fecha_influenza >= DateTime.Now) && (hv.fecha_seguro >= DateTime.Now))
+                (f.telefono_acudiente != 0))
             {
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
                 string[] documentos = null;
@@ -447,24 +447,36 @@ namespace MvcApplication2.Controllers
                     documentos = Constantes.documentos_estudiante;
 
 
-                if (validaDocumentos(estudiante, documentos))
+                if ((validaDocumentos(estudiante, documentos)) 
+                    && (((hv.fecha_seguro >= DateTime.Now) && (hv.fecha_poliza >= DateTime.Now)
+                    && (hv.fecha_influenza >= DateTime.Now)) 
+                    || (ds &&(hv.fecha_influenza >= DateTime.Now) && (hv.fecha_rcp >= DateTime.Now))))
                 {
+                   
                     estudianteAux.HojaVida.estado_HV = true;
 
 
                 }
+             
+
                 else
                 {
                     estudianteAux.HojaVida.estado_HV = false;
 
 
                 }
+                
+
+
                 db.SaveChanges();
 
                 ViewBag.estado = estudianteAux.HojaVida.estado_HV;
                 db.Entry(estudianteAux).State = EntityState.Modified;
                 return true;
             }
+            
+            
+            
             else
             {
                 Estudiante estudianteAux = db.Estudiantes.Find(estudiante.estudianteId);
@@ -1577,6 +1589,7 @@ namespace MvcApplication2.Controllers
         public ActionResult
             guardaDocumentos(Estudiante estudiante)//GUARDA ARCHIVOS
         {
+            
             int numFiles = Request.Files.Count;
             if (Request != null)
             {
@@ -1586,9 +1599,11 @@ namespace MvcApplication2.Controllers
 
                 for (int i = 0; i < numFiles; i++)
                 {
+                    
                     HttpPostedFileBase file = Request.Files[i];
                     if (file.ContentLength > 0)
                     {
+                        
                         string fileName = file.FileName;
                         string fileContentType = file.ContentType;
                         byte[] fileBytes = new byte[file.ContentLength];
@@ -1967,6 +1982,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
                 oHojaVida.fecha_seguro = estudiante.HojaVida.fecha_seguro;
                 oHojaVida.fecha_influenza = estudiante.HojaVida.fecha_influenza;
+                oHojaVida.fecha_poliza = estudiante.HojaVida.fecha_poliza;
 
                 
                 
@@ -2022,7 +2038,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.hemoclasificacion = estudiante.HojaVida.hemoclasificacion;
                 oHojaVida.hijos = estudiante.HojaVida.hijos;
                 oHojaVida.estado_civil = estudiante.HojaVida.estado_civil;
-                oHojaVida.fecha_seguro = estudiante.HojaVida.fecha_seguro;
+                oHojaVida.fecha_rcp = estudiante.HojaVida.fecha_rcp;
                 oHojaVida.fecha_influenza = estudiante.HojaVida.fecha_influenza;
 
 

@@ -58,11 +58,15 @@
                 <script>var mensaje = "";</script>
                 @if (Model.HojaVida.fecha_seguro < DateTime.Today)
                 {
-                    <script>var mensaje = mensaje+"Debes actualizar tu carné del seguro.";</script>
+                    <script>var mensaje = mensaje+"Debes actualizar tu carné de la EPS.";</script>
                 }
                 @if (Model.HojaVida.fecha_influenza < DateTime.Today)
                 {
                     <script>var mensaje = mensaje + "Debes aplicarte nuevamente la vacuna de influenza.";</script>
+                }
+                @if (Model.HojaVida.fecha_poliza < DateTime.Today)
+                {
+                    <script>var mensaje = mensaje + "Debes actualizar el certificado liberty.";</script>
                 }
                                 
                 
@@ -385,7 +389,7 @@
 
 
                             <div class="form-group required">
-                                <label class="col-sm-2 control-label">Fecha vencimiento Seguro</label>
+                                <label class="col-sm-2 control-label">Fecha vencimiento EPS</label>
 
                                 <div class="col-sm-4">                                  
                                     
@@ -401,6 +405,16 @@
                                     @Html.EditorFor(model => model.HojaVida.fecha_influenza)
                                     @*@Html.ValidationMessageFor(model => model.HojaVida.fecha_seguro)*@
                                 </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label">Fecha vencimiento certificado liberty</label>
+
+                                <div class="col-sm-4">
+
+                                    @Html.EditorFor(model => model.HojaVida.fecha_poliza)
+                                    @*@Html.ValidationMessageFor(model => model.HojaVida.fecha_seguro)*@
+                                </div>
+
                             </div>
 
                         </fdorm>
