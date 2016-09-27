@@ -35,7 +35,7 @@ namespace MvcApplication2.Controllers
             if (User.Identity.IsAuthenticated)
             {
 
-                listest = db.Rotacions.Where(r => r.ActividadAcademica.DepartamentoSalud.user.Equals(User.Identity.Name)).ToList();
+                listest = db.Rotacions.Where(r => r.ActividadAcademica.DepartamentoSalud.user.Equals(User.Identity.Name)).OrderBy(r => r.ActividadAcademica.nombre).ToList();
 
             }
             if (listest.Count == 0)

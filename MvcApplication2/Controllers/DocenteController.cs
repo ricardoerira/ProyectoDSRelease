@@ -1075,6 +1075,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.municipio_procedencia = docente.HojaVida.municipio_procedencia;
                 oHojaVida.num_celular = docente.HojaVida.num_celular;
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
+                oHojaVida.entidad_salud = docente.HojaVida.entidad_salud;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
                 oHojaVida.fecha_influenza = docente.HojaVida.fecha_influenza;
                 docente1.num_libreta_militar = docente.num_libreta_militar;
@@ -1222,6 +1223,7 @@ namespace MvcApplication2.Controllers
                 oHojaVida.num_telefono = docente.HojaVida.num_telefono;
                 oHojaVida.hemoclasificacion = docente.HojaVida.hemoclasificacion;
                 oHojaVida.ARL = docente.HojaVida.ARL;
+                oHojaVida.entidad_salud = docente.HojaVida.entidad_salud;
                 oHojaVida.genero = docente.HojaVida.genero;
                 docente1.num_libreta_militar = docente.num_libreta_militar;
                 docente1.tipo_vinculacion = docente.tipo_vinculacion;

@@ -615,7 +615,7 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("tel_madre", estudiante.HojaVida.Familia.telefono_madre + "");
             rptH.SetParameterValue("nombre_acudiente", estudiante.HojaVida.Familia.primer_nombre_acudiente + " " + estudiante.HojaVida.Familia.primer_apellido_acudiente + " " + estudiante.HojaVida.Familia.segundo_apellido_acudiente);
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
-            rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
+            rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.celular_acudiente + "");
 
             for (int i = 0; i < Constantes.documentos_estudiante.Length; i++)
             {
@@ -686,7 +686,7 @@ namespace MvcApplication2.Controllers
             rptH.SetParameterValue("tel_madre", estudiante.HojaVida.Familia.telefono_madre + "");
             rptH.SetParameterValue("nombre_acudiente", estudiante.HojaVida.Familia.primer_nombre_acudiente + " " + estudiante.HojaVida.Familia.primer_apellido_acudiente + " " + estudiante.HojaVida.Familia.segundo_apellido_acudiente);
             rptH.SetParameterValue("direccion_acudiente", estudiante.HojaVida.Familia.direccion_acudiente + "");
-            rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.telefono_acudiente + "");
+            rptH.SetParameterValue("tel_acudiente", estudiante.HojaVida.Familia.celular_acudiente + "");
 
             for (int i = 0; i < Constantes.documentos_estudianteResidentes.Length; i++)
             {
@@ -1294,6 +1294,29 @@ namespace MvcApplication2.Controllers
 
             ViewBag.imagen1 = imagen;
             return RedirectToAction("../Estudiante/Personales/" + estudiante.estudianteId);
+
+
+
+        }
+
+        public ActionResult DeleteImageR(int id)
+        {
+
+            string imagen = Request.Params["imagen"];
+            imagen = imagen.Replace("%", "/");
+            string path1 = string.Format("{0}{1}", Server.MapPath("../../Uploads/"), imagen);
+            if (System.IO.File.Exists(path1))
+                System.IO.File.Delete(path1);
+
+            Estudiante estudiante = db.Estudiantes.Find(id);
+            if (estudiante == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            ViewBag.imagen1 = imagen;
+            return RedirectToAction("../Estudiante/PersonalesResidentes/" + estudiante.estudianteId);
 
 
 
@@ -2045,10 +2068,10 @@ namespace MvcApplication2.Controllers
 
                 estudiante.HojaVida = null;
                 db.Entry(est).State = EntityState.Modified;
-                guardaDocumentos(estudiante);
+                guardaDocumentosResidentes(estudiante);
                 db.SaveChanges();
                 validarCampos(estudiante, false);
-                cargaDocumentos(estudiante);
+                cargaDocumentoResidentes(estudiante);
                 return RedirectToAction("../Estudiante/PersonalesResidentesDS/" + est.estudianteId);
 
             }
@@ -2056,7 +2079,7 @@ namespace MvcApplication2.Controllers
             {
 
                 validarCampos(estudiante, false);
-                cargaDocumentos(estudiante);
+                cargaDocumentoResidentes(estudiante);
                 Estudiante estudiante2 = db.Estudiantes.Find(estudiante.estudianteId);
                 return View(estudiante2);
             }

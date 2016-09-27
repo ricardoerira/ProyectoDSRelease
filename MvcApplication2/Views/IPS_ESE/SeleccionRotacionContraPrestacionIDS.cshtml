@@ -1,0 +1,173 @@
+﻿@model MvcApplication2.Models.IPS_ESE
+@{
+    ViewBag.Title = "InformeInduccion";
+}
+<div class="row">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Inicio", "VistaODS/", "Rotacion")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Hoja de vida<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Estudiante", "Buscar/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Docente", "Buscar/", "Docente")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Listado estudiantes", "EstadoHV/", "Estudiante")</li>
+                            <li>@Html.ActionLink("Listado docentes", "EstadoHV/", "Docente")</li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            IPS/ESE<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Listado", "Index/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Crear", "RegistroEPS/", "IPS_ESE")</li>
+
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Informes<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Portafolio de servicios </a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" @Html.ActionLink("Período académico", "SeleccionRotacionContraPrestacionPeriodoCursoDS/", "IPS_ESE")</a></li>
+                                    <li><a tabindex="-1" @Html.ActionLink("Mes y año", "SeleccionRotacionContraPrestacionCDS/", "IPS_ESE")</a></li>
+
+                                </ul>
+                            </li>
+                            <li>@Html.ActionLink("Inducciones", "SeleccionRotacionContraPrestacionIDS/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Inventario", "SeleccionRotacionContraPrestacionEDS/", "IPS_ESE")</li>
+
+
+
+                        </ul>
+                    </li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Usuario<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Crear", "Register/", "Account")</li>
+
+
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</div>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    if (!string.IsNullOrEmpty(ViewBag.AlertMessage))
+    {
+        <script>alert("@ViewBag.AlertMessage");</script>
+
+    }
+
+    <div class="container" id="wrap">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <fieldset>
+
+                    <fosrm action="r" method="post" accept-charset="utf-8" class="form" role="form">
+                        <legend>Informe inducción</legend>
+
+
+                        <h4>Seleccione los campos:</h4>
+                        <div class="row">
+
+                            <div class="form-group">
+                                <h5><label class="col-sm-2 control-label">IPS/ESE</label></h5>
+                                <div class="col-xs-6 col-md-6">
+
+                                    @Html.DropDownList("IPS_ESEId", (IEnumerable<SelectListItem>)ViewBag.IPS_ESEId, new { @class = "form-control input-lg" })
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <label>Seleccione período y año:</label>
+                        <div class="row">
+                            <div class="col-xs-4 col-md-4">
+                                <select name="periodoId" id="periodoId" class="form-control input-lg">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    
+                                </select>
+                            </div>
+
+                            <div class="col-xs-4 col-md-4">
+                                <select name="añoId" class="form-control input-lg">
+                                    <option value="2015">2015</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2017">2017</option>
+
+
+                                </select>
+                            </div>
+                            <br />
+                            <br>
+                        </div>
+
+                        <span class="help-block">A través de este formulario podrá visualizar el informe de inducciones. <p>Puede elegir por período académico y año.</p></span>
+                        <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit" formtarget="_blank">
+                            Ver a
+                        </button>
+
+
+
+
+                </fieldset>
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

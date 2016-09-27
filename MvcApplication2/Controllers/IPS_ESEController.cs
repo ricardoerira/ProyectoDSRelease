@@ -210,11 +210,12 @@ namespace MvcApplication2.Controllers
             {
 
                 ViewBag.imagen6 = path1;
+                ViewBag.imagen6p = "https://userscontent2.emaze.com/images/5ca03a98-9b4d-41d8-adbc-e6c7df43e4f7/3a39c14cb98b45318cb111b9e2c37ec3.png";
                 ViewBag.imagen6a = Constantes.documentos_ips[5] + ips_ese.IPS_ESEId + ".pdf";
             }
             else
             {
-                ViewBag.imagen6 = Constantes.url_noimage;
+                ViewBag.imagen6p = Constantes.url_noimage;
 
             }
 
@@ -300,7 +301,7 @@ namespace MvcApplication2.Controllers
            .ToList();
             ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
             ViewBag.programaId = new SelectList(db.Programas, "programaId", "nombre");
-            if (!User.Identity.Name.Equals(""))
+            if (!User.Identity.Name.Equals("") && !User.Identity.Name.Equals("pro_medicina") && !User.Identity.Name.Equals("pro_enfermeria") && !User.Identity.Name.Equals("pro_edufisica") && !User.Identity.Name.Equals("pro_regenciafarmacia") && !User.Identity.Name.Equals("pro_geriatria"))
             {
                 ViewBag.DepartamentoSaludId = new SelectList(db.DepartamentoSaluds.Where(r => r.user.Equals(User.Identity.Name)), "DepartamentoSaludId", "nombre");
 
@@ -951,6 +952,473 @@ namespace MvcApplication2.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SeleccionRotacionContraPrestacionE(IPS_ESE ipss, FormCollection value)
+        {
+
+            IPS_ESE ips = db.IPS_ESE.Find(ipss.IPS_ESEId);
+            string fecha = ViewBag.fecha;
+            List<Equipo> equipos = new List<Equipo>();
+
+            int mesId = Int32.Parse(value["mesId"]);
+            int añoId = Int32.Parse(value["añoId"]);
+            var date = DateTime.MinValue;
+
+            if (mesId == 13)
+            {
+                DateTime.TryParse(añoId + "/01/01", out date);
+                DateTime date2 = new DateTime(añoId, 12,
+                                     DateTime.DaysInMonth(añoId, 12));
+                equipos = db.Equipoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaPrestamo >= date).Where(r => r.fechaPrestamo <= date2).ToList();
+
+            }
+            else
+            {
+                DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
+                DateTime date2 = new DateTime(añoId, mesId,
+                                          DateTime.DaysInMonth(añoId, mesId));
+                equipos = db.Equipoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaPrestamo >= date).Where(r => r.fechaPrestamo <= date2).ToList();
+            }
+
+
+
+            if (equipos.ToList().Count > 0)
+            {
+
+                ReportDocument rptH = new ReportDocument();
+                string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteEquipos.rpt");
+                rptH.Load(strRptPath);
+
+
+
+                int total = equipos.Sum((c => c.costo));
+                rptH.Database.Tables[0].SetDataSource(equipos.ToList());
+                if (mesId == 13)
+                {
+                    rptH.SetParameterValue("fecha", "Año: " + añoId);
+
+                }
+                else
+                {
+                    rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
+
+                }
+
+                rptH.SetParameterValue("ips", ips.nombre);
+                rptH.SetParameterValue("total", total + "");
+                rptH.SetParameterValue("correo", ips.correo);
+                rptH.SetParameterValue("recibido", ips.representante);
+
+
+
+
+
+
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+
+
+
+                return File(stream, "application/pdf");
+
+            }
+            else
+            {
+                ViewBag.AlertMessage = "No se encontraron resultados";
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                List<IPS_ESE> lista = municipios.ToList();
+                ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+                return View();
+            }
+
+        }
+
+
+
+        public ActionResult SeleccionRotacionContraPrestacionCDS()
+        {
+
+            List<IPS_ESE> lista = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("IPS"))
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+
+                    lista = municipios.ToList();
+
+
+
+                }
+                else
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                    lista = municipios.ToList();
+
+
+                }
+
+
+            }
+            else
+            {
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                lista = municipios.ToList();
+
+            }
+            ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SeleccionRotacionContraPrestacionCDS(IPS_ESE ipss, FormCollection value)
+        {
+
+            IPS_ESE ips = db.IPS_ESE.Find(ipss.IPS_ESEId);
+            string fecha = ViewBag.fecha;
+
+
+            List<Curso> cursos = new List<Curso>();
+
+            ReportDocument rptH = new ReportDocument();
+            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteContraPrestacionC.rpt");
+            rptH.Load(strRptPath);
+
+            int mesId = Int32.Parse(value["mesId"]);
+            int añoId = Int32.Parse(value["añoId"]);
+            var date = DateTime.MinValue;
+
+            if (mesId == 13)
+            {
+                DateTime.TryParse(añoId + "/01/01", out date);
+                DateTime date2 = new DateTime(añoId, 12,
+                                     DateTime.DaysInMonth(añoId, 12));
+                cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaInicio >= date).Where(r => r.fechaFin <= date2).ToList();
+
+            }
+            else
+            {
+                DateTime.TryParse(añoId + "/" + mesId + "/01", out date);
+
+                DateTime date2 = new DateTime(añoId, mesId,
+                                          DateTime.DaysInMonth(añoId, mesId));
+
+                cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.fechaInicio >= date)
+                    .Where(r => r.fechaFin <= date2).ToList();
+
+            }
+
+            if (cursos.Count > 0)
+            {
+                rptH.Database.Tables[0].SetDataSource(cursos);
+
+
+                rptH.SetParameterValue("ips", ips.nombre);
+                rptH.SetParameterValue("email", ips.correo);
+                rptH.SetParameterValue("representante", ips.representante);
+
+                if (mesId == 13)
+                {
+                    rptH.SetParameterValue("fecha", "Año: " + añoId);
+
+                }
+                else
+                {
+                    rptH.SetParameterValue("fecha", "Mes: " + mesId + " Año: " + añoId);
+
+                }
+                int total = 0;
+
+                if (cursos.Count > 0)
+                {
+                    total += cursos.Sum(d => d.totalContraprestacion);
+
+                }
+
+                rptH.SetParameterValue("total", total);
+
+
+
+
+
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+
+
+
+                return File(stream, "application/pdf");
+            }
+            else
+            {
+                ViewBag.AlertMessage = "No se encontraron resultados";
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                List<IPS_ESE> lista = municipios.ToList();
+                ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+                return View();
+            }
+
+
+        }
+
+
+        public ActionResult SeleccionRotacionContraPrestacionIDS()
+        {
+            List<IPS_ESE> lista = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("IPS"))
+                {
+
+
+
+
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+
+                    lista = municipios.ToList();
+
+
+
+                }
+                else
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                    lista = municipios.ToList();
+
+
+                }
+
+
+            }
+            else
+            {
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                lista = municipios.ToList();
+
+            }
+            ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SeleccionRotacionContraPrestacionIDS(IPS_ESE ipss, FormCollection value)
+        {
+
+            IPS_ESE ips = db.IPS_ESE.Find(ipss.IPS_ESEId);
+            string fecha = ViewBag.fecha;
+
+
+            List<Induccion> inducciones = new List<Induccion>();
+
+            ReportDocument rptH = new ReportDocument();
+            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteContraPrestacionI.rpt");
+            rptH.Load(strRptPath);
+
+            int periodoId = Int32.Parse(value["periodoId"]);
+            int añoId = Int32.Parse(value["añoId"]);
+            var date = DateTime.MinValue;
+
+
+            inducciones = db.Induccions.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.periodo == periodoId)
+                     .Where(r => r.año == añoId).ToList();
+
+            rptH.Database.Tables[0].SetDataSource(inducciones);
+
+
+
+            rptH.SetParameterValue("ips", ips.nombre);
+            rptH.SetParameterValue("fecha", "");
+            rptH.SetParameterValue("representante", ips.representante);
+            rptH.SetParameterValue("correo", ips.correo);
+
+
+
+
+            rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: " + añoId);
+
+
+            //rptH.SetParameterValue("correo", ips.correo);
+
+            int total = 0;
+
+            if (inducciones.ToList().Count > 0)
+            {
+                total += inducciones.Sum(d => d.valor);
+                rptH.SetParameterValue("total", total);
+
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+                return File(stream, "application/pdf");
+            }
+            else
+            {
+                ViewBag.AlertMessage = "No se encontraron resultados";
+
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                List<IPS_ESE> lista = municipios.ToList();
+                ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+                return View();
+            }
+
+
+
+
+        }
+
+
+
+        //--------------SeleccionRotacionContraPrestacionPeriodoCurso  1
+
+        public ActionResult SeleccionRotacionContraPrestacionPeriodoCursoDS()
+        {
+            List<IPS_ESE> lista = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("IPS"))
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+
+                    lista = municipios.ToList();
+
+
+
+                }
+                else
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                    lista = municipios.ToList();
+
+
+                }
+
+
+            }
+            else
+            {
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                lista = municipios.ToList();
+
+            }
+            ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+            return View();
+        }
+
+
+        //---------- //--------------SeleccionRotacionContraPrestacionPeriodoCurso 2
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SeleccionRotacionContraPrestacionPeriodoCursoDS(IPS_ESE ipss, FormCollection value)
+        {
+
+            IPS_ESE ips = db.IPS_ESE.Find(ipss.IPS_ESEId);
+            string fecha = ViewBag.fecha;
+
+
+            List<Curso> cursos = new List<Curso>();
+            ReportDocument rptH = new ReportDocument();
+            string strRptPath = System.Web.HttpContext.Current.Server.MapPath("~/ReporteContraPrestacionPeriodoCurso.rpt");
+            rptH.Load(strRptPath);
+
+            int periodoId = Int32.Parse(value["periodoId"]);
+            var date = DateTime.MinValue;
+
+            cursos = db.Cursoes.Where(r => r.IPS_ESEId == ips.IPS_ESEId).Where(r => r.periodoAcademico == periodoId).ToList();
+
+
+            rptH.Database.Tables[0].SetDataSource(cursos);
+
+
+            rptH.SetParameterValue("ips", ips.nombre);
+            rptH.SetParameterValue("email", ips.correo);
+            rptH.SetParameterValue("representante", ips.representante);
+
+
+
+
+            rptH.SetParameterValue("fecha", "Periodo: " + periodoId + " Año: ");
+
+
+            int total = 0;
+
+            if (cursos.ToList().Count > 0)
+            {
+                total += cursos.Sum(d => d.totalContraprestacion);
+                rptH.SetParameterValue("total", total);
+
+                Stream stream = rptH.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+
+                return File(stream, "application/pdf");
+            }
+            else
+            {
+                ViewBag.AlertMessage = "No se encontraron resultados";
+
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                List<IPS_ESE> lista = municipios.ToList();
+                ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+                return View();
+            }
+
+
+
+
+        }
+       
+        public ActionResult SeleccionRotacionContraPrestacionEDS()
+        {
+
+            List<IPS_ESE> lista = null;
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("IPS"))
+                {
+
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio).Where(r => r.user.Equals(User.Identity.Name));
+
+                    lista = municipios.ToList();
+
+
+
+                }
+                else
+                {
+                    var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                    lista = municipios.ToList();
+
+
+                }
+
+
+            }
+            else
+            {
+
+                var municipios = db.IPS_ESE.Include(h => h.Municipio);
+                lista = municipios.ToList();
+
+            }
+            ViewBag.IPS_ESEId = new SelectList(lista, "IPS_ESEId", "nombre");
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SeleccionRotacionContraPrestacionEDS(IPS_ESE ipss, FormCollection value)
         {
 
             IPS_ESE ips = db.IPS_ESE.Find(ipss.IPS_ESEId);

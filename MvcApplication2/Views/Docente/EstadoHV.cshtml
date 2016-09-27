@@ -35,6 +35,26 @@
 
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Informes<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1" href="#">Portafolio de servicios </a>
+                                <ul class="dropdown-menu">
+                                    <li><a tabindex="-1" @Html.ActionLink("Período académico", "SeleccionRotacionContraPrestacionPeriodoCursoDS/", "IPS_ESE")</a></li>
+                                    <li><a tabindex="-1" @Html.ActionLink("Mes y año", "SeleccionRotacionContraPrestacionCDS/", "IPS_ESE")</a></li>
+
+                                </ul>
+                            </li>
+                            <li>@Html.ActionLink("Inducciones", "SeleccionRotacionContraPrestacionIDS/", "IPS_ESE")</li>
+                            <li>@Html.ActionLink("Inventario", "SeleccionRotacionContraPrestacionEDS/", "IPS_ESE")</li>
+
+
+
+                        </ul>
+                    </li>
 
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -73,7 +93,7 @@
 
                             <p class=" help-block"></p><p class=" help-block">Buscar por Departamento:</p> @Html.DropDownList("DepartamentoSaludId", (IEnumerable<SelectListItem>)ViewBag.DepartamentoSaludId, new { @class = "form-control" })
 
-</div>
+                        </div>
                         <div class="col-lg-offset-1 col-sm-3">
 
                             <p class=" help-block"></p><p class=" help-block">Buscar por estado:</p> @Html.DropDownList("Estado_HV", new List<SelectListItem>() { new SelectListItem { Text = "Desactualizada", Value = "False" }, new SelectListItem { Text = "Actualizada", Value = "True" } }, new { @class = "form-control" })

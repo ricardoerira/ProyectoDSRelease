@@ -174,7 +174,7 @@ namespace MvcApplication2.Controllers
            
 
             ViewBag.rotacionEstudianteId = id;
-            List<IPS_ESE> ips = db.IPS_ESE.ToList();
+            List<IPS_ESE> ips = db.IPS_ESE.OrderBy(r => r.nombre).ToList();
             ViewBag.IPS_ESEId = new SelectList(ips, "IPS_ESEId", "nombre", rotacionestudiante.IPS_ESEId);
             if (rotacionDetalles.Count() == 0)
             {

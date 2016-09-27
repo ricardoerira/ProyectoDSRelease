@@ -25,12 +25,12 @@ namespace MvcApplication2.Controllers
         public ActionResult Index()
         {
             //importaMaterias();
-            //importaGruposMateria();
+            importaGruposMateria();
 
             //importaDocentes();
             //importaDocentestest();
 
-            //importaEstudiantes();
+            importaEstudiantes();
             importaEstudiantesRotacion();
             // actualizaImagenDocentes();
             //importaEstudiantesRotacionDetalle();
@@ -1131,6 +1131,11 @@ namespace MvcApplication2.Controllers
                                     estudiante.direccion_procedencia = item3.DIR_CORREO;
                                     hojavida.direccion_manizales = item3.DIR_CORREO;
                                     hojavida.num_celular = 3000000000;
+                                    hojavida.fecha_influenza = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_poliza = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_rcp = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_seguro = SqlDateTime.MinValue.Value;
+
                                     if (hojavida.direccion_manizales.Equals(String.Empty))
                                     {
                                         hojavida.direccion_manizales = ".";
@@ -1152,7 +1157,11 @@ namespace MvcApplication2.Controllers
                                     {
 
                                         DateTime myDate = DateTime.ParseExact(item3.FECHA_NACIMIENTO, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+
                                         hojavida.fecha_nacimiento = myDate;
+                                        
+
+                                        
                                     }
                                     else
                                     {
