@@ -30,7 +30,7 @@ namespace MvcApplication2.Controllers
             //importaDocentes();
             //importaDocentestest();
 
-            importaEstudiantes();
+            //importaEstudiantes();
             importaEstudiantesRotacion();
             // actualizaImagenDocentes();
             //importaEstudiantesRotacionDetalle();
@@ -470,7 +470,7 @@ namespace MvcApplication2.Controllers
                             List<Rotacion> lista = datos.ToList();
                             if (lista.Count() == 0)
                             {
-                                if (item2.ANO > 2015)
+                                if (item2.ANO > 2016 && item2.PERIODO ==1)
                                 {
                                     Rotacion rotacion = new Rotacion();
                                     rotacion.year_academico = item2.ANO;
@@ -622,6 +622,10 @@ namespace MvcApplication2.Controllers
                                     hojavida.municipio_procedencia = ".";
 
                                     hojavida.num_telefono = item3.TELEFONO;
+                                    hojavida.fecha_influenza = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_poliza = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_rcp = SqlDateTime.MinValue.Value;
+                                    hojavida.fecha_seguro = SqlDateTime.MinValue.Value;
 
                                     if (!item3.FECHANAC.Equals(""))
                                     {

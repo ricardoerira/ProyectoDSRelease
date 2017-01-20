@@ -374,8 +374,8 @@ namespace MvcApplication2.Controllers
 
 
             rptH.SetParameterValue("presentacion", "A continuación le relaciono las rotaciones de los estudiantes del Programa de " + pr.nombre + " Departamento " + ds.nombre + " que realizaran su rotación en su institución y los profesores con su horario.");
-            rptH.SetParameterValue("fecha", DateTime.Now.ToString("dd MMMM yyyy") + ".");
-            rptH.SetParameterValue("dr", ips.representante);
+            rptH.SetParameterValue("fecha", DateTime.Now);
+            rptH.SetParameterValue("dr", ips.representanteDS);
             rptH.SetParameterValue("cargo", ips.cargo_representanteDS);
             rptH.SetParameterValue("nombreIPS", ips.nombre);
 
